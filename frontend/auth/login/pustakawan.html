@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login - E-Perpustakaan</title>
+  <!-- Font dari Google Fonts (butuh internet) dan file CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <!-- Kumpulan ikon halaman ini; dipanggil dengan <use href="#i-nama"> -->
+  <svg class="icon-sprite" aria-hidden="true"><symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol><symbol id="i-cap" viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></symbol><symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></symbol><symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol><symbol id="i-login" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="m10 17 5-5-5-5"/><path d="M15 12H3"/></symbol><symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol><symbol id="i-userplus" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></symbol></svg>
+  <main class="auth-page">
+    <section class="auth-card" aria-labelledby="judul">
+
+      <header class="auth-card__header">
+        <img class="auth-card__logo" src="../../assets/logo.png" alt="Logo Universitas Khairun">
+        <h1 class="auth-card__title" id="judul">E - PERPUSTAKAAN</h1>
+        <p class="auth-card__subtitle">UNIVERSITAS KHAIRUN</p>
+      </header>
+
+      <!-- Tab peran: tiga link ke halaman login masing-masing -->
+      <nav class="role-tabs" aria-label="Masuk sebagai">
+        <a class="role-tabs__link" href="anggota-login.html"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-cap"/></svg> Anggota</a>
+        <a class="role-tabs__link role-tabs__link--active" href="pustakawan-login.html" aria-current="page"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-book"/></svg> Pustakawan</a>
+        <a class="role-tabs__link" href="kepus-login.html"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg> Kepus</a>
+      </nav>
+
+      <p class="auth-card__hint">Silahkan login untuk melanjutkan</p>
+
+      <form class="form" action="../pustakawan/beranda.html" method="get">
+        <div class="form__group">
+          <label class="form__label form__label--caps" for="npm">NPM / NIP / KODE KEPUS</label>
+          <div class="input-field">
+            <span class="input-field__icon"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg></span>
+            <input class="form__input form__input--icon" id="npm" name="npm" type="text" placeholder="Masukkan NPM / NIP / Kode Kepus">
+          </div>
+        </div>
+        <div class="form__group">
+          <label class="form__label form__label--caps" for="password">PASSWORD</label>
+          <div class="input-field">
+            <span class="input-field__icon"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg></span>
+            <input class="form__input form__input--icon" id="password" name="password" type="password" placeholder="Masukkan password anda">
+            <span class="input-field__toggle"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg></span>
+          </div>
+          <a class="auth-card__link" href="pustakawan-lupa-password.html">Lupa password?</a>
+        </div>
+
+        <div class="form__group">
+          <label class="visually-hidden" for="email">Email</label>
+          <div class="input-field">
+            <span class="input-field__icon"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg></span>
+            <input class="form__input form__input--icon" id="email" name="email" type="email" placeholder="Masukkan email anda">
+          </div>
+        </div>
+
+        <button class="btn btn--primary btn--block btn--tall" type="submit"><svg class="icon" aria-hidden="true"><use href="#i-login"/></svg> Login</button>
+      </form>
+
+      <footer class="auth-card__footer">
+        <p>belum punya akun? <a href="pustakawan-daftar.html">daftar disini! <svg class="icon icon--sm" aria-hidden="true"><use href="#i-userplus"/></svg></a></p>
+      </footer>
+
+    </section>
+  </main>
+</body>
+</html>
+
+

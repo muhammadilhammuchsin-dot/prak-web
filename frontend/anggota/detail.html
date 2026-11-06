@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Detail Buku - E-Perpustakaan</title>
+  <!-- Font dari Google Fonts (butuh internet) dan file CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <!-- Kumpulan ikon halaman ini; dipanggil dengan <use href="#i-nama"> -->
+  <svg class="icon-sprite" aria-hidden="true"><symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></symbol><symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol><symbol id="i-bookmark" viewBox="0 0 24 24"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></symbol><symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></symbol><symbol id="i-profile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.7a5 5 0 0 1 10 0"/></symbol><symbol id="i-trend" viewBox="0 0 24 24"><path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></symbol></svg>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="beranda.html">
+        <span class="brand__icon"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
+        <span class="brand__text">
+          <span class="brand__name">E-Perpustakaan</span>
+          <span class="brand__sub">Universitas Khairun</span>
+        </span>
+      </a>
+
+      <nav class="main-nav" aria-label="Menu utama">
+        <ul class="main-nav__list">
+          <li><a class="main-nav__link" href="beranda.html">beranda</a></li>
+          <li><a class="main-nav__link main-nav__link--active" href="cari.html" aria-current="page">cari buku</a></li>
+          <li><a class="main-nav__link main-nav__link--logout" href="../auth/anggota-login.html">keluar <svg class="icon icon--sm" aria-hidden="true"><use href="#i-logout"/></svg></a></li>
+        </ul>
+      </nav>
+      <div class="user-info">
+        <span class="user-info__avatar"><svg class="icon" aria-hidden="true"><use href="#i-profile"/></svg></span>
+        <p class="user-info__text">
+          <span>Nama Anggota</span>
+          <span class="user-info__status">Mahasiswa Aktif</span>
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <a class="back-link" href="cari.html" aria-label="Kembali ke pencarian buku"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-arrow-left"/></svg></a>
+
+    <article class="panel book-detail">
+      <div>
+        <figure class="cover cover--large">
+          <img class="cover__image" src="../assets/covers/0001.jpg" alt="Sampul buku Struktur Data &amp; Analisis Algoritma">
+        </figure>
+        <button class="btn btn--navy btn--block book-detail__borrow" type="button"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-bookmark"/></svg> Pinjam Buku</button>
+      </div>
+      <div>
+        <h1 class="book-detail__title">Struktur Data &amp; Analisis Algoritma</h1>
+
+        <dl class="book-detail__meta">
+          <div><dt>ID</dt><dd>0001</dd></div>
+          <div><dt>Penulis</dt><dd>Dr. Hendra Gunawan, S.Kom., M.T.</dd></div>
+          <div><dt>Kategori</dt><dd>Informatika & Komputer</dd></div>
+        </dl>
+
+        <p>Stok tersedia : <span class="stock-badge">4</span></p>
+
+        <h2 class="book-detail__label">Deskripsi buku :</h2>
+        <p class="book-detail__description">Landasan teoretis dan penerapan struktur data: Linear Lists, Stack, Trees, B-Tree, Heap, hingga Graph, lengkap dengan kompleksitas Big-O.</p>
+
+        <p class="book-detail__stat"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-trend"/></svg> <strong>Dipinjam 20x</strong> (12 kali oleh Informatika)</p>
+      </div>
+    </article>
+
+    <section>
+      <h2 class="section-title">Buku Serupa</h2>
+      <div class="book-grid">
+        <article class="book-card">
+          <div class="book-card__top">
+            <figure class="cover cover--small">
+          <img class="cover__image" src="../assets/covers/0002.jpg" alt="Sampul buku Rekayasa Perangkat Lunak Terapan">
+        </figure>
+            <div class="book-card__body">
+              <h3 class="book-card__title book-card__title--small">Rekayasa Perangkat Lunak Terapan</h3>
+              <span class="badge">dipinjam 2x</span>
+            </div>
+          </div>
+          <a class="btn btn--light btn--block btn--small" href="detail.html">Detail</a>
+        </article>
+        <article class="book-card">
+          <div class="book-card__top">
+            <figure class="cover cover--small cover--placeholder">
+          <figcaption>Basis Data Relasional &amp; Manajemen SQL</figcaption>
+        </figure>
+            <div class="book-card__body">
+              <h3 class="book-card__title book-card__title--small">Basis Data Relasional &amp; Manajemen SQL</h3>
+              <span class="badge">dipinjam 5x</span>
+            </div>
+          </div>
+          <a class="btn btn--light btn--block btn--small" href="detail.html">Detail</a>
+        </article>
+        <article class="book-card">
+          <div class="book-card__top">
+            <figure class="cover cover--small">
+          <img class="cover__image" src="../assets/covers/0004.jpg" alt="Sampul buku Kecerdasan Buatan &amp; Jaringan Syaraf">
+        </figure>
+            <div class="book-card__body">
+              <h3 class="book-card__title book-card__title--small">Kecerdasan Buatan &amp; Jaringan Syaraf</h3>
+              <span class="badge">dipinjam 16x</span>
+            </div>
+          </div>
+          <a class="btn btn--light btn--block btn--small" href="detail.html">Detail</a>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+
