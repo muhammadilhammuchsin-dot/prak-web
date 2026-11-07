@@ -1,0 +1,48 @@
+
+/* ---------- 1. VARIABEL (ubah di sini, semua halaman ikut berubah) ---------- */
+:root {
+  --color-navy: #0b2a6f;
+  --color-blue: #0284c7;
+  --color-brand: #0369a1;
+  --color-text: #0f172a;
+  --color-title: #1e293b;
+  --color-label: #475569;
+  --color-muted: #64748b;
+  --color-placeholder: #94a3b8;
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+  --color-soft: #eef2ff;
+  --color-page: #f6f7fb;
+  --color-white: #fff;
+  --color-danger: #e11d48;
+  --color-danger-soft: #ffe4e6;
+  --color-link-soft: #e0e7ff;
+  --color-link-text: #1d4ed8;
+  --color-success: #15803d;
+  --color-success-soft: #dcfce7;
+  --color-gold: #f59e0b;
+
+  --font-main: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-input: 'Inter', system-ui, sans-serif;
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.875rem;    /* 14px */
+  --text-md: 0.9375rem;   /* 15px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-xl: 1.5rem;      /* 24px */
+  --text-2xl: 1.875rem;   /* 30px */
+  --leading-body: 1.6;
+  --leading-heading: 1.25;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-pill: 999px;
+  --content-width: 66rem;
+}
