@@ -16,7 +16,18 @@
   color: var(--color-white);
 }
 
-.sidebar .brand { padding: var(--space-1) var(--space-2) var(--space-4); }
+
+/* ---------- LOGO SIDEBAR ---------- */
+.sidebar .brand {
+  padding: var(--space-1) var(--space-2) var(--space-4);
+  gap: var(--space-2);
+}
+
+.sidebar .brand__name {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .sidebar__nav { display: flex; flex: 1; flex-direction: column; gap: var(--space-1); }
 
 .sidebar__link {
