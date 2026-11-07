@@ -1,26 +1,36 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Pulihkan Password - E-Perpustakaan</title>
-  <!-- Font dari Google Fonts (butuh internet) dan file CSS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body>
-  <!-- Kumpulan ikon halaman ini; dipanggil dengan <use href="#i-nama"> -->
-  <svg class="icon-sprite" aria-hidden="true"><symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></symbol><symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></symbol><symbol id="i-idcard" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M13 10h5M13 14h5"/></symbol><symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol></svg>
+
+  <svg class="icon-sprite" aria-hidden="true">
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-idcard" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M13 10h5M13 14h5"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  </svg>
+
   <main class="auth-page">
     <section class="auth-card auth-card--wide" aria-labelledby="judul">
 
       <header class="auth-card__header auth-card__header--row">
-        <a class="back-link back-link--dark" href="pustakawan-login.html" aria-label="Kembali ke halaman login"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-arrow-left"/></svg></a>
+        <a class="back-link back-link--dark" data-route="../login/pustakawan.html" role="link" tabindex="0" aria-label="Kembali ke halaman login">
+          <svg class="icon icon--lg" aria-hidden="true"><use href="#i-arrow-left"/></svg>
+        </a>
         <h1 class="auth-card__title auth-card__title--form" id="judul">Pulihkan Password</h1>
       </header>
 
-      <form class="form" action="pustakawan-login.html" method="get">
+      <div class="form" data-auth-form="forgot-password" data-user-role="pustakawan">
+
         <div class="form__group">
           <label class="form__label" for="email">Masukkan email aktif</label>
           <div class="input-field">
@@ -28,6 +38,7 @@
             <input class="form__input form__input--icon" id="email" name="email" type="text" placeholder="Contoh: Demak@gmail.com">
           </div>
         </div>
+
         <div class="form__group">
           <label class="form__label" for="otp">Masukkan Kode OTP</label>
           <div class="input-field">
@@ -35,6 +46,7 @@
             <input class="form__input form__input--icon" id="otp" name="otp" type="text" placeholder="Contoh: 0735">
           </div>
         </div>
+
         <div class="form__group">
           <label class="form__label" for="password">Masukkan Password baru</label>
           <div class="input-field">
@@ -43,6 +55,7 @@
             <span class="input-field__toggle"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg></span>
           </div>
         </div>
+
         <div class="form__group">
           <label class="form__label" for="password-confirm">Konfirmasi password anda</label>
           <div class="input-field">
@@ -53,12 +66,10 @@
           <p class="form__error" role="alert">password confirmation doesn't match</p>
         </div>
 
-        <button class="btn btn--primary btn--block btn--tall form__submit" type="submit">Simpan password</button>
-      </form>
+        <button class="btn btn--primary btn--block btn--tall form__submit" type="button" data-auth-action="forgot-password">Simpan password</button>
 
+      </div>
     </section>
   </main>
 </body>
 </html>
-
-
