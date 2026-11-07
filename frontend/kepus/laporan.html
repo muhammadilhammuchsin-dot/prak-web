@@ -1,9 +1,11 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Laporan Kepala Perpustakaan - E-Perpustakaan</title>
+
   <!-- Font dari Google Fonts (butuh internet) dan file CSS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -11,17 +13,36 @@
 </head>
 <body>
   <!-- Kumpulan ikon halaman ini; dipanggil dengan <use href="#i-nama"> -->
-  <svg class="icon-sprite" aria-hidden="true"><symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></symbol></svg>
+  <svg class="icon-sprite" aria-hidden="true">
+    <symbol id="i-logout" viewBox="0 0 24 24">
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+      <path d="m16 17 5-5-5-5"/>
+      <path d="M21 12H9"/>
+    </symbol>
+  </svg>
+
   <header class="page report__header">
     <h1>LAPORAN KEPALA PERPUSTAKAAN</h1>
-    <a class="report__logout" href="../auth/kepus-login.html"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-logout"/></svg> Keluar</a>
+    <a class="report__logout"
+       data-route="../auth/login/kepus.html"
+       role="link"
+       tabindex="0">
+      <svg class="icon icon--sm" aria-hidden="true">
+        <use href="#i-logout"/>
+      </svg>
+      Keluar
+    </a>
   </header>
 
   <main class="page">
 
     <section class="panel period-picker" aria-label="Periode laporan">
       <label class="period-picker__label" for="period">PERIODE</label>
-      <select class="select" id="period" name="period">
+      <select class="select"
+              id="period"
+              name="period"
+              data-action="change-period"
+              disabled>
         <option>September 2026</option>
         <option>Oktober 2026</option>
         <option>November 2026</option>
@@ -34,6 +55,7 @@
         <h2 class="stat-card__label">TOTAL ANGGOTA</h2>
         <p class="stat-card__value">012</p>
       </article>
+
       <article class="stat-card">
         <h2 class="stat-card__label">TOTAL BUKU</h2>
         <p class="stat-card__value">200</p>
@@ -42,41 +64,111 @@
 
     <section class="panel">
       <h2 class="panel__title">Data minat Baca anggota</h2>
+
       <div class="chart-row">
-        <div class="donut" role="img" aria-label="Diagram donat minat baca anggota">
+        <div class="donut"
+             role="img"
+             aria-label="Diagram donat minat baca anggota">
           <span class="donut__hole">100%</span>
         </div>
+
         <ul class="legend">
-          <li class="legend__item"><span class="legend__dot legend__dot--1"></span>Teknologi &amp; Informatika <strong>60%</strong></li>
-          <li class="legend__item"><span class="legend__dot legend__dot--2"></span>Sains &amp; Matematika <strong>20%</strong></li>
-          <li class="legend__item"><span class="legend__dot legend__dot--3"></span>Sosial &amp; Bisnis <strong>12%</strong></li>
-          <li class="legend__item"><span class="legend__dot legend__dot--4"></span>Sastra &amp; Bahasa <strong>8%</strong></li>
+          <li class="legend__item">
+            <span class="legend__dot legend__dot--1"></span>
+            Teknologi &amp; Informatika
+            <strong>60%</strong>
+          </li>
+
+          <li class="legend__item">
+            <span class="legend__dot legend__dot--2"></span>
+            Sains &amp; Matematika
+            <strong>20%</strong>
+          </li>
+
+          <li class="legend__item">
+            <span class="legend__dot legend__dot--3"></span>
+            Sosial &amp; Bisnis
+            <strong>12%</strong>
+          </li>
+
+          <li class="legend__item">
+            <span class="legend__dot legend__dot--4"></span>
+            Sastra &amp; Bahasa
+            <strong>8%</strong>
+          </li>
         </ul>
       </div>
     </section>
 
     <section class="panel">
       <h2 class="panel__title">Diagram peminjaman buku</h2>
-      <div class="bar-chart" role="img" aria-label="Diagram batang peminjaman buku per kategori">
-        <ol class="bar-chart__axis"><li>100%</li><li>75%</li><li>50%</li><li>25%</li><li>0%</li></ol>
+
+      <div class="bar-chart"
+           role="img"
+           aria-label="Diagram batang peminjaman buku per kategori">
+
+        <ol class="bar-chart__axis">
+          <li>100%</li>
+          <li>75%</li>
+          <li>50%</li>
+          <li>25%</li>
+          <li>0%</li>
+        </ol>
+
         <div class="bar-chart__body">
+
           <ul class="bar-chart__plot">
-            <li class="bar-chart__item"><span>91%</span><span class="bar-chart__bar bar-chart__bar--1"></span></li>
-            <li class="bar-chart__item"><span>72%</span><span class="bar-chart__bar bar-chart__bar--2"></span></li>
-            <li class="bar-chart__item"><span>30%</span><span class="bar-chart__bar bar-chart__bar--3"></span></li>
-            <li class="bar-chart__item"><span>31%</span><span class="bar-chart__bar bar-chart__bar--4"></span></li>
+            <li class="bar-chart__item">
+              <span>91%</span>
+              <span class="bar-chart__bar bar-chart__bar--1"></span>
+            </li>
+
+            <li class="bar-chart__item">
+              <span>72%</span>
+              <span class="bar-chart__bar bar-chart__bar--2"></span>
+            </li>
+
+            <li class="bar-chart__item">
+              <span>30%</span>
+              <span class="bar-chart__bar bar-chart__bar--3"></span>
+            </li>
+
+            <li class="bar-chart__item">
+              <span>31%</span>
+              <span class="bar-chart__bar bar-chart__bar--4"></span>
+            </li>
           </ul>
+
           <ul class="bar-chart__labels">
-            <li>Teknologi<span class="bar-chart__note">91% dipinjam</span></li>
-            <li>Sains<span class="bar-chart__note">72% dipinjam</span></li>
-            <li>Sastra<span class="bar-chart__note">30% dipinjam</span></li>
-            <li>Sosial<span class="bar-chart__note">31% dipinjam</span></li>
+            <li>
+              Teknologi
+              <span class="bar-chart__note">91% dipinjam</span>
+            </li>
+
+            <li>
+              Sains
+              <span class="bar-chart__note">72% dipinjam</span>
+            </li>
+
+            <li>
+              Sastra
+              <span class="bar-chart__note">30% dipinjam</span>
+            </li>
+
+            <li>
+              Sosial
+              <span class="bar-chart__note">31% dipinjam</span>
+            </li>
           </ul>
+
         </div>
       </div>
     </section>
 
   </main>
+
+  <!-- JavaScript Kepala Perpustakaan -->
+  <script src="../js/kepus/laporan.js" defer></script>
+
 </body>
 </html>
-
