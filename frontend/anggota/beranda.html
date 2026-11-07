@@ -10,11 +10,12 @@
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-  <!-- Kumpulan ikon halaman ini; dipanggil dengan <use href="#i-nama"> -->
+  <!-- Kumpulan ikon halaman ini -->
   <svg class="icon-sprite" aria-hidden="true"><symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol><symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol><symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></symbol><symbol id="i-profile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.7a5 5 0 0 1 10 0"/></symbol><symbol id="i-trend" viewBox="0 0 24 24"><path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></symbol></svg>
+
   <header class="site-header">
     <div class="site-header__inner">
-      <a class="brand" href="beranda.html">
+      <a class="brand" data-route="beranda.html" role="link" tabindex="0">
         <span class="brand__icon"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
         <span class="brand__text">
           <span class="brand__name">E-Perpustakaan</span>
@@ -24,9 +25,9 @@
 
       <nav class="main-nav" aria-label="Menu utama">
         <ul class="main-nav__list">
-          <li><a class="main-nav__link main-nav__link--active" href="beranda.html" aria-current="page">beranda</a></li>
-          <li><a class="main-nav__link" href="cari.html">cari buku</a></li>
-          <li><a class="main-nav__link main-nav__link--logout" href="../auth/anggota-login.html">keluar <svg class="icon icon--sm" aria-hidden="true"><use href="#i-logout"/></svg></a></li>
+          <li><a class="main-nav__link main-nav__link--active" aria-current="page" data-route="beranda.html" role="link" tabindex="0">beranda</a></li>
+          <li><a class="main-nav__link" data-route="cari.html" role="link" tabindex="0">cari buku</a></li>
+          <li><a class="main-nav__link main-nav__link--logout" data-route="../auth/login/anggota.html" role="link" tabindex="0">keluar <svg class="icon icon--sm" aria-hidden="true"><use href="#i-logout"/></svg></a></li>
         </ul>
       </nav>
     </div>
@@ -51,7 +52,7 @@
       <h2 class="panel__title panel__title--divided"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-trend"/></svg> Kategori terpopuler</h2>
       <div class="topic-card">
         <span>Informatika &amp; TI</span>
-        <a class="topic-card__link" href="cari-informatika.html">Detail</a>
+        <a class="topic-card__link" data-route="cari-informatika.html" role="link" tabindex="0">Detail</a>
       </div>
     </section>
 
@@ -60,34 +61,35 @@
       <div class="book-grid">
         <article class="book-card">
           <figure class="cover cover--banner">
-          <img class="cover__image" src="../assets/covers/0004.jpg" alt="Sampul buku Kecerdasan Buatan &amp; Jaringan Syaraf">
-        </figure>
+            <img class="cover__image" src="../assets/covers/0004.jpg" alt="Sampul buku Kecerdasan Buatan &amp; Jaringan Syaraf">
+          </figure>
           <h3 class="book-card__title">Kecerdasan Buatan &amp; Jaringan Syaraf</h3>
           <span class="badge">dipinjam 2x</span>
           <p class="book-card__text">Pengantar machine learning dan neural network edisi revisi terbaru.</p>
-          <a class="btn btn--navy btn--block btn--small" href="detail.html">Detail <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg></a>
+          <a class="btn btn--navy btn--block btn--small" data-route="detail.html" role="link" tabindex="0">Detail <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg></a>
         </article>
+
         <article class="book-card">
           <figure class="cover cover--banner">
-          <img class="cover__image" src="../assets/covers/0002.jpg" alt="Sampul buku Rekayasa Perangkat Lunak Terapan">
-        </figure>
+            <img class="cover__image" src="../assets/covers/0002.jpg" alt="Sampul buku Rekayasa Perangkat Lunak Terapan">
+          </figure>
           <h3 class="book-card__title">Rekayasa Perangkat Lunak Terapan</h3>
           <span class="badge">dipinjam 5x</span>
           <p class="book-card__text">Prinsip dan praktik rekayasa perangkat lunak dari analisis kebutuhan hingga pengujian.</p>
-          <a class="btn btn--navy btn--block btn--small" href="detail.html">Detail <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg></a>
+          <a class="btn btn--navy btn--block btn--small" data-route="detail.html" role="link" tabindex="0">Detail <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg></a>
         </article>
+
         <article class="book-card">
           <figure class="cover cover--banner">
-          <img class="cover__image" src="../assets/covers/0001.jpg" alt="Sampul buku Struktur Data &amp; Analisis Algoritma">
-        </figure>
+            <img class="cover__image" src="../assets/covers/0001.jpg" alt="Sampul buku Struktur Data &amp; Analisis Algoritma">
+          </figure>
           <h3 class="book-card__title">Struktur Data &amp; Analisis Algoritma</h3>
           <span class="badge">dipinjam 10x</span>
           <p class="book-card__text">Landasan teoretis dan penerapan struktur data: Linear Lists, Stack, Trees, B-Tree, Heap, hingga Graph, lengkap dengan kompleksitas Big-O.</p>
-          <a class="btn btn--navy btn--block btn--small" href="detail.html">Detail <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg></a>
+          <a class="btn btn--navy btn--block btn--small" data-route="detail.html" role="link" tabindex="0">Detail <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg></a>
         </article>
       </div>
     </section>
   </main>
 </body>
 </html>
-
