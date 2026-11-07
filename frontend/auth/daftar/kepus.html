@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Buat Akun - E-Perpustakaan</title>
- 
+  <title>Daftar Kepus - E-Perpustakaan</title>
 
-  <!-- GOOGLE FONTS ASLI -->
+  <!-- GOOGLE FONTS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- CSS SHARED -->
@@ -19,70 +19,222 @@
   <link rel="stylesheet" href="../../css/auth/auth.css">
   <link rel="stylesheet" href="../../css/shared/layout.css">
   <link rel="stylesheet" href="../../css/shared/responsive.css">
-
-
 </head>
 <body>
 
+  <!-- KUMPULAN IKON -->
   <svg class="icon-sprite" aria-hidden="true">
-    <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></symbol>
-    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></symbol>
-    <symbol id="i-idcard" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M13 10h5M13 14h5"/></symbol>
-    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
-    <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24">
+      <path d="M19 12H5M12 19l-7-7 7-7"/>
+    </symbol>
+
+    <symbol id="i-eye" viewBox="0 0 24 24">
+      <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
+      <circle cx="12" cy="12" r="3"/>
+    </symbol>
+
+    <symbol id="i-idcard" viewBox="0 0 24 24">
+      <rect x="2" y="5" width="20" height="14" rx="2"/>
+      <circle cx="8" cy="12" r="2"/>
+      <path d="M13 10h5M13 14h5"/>
+    </symbol>
+
+    <symbol id="i-lock" viewBox="0 0 24 24">
+      <rect x="3" y="11" width="18" height="11" rx="2"/>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+    </symbol>
+
+    <symbol id="i-user" viewBox="0 0 24 24">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+      <circle cx="12" cy="7" r="4"/>
+    </symbol>
   </svg>
 
   <main class="auth-page">
     <section class="auth-card auth-card--wide" aria-labelledby="judul">
 
+      <!-- HEADER -->
       <header class="auth-card__header auth-card__header--row">
-        <a class="back-link back-link--dark" data-route="../login/kepus.html" role="link" tabindex="0" aria-label="Kembali ke halaman login">
-          <svg class="icon icon--lg" aria-hidden="true"><use href="#i-arrow-left"/></svg>
+        <a class="back-link back-link--dark"
+           href="../login/kepus.html"
+           aria-label="Kembali ke halaman login">
+          <svg class="icon icon--lg" aria-hidden="true">
+            <use href="#i-arrow-left"/>
+          </svg>
         </a>
-        <h1 class="auth-card__title auth-card__title--form" id="judul">Buat Akun</h1>
+
+        <h1 class="auth-card__title auth-card__title--form" id="judul">
+          Buat Akun Kepus
+        </h1>
       </header>
 
-      <div class="form" data-auth-form="register" data-user-role="kepus">
+      <!-- FORM REGISTRASI -->
+      <form class="form"
+            data-auth-form="register"
+            data-user-role="kepus"
+            novalidate>
 
+        <!-- NAMA -->
         <div class="form__group">
-          <label class="form__label" for="nama">Masukkan nama lengkap</label>
+          <label class="form__label" for="nama">
+            Masukkan nama lengkap
+          </label>
+
           <div class="input-field">
-            <span class="input-field__icon"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg></span>
-            <input class="form__input form__input--icon" id="nama" name="nama" type="text" placeholder="Nama Lengkap">
+            <span class="input-field__icon">
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-user"/>
+              </svg>
+            </span>
+
+            <input class="form__input form__input--icon"
+                   id="nama"
+                   name="nama"
+                   type="text"
+                   placeholder="Nama lengkap"
+                   autocomplete="name"
+                   minlength="3"
+                   maxlength="100"
+                   required
+                   aria-describedby="nama-error">
           </div>
+
+          <p class="form__error"
+             id="nama-error"
+             data-error-for="nama"
+             role="alert"
+             hidden></p>
         </div>
 
+        <!-- NIP / KODE KEPUS -->
         <div class="form__group">
-          <label class="form__label" for="npm">Masukkan NIP/kode kepus</label>
+          <label class="form__label" for="npm">
+            Masukkan NIP/Kode Kepus
+          </label>
+
           <div class="input-field">
-            <span class="input-field__icon"><svg class="icon" aria-hidden="true"><use href="#i-idcard"/></svg></span>
-            <input class="form__input form__input--icon" id="npm" name="npm" type="text" placeholder="KDP / Kode Kepus">
+            <span class="input-field__icon">
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-idcard"/>
+              </svg>
+            </span>
+
+            <input class="form__input form__input--icon"
+                   id="npm"
+                   name="npm"
+                   type="text"
+                   placeholder="NIP / Kode Kepus"
+                   autocomplete="username"
+                   required
+                   aria-describedby="npm-error">
           </div>
+
+          <p class="form__error"
+             id="npm-error"
+             data-error-for="npm"
+             role="alert"
+             hidden></p>
         </div>
 
+        <!-- PASSWORD -->
         <div class="form__group">
-          <label class="form__label" for="password">Masukkan Password anda</label>
+          <label class="form__label" for="password">
+            Masukkan password Anda
+          </label>
+
           <div class="input-field">
-            <span class="input-field__icon"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg></span>
-            <input class="form__input form__input--icon" id="password" name="password" type="password" placeholder="Password">
-            <span class="input-field__toggle"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg></span>
+            <span class="input-field__icon">
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-lock"/>
+              </svg>
+            </span>
+
+            <input class="form__input form__input--icon form__input--with-toggle"
+                   id="password"
+                   name="password"
+                   type="password"
+                   placeholder="Minimal 8 karakter"
+                   autocomplete="new-password"
+                   minlength="8"
+                   required
+                   aria-describedby="password-error">
+
+            <button class="input-field__toggle"
+                    type="button"
+                    data-toggle-password="password"
+                    aria-label="Tampilkan password"
+                    aria-pressed="false">
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-eye"/>
+              </svg>
+            </button>
           </div>
+
+          <p class="form__error"
+             id="password-error"
+             data-error-for="password"
+             role="alert"
+             hidden></p>
         </div>
 
+        <!-- KONFIRMASI PASSWORD -->
         <div class="form__group">
-          <label class="form__label" for="password-confirm">Konfirmasi password anda</label>
+          <label class="form__label" for="password-confirm">
+            Konfirmasi password Anda
+          </label>
+
           <div class="input-field">
-            <span class="input-field__icon"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg></span>
-            <input class="form__input form__input--icon form__input--error" id="password-confirm" name="password-confirm" type="password" placeholder="Password yang sama" aria-invalid="true">
-            <span class="input-field__toggle"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg></span>
+            <span class="input-field__icon">
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-lock"/>
+              </svg>
+            </span>
+
+            <input class="form__input form__input--icon form__input--with-toggle"
+                   id="password-confirm"
+                   name="password-confirm"
+                   type="password"
+                   placeholder="Ulangi password yang sama"
+                   autocomplete="new-password"
+                   required
+                   aria-describedby="password-confirm-error">
+
+            <button class="input-field__toggle"
+                    type="button"
+                    data-toggle-password="password-confirm"
+                    aria-label="Tampilkan konfirmasi password"
+                    aria-pressed="false">
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-eye"/>
+              </svg>
+            </button>
           </div>
-          <p class="form__error" role="alert">password confirmation doesn't match</p>
+
+          <p class="form__error"
+             id="password-confirm-error"
+             data-error-for="password-confirm"
+             role="alert"
+             hidden></p>
         </div>
 
-        <button class="btn btn--primary btn--block btn--tall form__submit" type="button" data-auth-action="register">Daftar</button>
+        <!-- TOMBOL DAFTAR -->
+        <button class="btn btn--primary btn--block btn--tall form__submit"
+                type="submit">
+          Daftar
+        </button>
 
-      </div>
+        <!-- FEEDBACK -->
+        <p class="auth-feedback"
+           data-auth-feedback
+           role="status"
+           aria-live="polite"
+           hidden></p>
+      </form>
+
     </section>
   </main>
+
+  <!-- JAVASCRIPT KEPUS -->
+  <script src="../../js/auth/kepus-auth.js" defer></script>
 </body>
 </html>
