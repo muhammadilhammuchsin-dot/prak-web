@@ -1,14 +1,31 @@
 
-/* ---------- 6. LOGIN & FORM AKUN ---------- */
+/* =====================================================
+   AUTH.CSS - E-PERPUSTAKAAN
+   Tampilan login dan registrasi anggota
+   ===================================================== */
+
+/* =====================================================
+   1. HALAMAN AUTENTIKASI
+   ===================================================== */
+
 .auth-page {
   display: grid;
   place-items: center;
   min-height: 100vh;
   padding: var(--space-5);
-  background: linear-gradient(160deg, #dbeafe, #7dd3fc 60%, #93c5fd);
+  background: linear-gradient(
+    160deg,
+    #dbeafe,
+    #7dd3fc 60%,
+    #93c5fd
+  );
 }
 
-.auth-card {                     /* login: lebar 490, padding 32, jarak 20, radius 24 */
+/* =====================================================
+   2. KARTU AUTENTIKASI
+   ===================================================== */
+
+.auth-card {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -20,20 +37,37 @@
   box-shadow: 0 12px 40px rgb(11 42 111 / 15%);
 }
 
-.auth-card--wide {               /* form: lebar 479, padding 40, jarak 32, radius 16 */
+.auth-card--wide {
   gap: var(--space-6);
   max-width: 29.9375rem;
   padding: 2.5rem;
   border-radius: var(--radius-lg);
 }
 
-.auth-card--wide .form { gap: var(--space-5); }
-.auth-card--wide .form__submit { margin-top: var(--space-5); }
+.auth-card--wide .form {
+  gap: var(--space-5);
+}
 
-.auth-card__header { text-align: center; }
-.auth-card__header--row { display: flex; align-items: center; gap: var(--space-4); text-align: left; }
+.auth-card--wide .form__submit {
+  margin-top: var(--space-5);
+}
 
-.auth-card__logo {               /* logo 112 x 124 */
+/* =====================================================
+   3. HEADER AUTENTIKASI
+   ===================================================== */
+
+.auth-card__header {
+  text-align: center;
+}
+
+.auth-card__header--row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: left;
+}
+
+.auth-card__logo {
   display: block;
   width: 7rem;
   height: 7.75rem;
@@ -41,13 +75,13 @@
   object-fit: contain;
 }
 
-.auth-card__title {              /* E - PERPUSTAKAAN: ExtraBold 30 / 36 */
+.auth-card__title {
   font-size: var(--text-2xl);
   line-height: 2.25rem;
   letter-spacing: -0.047em;
 }
 
-.auth-card__title--form {        /* judul form: Bold 24 / 32 */
+.auth-card__title--form {
   font-size: var(--text-xl);
   font-weight: 700;
   line-height: 2rem;
@@ -55,7 +89,7 @@
   color: var(--color-title);
 }
 
-.auth-card__subtitle {           /* UNIVERSITAS KHAIRUN: Bold 16 / 24 */
+.auth-card__subtitle {
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.5rem;
@@ -63,8 +97,23 @@
   color: var(--color-brand);
 }
 
-.auth-card__hint { font-size: var(--text-sm); font-weight: 500; text-align: center; color: var(--color-label); }
-.auth-card__link { align-self: flex-end; font-size: var(--text-xs); font-weight: 700; color: var(--color-brand); }
+.auth-card__hint {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-align: center;
+  color: var(--color-label);
+}
+
+/* =====================================================
+   4. LINK AUTENTIKASI
+   ===================================================== */
+
+.auth-card__link {
+  align-self: flex-end;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--color-brand);
+}
 
 .auth-card__footer {
   padding-top: var(--space-4);
@@ -74,9 +123,19 @@
   color: var(--color-label);
 }
 
-.auth-card__footer a { display: inline-flex; align-items: center; gap: var(--space-1); font-weight: 700; color: var(--color-brand); }
+.auth-card__footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-weight: 700;
+  color: var(--color-brand);
+}
 
-.role-tabs {                     /* tab peran: tiga link */
+/* =====================================================
+   5. ROLE TABS
+   ===================================================== */
+
+.role-tabs {
   display: flex;
   gap: var(--space-3);
   padding: var(--space-3);
@@ -100,4 +159,166 @@
   color: var(--color-label);
 }
 
-.role-tabs__link--active { border-color: var(--color-blue); background: var(--color-blue); color: var(--color-white); }
+.role-tabs__link--active {
+  border-color: var(--color-blue);
+  background: var(--color-blue);
+  color: var(--color-white);
+}
+
+/* =====================================================
+   6. TOMBOL TAMPILKAN PASSWORD
+   ===================================================== */
+
+.auth-card .input-field__toggle {
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-placeholder);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.auth-card .input-field__toggle:hover {
+  color: var(--color-brand);
+}
+
+.auth-card .input-field__toggle:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.auth-card .form__input--with-toggle {
+  padding-right: 2.75rem;
+}
+
+/* =====================================================
+   7. PESAN VALIDASI INPUT
+   ===================================================== */
+
+.auth-card .form__error[hidden],
+.auth-card .auth-feedback[hidden] {
+  display: none;
+}
+
+.auth-card .form__error {
+  margin-top: 0.1rem;
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--color-danger);
+}
+
+.auth-card .form__input[aria-invalid="true"] {
+  border-color: var(--color-danger);
+}
+
+/* =====================================================
+   8. PESAN FEEDBACK FORM
+   ===================================================== */
+
+.auth-feedback {
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-soft);
+  color: var(--color-label);
+  font-size: var(--text-xs);
+  line-height: 1.6;
+}
+
+.auth-feedback--error {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.auth-feedback--info {
+  border-color: var(--color-border-strong);
+  color: var(--color-label);
+}
+
+/* =====================================================
+   9. RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 480px) {
+  .auth-page {
+    padding: 1rem;
+  }
+
+  .auth-card {
+    padding: 1.25rem;
+  }
+
+  .auth-card--wide {
+    padding: 1.5rem;
+  }
+
+  .role-tabs {
+    gap: 0.4rem;
+    padding: 0.5rem;
+  }
+
+  .role-tabs__link {
+    gap: 0.25rem;
+    font-size: 0.7rem;
+  }
+
+  .auth-card__header--row {
+    gap: 0.75rem;
+  }
+}
+
+
+
+/* FEEDBACK AUTENTIKASI PUSTAKAWAN */
+
+.auth-feedback {
+  padding: 12px 14px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.auth-feedback[hidden] {
+  display: none;
+}
+
+.auth-feedback--error {
+  border-color: #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.auth-feedback--info {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.form__input[aria-invalid="true"] {
+  border-color: #dc2626;
+}
+
+.form__error[hidden] {
+  display: none;
+}
+
+.form__error {
+  margin-top: 5px;
+  color: #dc2626;
+  font-size: 12px;
+}
+
+button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
