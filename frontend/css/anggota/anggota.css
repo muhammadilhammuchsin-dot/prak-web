@@ -4,7 +4,10 @@
    CSS khusus halaman anggota
    ===================================================== */
 
-/* ---------- 1. PENCARIAN & DROPDOWN ---------- */
+/* =====================================================
+   1. PENCARIAN DAN DROPDOWN
+   ===================================================== */
+
 .dropdown {
   position: relative;
   display: inline-block;
@@ -22,23 +25,42 @@
   font-weight: 700;
   list-style: none;
   cursor: pointer;
+  user-select: none;
 }
 
 .dropdown__summary::-webkit-details-marker {
   display: none;
 }
 
+.dropdown__summary::marker {
+  content: "";
+}
+
+.dropdown__summary .icon {
+  transition: transform 0.2s ease;
+}
+
+.dropdown[open] .dropdown__summary .icon {
+  transform: rotate(180deg);
+}
+
 .dropdown__list {
   position: absolute;
-  top: calc(100% + var(--space-1));
+  top: calc(100% + 0.35rem);
   left: 0;
-  z-index: 5;
+  z-index: 20;
+  display: none;
   min-width: 14rem;
-  padding: var(--space-2);
+  margin: 0;
+  padding: 0.35rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-white);
   box-shadow: 0 8px 24px rgb(11 42 111 / 12%);
+}
+
+.dropdown[open] .dropdown__list {
+  display: block;
 }
 
 .dropdown__link {
@@ -49,6 +71,7 @@
   color: var(--color-label);
 }
 
+.dropdown__link:hover,
 .dropdown__link--selected {
   background: var(--color-soft);
   font-weight: 600;
@@ -64,7 +87,10 @@
   font-weight: 700;
 }
 
-/* ---------- 2. DETAIL BUKU ---------- */
+/* =====================================================
+   2. DETAIL BUKU - STRUKTUR ASLI
+   ===================================================== */
+
 .book-detail {
   display: grid;
   grid-template-columns: 16.25rem 1fr;
@@ -72,7 +98,9 @@
   margin-top: var(--space-3);
 }
 
-.book-detail__title { color: var(--color-navy); }
+.book-detail__title {
+  color: var(--color-navy);
+}
 
 .book-detail__meta {
   display: flex;
@@ -85,11 +113,29 @@
   font-size: var(--text-sm);
 }
 
-.book-detail__meta div { display: flex; gap: var(--space-2); }
-.book-detail__meta dt { color: var(--color-muted); }
-.book-detail__meta dd { font-weight: 700; }
-.book-detail__label { margin-top: var(--space-4); font-size: var(--text-md); }
-.book-detail__description { margin-top: var(--space-1); font-size: var(--text-sm); color: var(--color-muted); }
+.book-detail__meta div {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.book-detail__meta dt {
+  color: var(--color-muted);
+}
+
+.book-detail__meta dd {
+  font-weight: 700;
+}
+
+.book-detail__label {
+  margin-top: var(--space-4);
+  font-size: var(--text-md);
+}
+
+.book-detail__description {
+  margin-top: var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
 
 .book-detail__stat {
   display: flex;
@@ -102,7 +148,9 @@
   font-size: var(--text-sm);
 }
 
-.book-detail__borrow { margin-top: var(--space-3); }
+.book-detail__borrow {
+  margin-top: var(--space-3);
+}
 
 .stock-badge {
   padding: 0 var(--space-3);
@@ -111,4 +159,219 @@
   font-size: var(--text-xs);
   font-weight: 700;
   color: var(--color-success);
+}
+
+/* =====================================================
+   3. HALAMAN PENCARIAN BUKU
+   ===================================================== */
+
+.search-page {
+  min-height: 100vh;
+}
+
+.search-page .site-header__inner {
+  max-width: 55rem;
+}
+
+.page--search {
+  width: 100%;
+  max-width: 55rem;
+  margin: 0 auto;
+  padding: 2.25rem 2.5rem 2rem;
+}
+
+.page--search .panel {
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+}
+
+.page--search .search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.page--search .search-bar__field {
+  flex: 1;
+  min-width: 0;
+  height: 2rem;
+}
+
+.page--search .search-bar__input {
+  width: 100%;
+  min-width: 0;
+  height: 2rem;
+  padding: 0.4rem 0.75rem 0.4rem 2rem;
+  border: 1px solid #e5e7f3;
+  border-radius: 0.55rem;
+  background: #f1f2ff;
+  font-size: 0.7rem;
+}
+
+.page--search .search-bar__input::placeholder {
+  color: var(--color-muted);
+}
+
+.page--search .input-field__icon {
+  left: 0.75rem;
+}
+
+.page--search .search-bar__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 4.6rem;
+  min-height: 2rem;
+  padding: 0 0.9rem;
+  border-radius: 0.55rem;
+  font-size: 0.7rem;
+  box-shadow: 0 2px 4px rgb(11 42 111 / 18%);
+}
+
+.page--search .dropdown {
+  margin-top: 0.75rem;
+}
+
+.page--search .dropdown__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 6.9rem;
+  min-height: 1.6rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: 0.45rem;
+  font-size: 0.62rem;
+  font-weight: 600;
+}
+
+.page--search .dropdown__list {
+  min-width: 12rem;
+}
+
+.page--search .dropdown__link {
+  font-size: 0.7rem;
+}
+
+.page--search .section-title {
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.page--search .book-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.page--search .book-card--wide {
+  min-width: 0;
+  min-height: 11.3rem;
+  gap: 0.65rem;
+  padding: 0.9rem;
+  border-radius: 0.75rem;
+}
+
+.page--search .book-card__top {
+  min-height: 7.125rem;
+  align-items: flex-start;
+  gap: 0.7rem;
+}
+
+.page--search .cover {
+  flex: 0 0 5.125rem;
+  width: 5.125rem;
+  height: 7.125rem;
+  border-radius: 0.35rem;
+}
+
+.page--search .cover--placeholder {
+  padding: 0.5rem;
+  font-size: 0.58rem;
+}
+
+.page--search .cover__label {
+  top: 0.25rem;
+  left: 0.25rem;
+  font-size: 0.5rem;
+}
+
+.page--search .book-card__body {
+  flex: 1;
+  min-width: 0;
+  gap: 0.15rem;
+  padding-right: 1rem;
+}
+
+.page--search .tag {
+  align-self: flex-start;
+  margin-bottom: 0.1rem;
+  padding: 0.05rem 0.3rem;
+  font-size: 0.55rem;
+  line-height: 1.35;
+}
+
+.page--search .book-card__title {
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+.page--search .book-card__author {
+  font-size: 0.64rem;
+  line-height: 1.35;
+}
+
+.page--search .book-card__body .badge {
+  margin-top: auto;
+  padding: 0.08rem 0.35rem;
+  font-size: 0.55rem;
+  line-height: 1.3;
+}
+
+.page--search .book-card__bookmark {
+  top: 0;
+  right: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.page--search .book-card__bookmark .icon {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+.page--search .book-card__bookmark--saved {
+  color: var(--color-gold);
+}
+
+.page--search .book-card__footer {
+  padding-top: 0.45rem;
+}
+
+.page--search .book-card__footer .btn {
+  min-height: 1.35rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 0.45rem;
+  font-size: 0.62rem;
+}
+
+/* =====================================================
+   4. RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 700px) {
+  .page--search {
+    padding: 1.25rem 1rem 1.5rem;
+  }
+
+  .page--search .book-grid--two {
+    grid-template-columns: 1fr;
+  }
+
+  .page--search .book-card__top {
+    flex-direction: row;
+  }
 }
