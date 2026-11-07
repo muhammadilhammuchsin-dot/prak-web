@@ -169,23 +169,29 @@
   min-height: 100vh;
 }
 
+/* Navbar pencarian */
 .search-page .site-header__inner {
-  max-width: 55rem;
+  max-width: 72rem;
+  padding-right: 2.5rem;
+  padding-left: 2.5rem;
 }
 
+/* Kontainer halaman */
 .page--search {
   width: 100%;
-  max-width: 55rem;
+  max-width: 72rem;
   margin: 0 auto;
   padding: 2.25rem 2.5rem 2rem;
 }
 
+/* Panel pencarian */
 .page--search .panel {
   margin-bottom: 1.25rem;
   padding: 1rem;
   border-radius: 0.75rem;
 }
 
+/* Kolom pencarian */
 .page--search .search-bar {
   display: flex;
   align-items: center;
@@ -217,6 +223,7 @@
   left: 0.75rem;
 }
 
+/* Tombol pencarian */
 .page--search .search-bar__button {
   display: inline-flex;
   align-items: center;
@@ -229,6 +236,7 @@
   box-shadow: 0 2px 4px rgb(11 42 111 / 18%);
 }
 
+/* Dropdown kategori */
 .page--search .dropdown {
   margin-top: 0.75rem;
 }
@@ -254,30 +262,41 @@
   font-size: 0.7rem;
 }
 
+/* Judul bagian */
 .page--search .section-title {
   margin-bottom: 0.75rem;
   font-size: 0.85rem;
 }
 
+/* Grid buku */
 .page--search .book-grid--two {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
   gap: 1rem;
 }
 
+/* Kartu buku */
 .page--search .book-card--wide {
+  display: flex;
+  flex-direction: column;
   min-width: 0;
   min-height: 11.3rem;
+  height: 100%;
   gap: 0.65rem;
   padding: 0.9rem;
   border-radius: 0.75rem;
 }
 
+/* Bagian atas kartu */
 .page--search .book-card__top {
+  flex: 1;
+  min-width: 0;
   min-height: 7.125rem;
   align-items: flex-start;
   gap: 0.7rem;
 }
 
+/* Sampul buku */
 .page--search .cover {
   flex: 0 0 5.125rem;
   width: 5.125rem;
@@ -296,6 +315,7 @@
   font-size: 0.5rem;
 }
 
+/* Informasi buku */
 .page--search .book-card__body {
   flex: 1;
   min-width: 0;
@@ -303,6 +323,7 @@
   padding-right: 1rem;
 }
 
+/* Kategori */
 .page--search .tag {
   align-self: flex-start;
   margin-bottom: 0.1rem;
@@ -311,16 +332,19 @@
   line-height: 1.35;
 }
 
+/* Judul buku */
 .page--search .book-card__title {
   font-size: 0.78rem;
   line-height: 1.25;
 }
 
+/* Penulis */
 .page--search .book-card__author {
   font-size: 0.64rem;
   line-height: 1.35;
 }
 
+/* Statistik peminjaman */
 .page--search .book-card__body .badge {
   margin-top: auto;
   padding: 0.08rem 0.35rem;
@@ -328,6 +352,7 @@
   line-height: 1.3;
 }
 
+/* Bookmark */
 .page--search .book-card__bookmark {
   top: 0;
   right: 0;
@@ -347,7 +372,9 @@
   color: var(--color-gold);
 }
 
+/* Footer kartu */
 .page--search .book-card__footer {
+  margin-top: auto;
   padding-top: 0.45rem;
 }
 
@@ -363,6 +390,12 @@
    ===================================================== */
 
 @media (max-width: 700px) {
+
+  .search-page .site-header__inner {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
   .page--search {
     padding: 1.25rem 1rem 1.5rem;
   }

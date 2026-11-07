@@ -5,10 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Cari Sains &amp; Matematika - E-Perpustakaan</title>
+
   <!-- Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
   <!-- CSS bersama -->
   <link rel="stylesheet" href="../css/shared/variables.css">
   <link rel="stylesheet" href="../css/shared/base.css">
@@ -18,123 +20,361 @@
   <link rel="stylesheet" href="../css/anggota/anggota.css">
   <link rel="stylesheet" href="../css/shared/responsive.css">
 </head>
+
 <body class="search-page">
+
+  <!-- ICON SPRITE -->
   <svg class="icon-sprite" aria-hidden="true">
-    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
-    <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
-    <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></symbol>
-    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
-    <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></symbol>
-    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24">
+      <path d="M5 12h14M12 5l7 7-7 7"/>
+    </symbol>
+    <symbol id="i-book" viewBox="0 0 24 24">
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+    </symbol>
+    <symbol id="i-bookmark" viewBox="0 0 24 24">
+      <path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+    </symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24">
+      <path d="m6 9 6 6 6-6"/>
+    </symbol>
+    <symbol id="i-logout" viewBox="0 0 24 24">
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+      <path d="m16 17 5-5-5-5"/>
+      <path d="M21 12H9"/>
+    </symbol>
+    <symbol id="i-search" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="8"/>
+      <path d="m21 21-4.3-4.3"/>
+    </symbol>
   </svg>
 
-  <!-- Navbar -->
+  <!-- NAVBAR -->
   <header class="site-header">
     <div class="site-header__inner">
+
       <a class="brand" href="beranda.html" data-route="beranda.html">
-        <span class="brand__icon"><svg class="icon" aria-hidden="true"><use href="#i-book"></use></svg></span>
+        <span class="brand__icon">
+          <svg class="icon" aria-hidden="true">
+            <use href="#i-book"></use>
+          </svg>
+        </span>
         <span class="brand__text">
           <span class="brand__name">E-Perpustakaan</span>
           <span class="brand__sub">Universitas Khairun</span>
         </span>
       </a>
+
       <nav class="main-nav" aria-label="Menu utama">
         <ul class="main-nav__list">
-          <li><a class="main-nav__link" href="beranda.html" data-route="beranda.html">beranda</a></li>
-          <li><a class="main-nav__link main-nav__link--active" href="cari.html" data-route="cari.html" aria-current="page">cari buku</a></li>
-          <li><a class="main-nav__link main-nav__link--logout" href="../auth/login/anggota.html" data-route="../auth/login/anggota.html">keluar <svg class="icon icon--sm" aria-hidden="true"><use href="#i-logout"></use></svg></a></li>
+          <li>
+            <a class="main-nav__link"
+               href="beranda.html"
+               data-route="beranda.html">
+              beranda
+            </a>
+          </li>
+          <li>
+            <a class="main-nav__link main-nav__link--active"
+               href="cari.html"
+               data-route="cari.html"
+               aria-current="page">
+              cari buku
+            </a>
+          </li>
+          <li>
+            <a class="main-nav__link main-nav__link--logout"
+               href="../auth/login/anggota.html"
+               data-route="../auth/login/anggota.html">
+              keluar
+              <svg class="icon icon--sm" aria-hidden="true">
+                <use href="#i-logout"></use>
+              </svg>
+            </a>
+          </li>
         </ul>
       </nav>
+
     </div>
   </header>
 
-  <!-- Pencarian dan filter kategori -->
+  <!-- PENCARIAN DAN FILTER KATEGORI -->
   <main class="page page--search">
-    <h1 class="visually-hidden">Cari Buku</h1>
+
+    <h1 class="visually-hidden">Cari Buku Sains dan Matematika</h1>
+
     <section class="panel search-panel" aria-label="Pencarian buku">
+
       <div class="search-bar" role="search" data-search-form>
+
         <div class="input-field search-bar__field">
-          <span class="input-field__icon"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-search"></use></svg></span>
-          <label class="visually-hidden" for="keyword">Nama atau ID buku</label>
-          <input class="search-bar__input" id="keyword" name="keyword" type="search" placeholder="masukkan nama / id buku...">
+          <span class="input-field__icon">
+            <svg class="icon icon--sm" aria-hidden="true">
+              <use href="#i-search"></use>
+            </svg>
+          </span>
+
+          <label class="visually-hidden" for="keyword">
+            Nama atau ID buku
+          </label>
+
+          <input
+            class="search-bar__input"
+            id="keyword"
+            name="keyword"
+            type="search"
+            placeholder="masukkan nama / id buku...">
         </div>
-        <button class="btn btn--navy search-bar__button" type="button" data-action="search">
-          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-search"></use></svg> Cari
+
+        <button class="btn btn--navy search-bar__button"
+                type="button"
+                data-action="search">
+          <svg class="icon icon--sm" aria-hidden="true">
+            <use href="#i-search"></use>
+          </svg>
+          Cari
         </button>
+
       </div>
+
       <details class="dropdown" data-category-dropdown>
-        <summary class="dropdown__summary">Kategori <svg class="icon icon--sm" aria-hidden="true"><use href="#i-chevron"></use></svg></summary>
+        <summary class="dropdown__summary">
+          Kategori
+          <svg class="icon icon--sm" aria-hidden="true">
+            <use href="#i-chevron"></use>
+          </svg>
+        </summary>
+
         <ul class="dropdown__list">
-          <li><a class="dropdown__link" href="cari-informatika.html" data-route="cari-informatika.html">Informatika &amp; Komputer</a></li>
-          <li><a class="dropdown__link dropdown__link--selected" href="cari-sains.html" data-route="cari-sains.html" aria-current="page">Sains &amp; Matematika</a></li>
-          <li><a class="dropdown__link" href="cari-sosial.html" data-route="cari-sosial.html">Sosial &amp; Bisnis</a></li>
-          <li><a class="dropdown__link" href="cari-sastra.html" data-route="cari-sastra.html">Sastra &amp; Bahasa</a></li>
+          <li>
+            <a class="dropdown__link"
+               href="cari-informatika.html"
+               data-route="cari-informatika.html">
+              Informatika &amp; Komputer
+            </a>
+          </li>
+          <li>
+            <a class="dropdown__link dropdown__link--selected"
+               href="cari-sains.html"
+               data-route="cari-sains.html"
+               aria-current="page">
+              Sains &amp; Matematika
+            </a>
+          </li>
+          <li>
+            <a class="dropdown__link"
+               href="cari-sosial.html"
+               data-route="cari-sosial.html">
+              Sosial &amp; Bisnis
+            </a>
+          </li>
+          <li>
+            <a class="dropdown__link"
+               href="cari-sastra.html"
+               data-route="cari-sastra.html">
+              Sastra &amp; Bahasa
+            </a>
+          </li>
         </ul>
       </details>
+
     </section>
 
+    <!-- DAFTAR BUKU -->
     <section aria-labelledby="book-section-title">
+
       <h2 class="section-title" id="book-section-title">
-        <svg class="icon icon--sm" aria-hidden="true"><use href="#i-book"></use></svg> Hasil Pencarian
+        <svg class="icon icon--sm" aria-hidden="true">
+          <use href="#i-book"></use>
+        </svg>
+        Rekomendasi Buku
       </h2>
+
       <div class="book-grid book-grid--two">
+
+        <!-- BUKU 1 -->
         <article class="book-card book-card--wide">
+
           <div class="book-card__top">
-            <figure class="cover"><img class="cover__image" src="../assets/covers/0011.jpg" alt="Sampul buku Matematika dalam Sains" loading="lazy"></figure>
+            <figure class="cover">
+              <img class="cover__image"
+                   src="../assets/covers/0011.jpg"
+                   alt="Sampul buku Matematika dalam Sains"
+                   loading="lazy">
+            </figure>
+
             <div class="book-card__body">
               <span class="tag">Sains &amp; Matematika</span>
-              <h3 class="book-card__title">Matematika dalam Sains</h3>
-              <p class="book-card__author">Dr. Ir. Taufik Abdullah, M.Pd</p>
+              <h3 class="book-card__title">
+                Matematika dalam Sains
+              </h3>
+              <p class="book-card__author">
+                Dr. Ir. Taufik Abdullah, M.Pd
+              </p>
               <span class="badge">dipinjam 10x</span>
             </div>
-            <button class="book-card__bookmark" type="button" aria-label="Simpan buku" data-action="bookmark"><svg class="icon" aria-hidden="true"><use href="#i-bookmark"></use></svg></button>
+
+            <button class="book-card__bookmark"
+                    type="button"
+                    aria-label="Simpan buku"
+                    data-action="bookmark">
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-bookmark"></use>
+              </svg>
+            </button>
           </div>
-          <div class="book-card__footer"><a class="btn btn--navy btn--small" href="detail.html" data-route="detail.html">Detail <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow"></use></svg></a></div>
+
+          <div class="book-card__footer">
+            <a class="btn btn--navy btn--small"
+               href="detail.html"
+               data-route="detail.html">
+              Detail
+              <svg class="icon icon--sm" aria-hidden="true">
+                <use href="#i-arrow"></use>
+              </svg>
+            </a>
+          </div>
+
         </article>
 
+        <!-- BUKU 2 -->
         <article class="book-card book-card--wide">
+
           <div class="book-card__top">
-            <figure class="cover"><img class="cover__image" src="../assets/covers/0005.jpg" alt="Sampul buku Matematika dalam Bencana" loading="lazy"></figure>
+            <figure class="cover">
+              <img class="cover__image"
+                   src="../assets/covers/0005.jpg"
+                   alt="Sampul buku Matematika dalam Bencana"
+                   loading="lazy">
+            </figure>
+
             <div class="book-card__body">
               <span class="tag">Sains &amp; Matematika</span>
-              <h3 class="book-card__title">Matematika dalam Bencana</h3>
-              <p class="book-card__author">Prof. Fahri A. Salim, Ph.D.</p>
+              <h3 class="book-card__title">
+                Matematika dalam Bencana
+              </h3>
+              <p class="book-card__author">
+                Prof. Fahri A. Salim, Ph.D.
+              </p>
               <span class="badge">dipinjam 5x</span>
             </div>
-            <button class="book-card__bookmark" type="button" aria-label="Simpan buku" data-action="bookmark"><svg class="icon" aria-hidden="true"><use href="#i-bookmark"></use></svg></button>
+
+            <button class="book-card__bookmark"
+                    type="button"
+                    aria-label="Simpan buku"
+                    data-action="bookmark">
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-bookmark"></use>
+              </svg>
+            </button>
           </div>
-          <div class="book-card__footer"><a class="btn btn--navy btn--small" href="detail.html" data-route="detail.html">Detail <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow"></use></svg></a></div>
+
+          <div class="book-card__footer">
+            <a class="btn btn--navy btn--small"
+               href="detail.html"
+               data-route="detail.html">
+              Detail
+              <svg class="icon icon--sm" aria-hidden="true">
+                <use href="#i-arrow"></use>
+              </svg>
+            </a>
+          </div>
+
         </article>
 
+        <!-- BUKU 3 -->
         <article class="book-card book-card--wide">
+
           <div class="book-card__top">
-            <figure class="cover"><img class="cover__image" src="../assets/covers/0006.jpg" alt="Sampul buku Matematika dalam Perjalanan" loading="lazy"></figure>
+            <figure class="cover">
+              <img class="cover__image"
+                   src="../assets/covers/0006.jpg"
+                   alt="Sampul buku Matematika dalam Perjalanan"
+                   loading="lazy">
+            </figure>
+
             <div class="book-card__body">
               <span class="tag">Sains &amp; Matematika</span>
-              <h3 class="book-card__title">Matematika dalam Perjalanan</h3>
-              <p class="book-card__author">Siti Rahmawati, S.T., M.Cs.</p>
+              <h3 class="book-card__title">
+                Matematika dalam Perjalanan
+              </h3>
+              <p class="book-card__author">
+                Siti Rahmawati, S.T., M.Cs.
+              </p>
               <span class="badge">dipinjam 11x</span>
             </div>
-            <button class="book-card__bookmark" type="button" aria-label="Simpan buku" data-action="bookmark"><svg class="icon" aria-hidden="true"><use href="#i-bookmark"></use></svg></button>
+
+            <button class="book-card__bookmark"
+                    type="button"
+                    aria-label="Simpan buku"
+                    data-action="bookmark">
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-bookmark"></use>
+              </svg>
+            </button>
           </div>
-          <div class="book-card__footer"><a class="btn btn--navy btn--small" href="detail.html" data-route="detail.html">Detail <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow"></use></svg></a></div>
+
+          <div class="book-card__footer">
+            <a class="btn btn--navy btn--small"
+               href="detail.html"
+               data-route="detail.html">
+              Detail
+              <svg class="icon icon--sm" aria-hidden="true">
+                <use href="#i-arrow"></use>
+              </svg>
+            </a>
+          </div>
+
         </article>
 
+        <!-- BUKU 4 -->
         <article class="book-card book-card--wide">
+
           <div class="book-card__top">
-            <figure class="cover"><img class="cover__image" src="../assets/covers/0012.jpg" alt="Sampul buku Matematika dalam Masyarakat" loading="lazy"></figure>
+            <figure class="cover">
+              <img class="cover__image"
+                   src="../assets/covers/0012.jpg"
+                   alt="Sampul buku Matematika dalam Masyarakat"
+                   loading="lazy">
+            </figure>
+
             <div class="book-card__body">
               <span class="tag">Sains &amp; Matematika</span>
-              <h3 class="book-card__title">Matematika dalam Masyarakat</h3>
-              <p class="book-card__author">Dr. Ir. Taufik Abdullah, M.Sc.</p>
+              <h3 class="book-card__title">
+                Matematika dalam Masyarakat
+              </h3>
+              <p class="book-card__author">
+                Dr. Ir. Taufik Abdullah, M.Sc.
+              </p>
               <span class="badge">dipinjam 11x</span>
             </div>
-            <button class="book-card__bookmark" type="button" aria-label="Simpan buku" data-action="bookmark"><svg class="icon" aria-hidden="true"><use href="#i-bookmark"></use></svg></button>
+
+            <button class="book-card__bookmark"
+                    type="button"
+                    aria-label="Simpan buku"
+                    data-action="bookmark">
+              <svg class="icon" aria-hidden="true">
+                <use href="#i-bookmark"></use>
+              </svg>
+            </button>
           </div>
-          <div class="book-card__footer"><a class="btn btn--navy btn--small" href="detail.html" data-route="detail.html">Detail <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow"></use></svg></a></div>
+
+          <div class="book-card__footer">
+            <a class="btn btn--navy btn--small"
+               href="detail.html"
+               data-route="detail.html">
+              Detail
+              <svg class="icon icon--sm" aria-hidden="true">
+                <use href="#i-arrow"></use>
+              </svg>
+            </a>
+          </div>
+
         </article>
+
       </div>
     </section>
+
   </main>
 </body>
 </html>
