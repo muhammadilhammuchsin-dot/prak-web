@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- CSS bersama: menggunakan desain yang sama dengan login Pustakawan -->
+  <!-- CSS bersama -->
   <link rel="stylesheet" href="../../css/shared/variables.css">
   <link rel="stylesheet" href="../../css/shared/base.css">
   <link rel="stylesheet" href="../../css/shared/utilities.css">
@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="../../css/shared/responsive.css">
 </head>
 <body>
-  <!-- Kumpulan ikon -->
+  <!-- Ikon halaman -->
   <svg class="icon-sprite" aria-hidden="true">
     <symbol id="i-book" viewBox="0 0 24 24">
       <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
@@ -50,19 +50,26 @@
       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
       <circle cx="12" cy="7" r="4"/>
     </symbol>
+    <symbol id="i-userplus" viewBox="0 0 24 24">
+      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M19 8v6M22 11h-6"/>
+    </symbol>
   </svg>
 
-  <!-- Kontainer halaman login -->
+  <!-- Kontainer login -->
   <main class="auth-page">
     <section class="auth-card" aria-labelledby="judul">
-      <!-- Header dan identitas perpustakaan -->
+      <!-- Header -->
       <header class="auth-card__header">
-        <img class="auth-card__logo" src="../../assets/logo.png" alt="Logo Universitas Khairun">
+        <img class="auth-card__logo"
+             src="../../assets/logo.png"
+             alt="Logo Universitas Khairun">
         <h1 class="auth-card__title" id="judul">E - PERPUSTAKAAN</h1>
         <p class="auth-card__subtitle">UNIVERSITAS KHAIRUN</p>
       </header>
 
-      <!-- Navigasi pemilihan jenis pengguna -->
+      <!-- Pilihan role -->
       <nav class="role-tabs" aria-label="Masuk sebagai">
         <a class="role-tabs__link" href="anggota.html">
           <svg class="icon icon--sm" aria-hidden="true"><use href="#i-cap"/></svg>
@@ -72,72 +79,136 @@
           <svg class="icon icon--sm" aria-hidden="true"><use href="#i-book"/></svg>
           Pustakawan
         </a>
-        <a class="role-tabs__link role-tabs__link--active" href="kepus.html" aria-current="page">
+        <a class="role-tabs__link role-tabs__link--active"
+           href="kepus.html"
+           aria-current="page">
           <svg class="icon icon--sm" aria-hidden="true"><use href="#i-user"/></svg>
           Kepus
         </a>
       </nav>
 
-      <!-- Informasi login -->
       <p class="auth-card__hint">Silakan login untuk melanjutkan</p>
 
-      <!-- Form login Kepala Perpustakaan -->
-      <form class="form" data-auth-form="login" data-user-role="kepus" novalidate>
-        <!-- Input NIP atau kode Kepus -->
+      <!-- Form login Kepus -->
+      <form class="form"
+            data-auth-form="login"
+            data-user-role="kepus"
+            novalidate>
+
+        <!-- NIP atau kode Kepus -->
         <div class="form__group">
-          <label class="form__label form__label--caps" for="npm">NIP / KODE KEPUS</label>
+          <label class="form__label form__label--caps" for="npm">
+            NIP / KODE KEPUS
+          </label>
           <div class="input-field">
             <span class="input-field__icon">
               <svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>
             </span>
-            <input class="form__input form__input--icon" id="npm" name="npm" type="text" placeholder="Masukkan NIP / Kode Kepus" autocomplete="username" required>
+            <input class="form__input form__input--icon"
+                   id="npm"
+                   name="npm"
+                   type="text"
+                   placeholder="Masukkan NIP / Kode Kepus"
+                   autocomplete="username"
+                   required
+                   aria-describedby="npm-error">
           </div>
+          <p class="form__error"
+             id="npm-error"
+             data-error-for="npm"
+             role="alert"
+             hidden></p>
         </div>
 
-        <!-- Input password -->
+        <!-- Password -->
         <div class="form__group">
-          <label class="form__label form__label--caps" for="password">PASSWORD</label>
+          <label class="form__label form__label--caps" for="password">
+            PASSWORD
+          </label>
           <div class="input-field">
             <span class="input-field__icon">
               <svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>
             </span>
-            <input class="form__input form__input--icon form__input--with-toggle" id="password" name="password" type="password" placeholder="Masukkan password Anda" autocomplete="current-password" required>
-            <button class="input-field__toggle" type="button" data-toggle-password="password" aria-label="Tampilkan password" aria-pressed="false">
+            <input class="form__input form__input--icon form__input--with-toggle"
+                   id="password"
+                   name="password"
+                   type="password"
+                   placeholder="Masukkan password Anda"
+                   autocomplete="current-password"
+                   required
+                   aria-describedby="password-error">
+            <button class="input-field__toggle"
+                    type="button"
+                    data-toggle-password="password"
+                    aria-label="Tampilkan password"
+                    aria-pressed="false">
               <svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg>
             </button>
           </div>
-          <a class="auth-card__link" href="../lupa-password/kepus.html">Lupa password?</a>
+          <p class="form__error"
+             id="password-error"
+             data-error-for="password"
+             role="alert"
+             hidden></p>
+          <a class="auth-card__link"
+             href="../lupa-password/kepus.html">
+            Lupa password?
+          </a>
         </div>
 
-        <!-- Input email opsional -->
+        <!-- Email opsional -->
         <div class="form__group">
-          <label class="form__label form__label--caps" for="email">EMAIL (OPSIONAL)</label>
+          <label class="form__label form__label--caps" for="email">
+            EMAIL (OPSIONAL)
+          </label>
           <div class="input-field">
             <span class="input-field__icon">
               <svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>
             </span>
-            <input class="form__input form__input--icon" id="email" name="email" type="email" placeholder="Masukkan email jika diperlukan" autocomplete="email">
+            <input class="form__input form__input--icon"
+                   id="email"
+                   name="email"
+                   type="email"
+                   placeholder="Masukkan email jika diperlukan"
+                   autocomplete="email"
+                   aria-describedby="email-error">
           </div>
+          <p class="form__error"
+             id="email-error"
+             data-error-for="email"
+             role="alert"
+             hidden></p>
         </div>
 
         <!-- Tombol login -->
-        <button class="btn btn--primary btn--block btn--tall" type="submit">
+        <button class="btn btn--primary btn--block btn--tall"
+                type="submit">
           <svg class="icon" aria-hidden="true"><use href="#i-login"/></svg>
           Login
         </button>
 
-        <!-- Pesan berhasil atau gagal login -->
-        <p class="auth-feedback" data-auth-feedback role="status" aria-live="polite" hidden></p>
+        <!-- Feedback login -->
+        <p class="auth-feedback"
+           data-auth-feedback
+           role="status"
+           aria-live="polite"
+           hidden></p>
       </form>
 
-      <!-- Footer pengganti menu pendaftaran -->
+      <!-- Pendaftaran bersama dengan role Kepus -->
       <footer class="auth-card__footer">
-        <p>Akses khusus Kepala Perpustakaan.</p>
+        <p>
+          Belum punya akun?
+          <a href="../daftar/petugas.html?role=kepus">
+            Daftar di sini!
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-userplus"/></svg>
+          </a>
+        </p>
       </footer>
     </section>
   </main>
 
-  <!-- JavaScript autentikasi Kepus -->
-  <script src="../../js/auth/kepus-auth.js" defer></script>
+  <!-- JavaScript autentikasi bersama -->
+  <script src="../../js/auth/staff-auth.js" defer></script>
 </body>
 </html>
