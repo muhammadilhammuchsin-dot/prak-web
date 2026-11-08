@@ -141,26 +141,25 @@
 
 /* =====================================================
    3. HALAMAN PENCARIAN BUKU
+   Layout utama mengikuti .page dari layout.css.
+   Dengan demikian navbar dan konten memiliki alignment
+   yang sama dengan halaman beranda.
    ===================================================== */
 .search-page {
   min-height: 100vh;
 }
-.search-page .site-header__inner {
-  max-width: 72rem;
-  padding-right: 2.5rem;
-  padding-left: 2.5rem;
-}
-.page--search {
-  width: 100%;
-  max-width: 72rem;
-  margin: 0 auto;
-  padding: 2.25rem 2.5rem 2rem;
-}
+
+/* Tidak menetapkan max-width, margin, dan padding khusus
+   pada .page--search agar menggunakan pengaturan .page. */
+
+/* Panel pencarian */
 .page--search .panel {
   margin-bottom: 1.25rem;
   padding: 1rem;
   border-radius: 0.75rem;
 }
+
+/* Kolom pencarian */
 .page--search .search-bar {
   display: flex;
   align-items: center;
@@ -187,6 +186,8 @@
 .page--search .input-field__icon {
   left: 0.75rem;
 }
+
+/* Tombol pencarian */
 .page--search .search-bar__button {
   display: inline-flex;
   align-items: center;
@@ -198,6 +199,8 @@
   font-size: 0.7rem;
   box-shadow: 0 2px 4px rgb(11 42 111 / 18%);
 }
+
+/* Dropdown kategori */
 .page--search .dropdown {
   margin-top: 0.75rem;
 }
@@ -219,15 +222,21 @@
 .page--search .dropdown__link {
   font-size: 0.7rem;
 }
+
+/* Judul rekomendasi buku */
 .page--search .section-title {
   margin-bottom: 0.75rem;
   font-size: 0.85rem;
 }
+
+/* Grid dua kolom */
 .page--search .book-grid--two {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: stretch;
   gap: 1rem;
 }
+
+/* Kartu buku pencarian */
 .page--search .book-card--wide {
   display: flex;
   flex-direction: column;
@@ -238,6 +247,8 @@
   padding: 0.9rem;
   border-radius: 0.75rem;
 }
+
+/* Bagian atas kartu */
 .page--search .book-card__top {
   flex: 1;
   min-width: 0;
@@ -245,6 +256,8 @@
   align-items: flex-start;
   gap: 0.7rem;
 }
+
+/* Sampul buku */
 .page--search .cover {
   flex: 0 0 5.125rem;
   width: 5.125rem;
@@ -260,12 +273,16 @@
   left: 0.25rem;
   font-size: 0.5rem;
 }
+
+/* Informasi buku */
 .page--search .book-card__body {
   flex: 1;
   min-width: 0;
   gap: 0.15rem;
   padding-right: 1rem;
 }
+
+/* Kategori */
 .page--search .tag {
   align-self: flex-start;
   margin-bottom: 0.1rem;
@@ -273,20 +290,28 @@
   font-size: 0.55rem;
   line-height: 1.35;
 }
+
+/* Judul buku */
 .page--search .book-card__title {
   font-size: 0.78rem;
   line-height: 1.25;
 }
+
+/* Penulis */
 .page--search .book-card__author {
   font-size: 0.64rem;
   line-height: 1.35;
 }
+
+/* Statistik peminjaman */
 .page--search .book-card__body .badge {
   margin-top: auto;
   padding: 0.08rem 0.35rem;
   font-size: 0.55rem;
   line-height: 1.3;
 }
+
+/* Bookmark */
 .page--search .book-card__bookmark {
   top: 0;
   right: 0;
@@ -303,6 +328,8 @@
 .page--search .book-card__bookmark--saved {
   color: var(--color-gold);
 }
+
+/* Footer kartu */
 .page--search .book-card__footer {
   margin-top: auto;
   padding-top: 0.45rem;
@@ -433,21 +460,20 @@
 
 /* =====================================================
    6. RESPONSIVE HALAMAN PENCARIAN DAN DETAIL
+   Navbar dan kontainer tetap mengikuti CSS bersama.
    ===================================================== */
 @media (max-width: 700px) {
-  .search-page .site-header__inner {
-    padding-right: 1rem;
-    padding-left: 1rem;
-  }
-  .page--search {
-    padding: 1.25rem 1rem 1.5rem;
-  }
+  /* Grid pencarian menjadi satu kolom */
   .page--search .book-grid--two {
     grid-template-columns: 1fr;
   }
+
+  /* Susunan informasi buku tetap horizontal */
   .page--search .book-card__top {
     flex-direction: row;
   }
+
+  /* Detail buku menjadi satu kolom */
   .book-detail {
     grid-template-columns: 1fr;
   }

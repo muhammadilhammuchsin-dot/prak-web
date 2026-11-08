@@ -12,6 +12,7 @@
    5. Menyimpan pilihan kategori pada URL.
    6. Menambah dan menghapus bookmark.
    7. Menghubungkan tombol Detail dengan ID buku yang benar.
+   8. Memastikan ID diperiksa sebelum navigasi.
 
    Penyimpanan bookmark menggunakan localStorage.
    Katalog mengambil data langsung dari file HTML.
@@ -106,8 +107,14 @@
     return currentPage ? currentPage.key : 'all';
   }
 
-  // Mengambil ID buku dari label sampul atau nama file gambar.
+  // Mengambil ID buku dari atribut, label sampul, atau nama file gambar.
   function getBookId(card) {
+    // Prioritaskan ID yang sudah tersimpan pada kartu.
+    const storedId = card.dataset.bookId?.trim();
+
+    if (storedId) return storedId;
+
+    // Mengambil ID dari label sampul, misalnya ID: 0003.
     const coverLabel = $('.cover__label', card)?.textContent || '';
 
     const labelMatch = coverLabel.match(
@@ -116,6 +123,7 @@
 
     if (labelMatch) return labelMatch[1];
 
+    // Mengambil ID dari nama file sampul, misalnya 0002.jpg.
     const image = $('.cover__image', card);
     const imagePath = image?.getAttribute('src') || '';
 
@@ -125,7 +133,15 @@
 
     if (imageMatch) return imageMatch[1];
 
-    return card.dataset.bookId || '';
+    return '';
+  }
+
+  // Mengambil judul buku.
+  function getBookTitle(card) {
+    return $('.book-card__title', card)
+      ?.textContent
+      .replace(/\s+/g, ' ')
+      .trim() || '';
   }
 
   // Memastikan setiap tombol Detail membawa ID buku yang benar.
@@ -163,13 +179,59 @@
     });
   }
 
-  // Mengambil judul buku.
-  function getBookTitle(card) {
-    return $('.book-card__title', card)
-      ?.textContent
-      .replace(/\s+/g, ' ')
-      .trim() || '';
-  }
+  // Memastikan ID buku benar sebelum navigasi dijalankan.
+  // Listener capture berjalan sebelum navigasi pada app.js.
+  document.addEventListener('click', event => {
+    const target = event.target instanceof Element
+      ? event.target
+      : null;
+
+    const link = target?.closest('.book-card a');
+
+    if (!link) return;
+
+    const href = link.getAttribute('href') || '';
+    const route = link.dataset.route || '';
+
+    // Hanya menangani tautan menuju halaman detail.
+    if (
+      !href.includes('detail.html') &&
+      !route.includes('detail.html')
+    ) {
+      return;
+    }
+
+    const card = link.closest('.book-card');
+
+    if (!card) return;
+
+    const bookId = getBookId(card);
+
+    // Hentikan navigasi jika ID tidak dapat diidentifikasi.
+    if (!bookId) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+
+      console.error(
+        'ID buku tidak ditemukan:',
+        getBookTitle(card)
+      );
+
+      window.EPerpus?.notify(
+        'ID buku tidak ditemukan. Periksa data katalog.',
+        'error'
+      );
+
+      return;
+    }
+
+    // Perbarui href dan data-route sebelum app.js membacanya.
+    const detailUrl =
+      `detail.html?id=${encodeURIComponent(bookId)}`;
+
+    link.href = detailUrl;
+    link.dataset.route = detailUrl;
+  }, true);
 
   // Menyimpan bookmark awal yang sudah ditandai pada HTML.
   function captureInitialBookmarks() {
@@ -597,7 +659,7 @@
     }
   }
 
-  // Inisialisasi seluruh fitur pencarian.
+  // Inisialisasi seluruh fitur pencarian dan katalog.
   async function initialize() {
     if (!$('.book-grid')) return;
 
@@ -606,6 +668,21 @@
 
     // Menentukan kategori awal.
     selectedCategory = getInitialCategory();
+
+    // Mengambil kartu yang sudah tersedia pada halaman.
+    bookCards = getBookCards();
+
+    // Menyimpan ID pada kartu sebelum katalog global dimuat.
+    bookCards.forEach(card => {
+      const id = getBookId(card);
+
+      if (id) {
+        card.dataset.bookId = id;
+      }
+    });
+
+    // Memperbaiki tautan Detail sebelum proses fetch dimulai.
+    updateDetailLinks();
 
     // Mengambil seluruh buku dari empat halaman kategori.
     catalogReady = await loadGlobalCatalog();
@@ -633,7 +710,7 @@
       selectedCategory = currentPage?.key || 'all';
     }
 
-    // Memperbarui tautan Detail dengan ID masing-masing buku.
+    // Memperbarui tautan Detail setelah katalog selesai dimuat.
     updateDetailLinks();
 
     // Memulihkan bookmark dan menerapkan filter awal.
