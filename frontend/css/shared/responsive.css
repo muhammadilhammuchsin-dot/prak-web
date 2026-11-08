@@ -1,13 +1,16 @@
+/* HAPUS aturan global ini karena memengaruhi halaman lain */
+.book-card__top {
+  align-items: stretch;
+}
 
-/* ---------- 14. RESPONSIF (HP) ---------- */
-@media (max-width: 700px) {
-  .book-detail, .book-form, .stats, .book-grid--two { grid-template-columns: 1fr; }
-  .book-card__top { flex-direction: column; }
-  .cover--large { height: 15rem; }
-  .auth-card--wide { padding: var(--space-5); }
-  .admin-layout { flex-direction: column; }
-  .sidebar { position: static; flex-direction: row; flex-wrap: wrap; width: 100%; height: auto; }
-  .sidebar__nav { flex-direction: row; flex-wrap: wrap; }
-  .sidebar__link--logout { margin: 0 0 0 auto; }
-  .chart-row { flex-direction: column; }
+.book-card__body {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  min-width: 0;
+}
+
+.book-card__body > .badge {
+  margin-top: auto;
+  align-self: flex-start;
 }

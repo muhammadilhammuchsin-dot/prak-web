@@ -1,17 +1,20 @@
 
 /* =========================================================
    E-PERPUSTAKAAN
-   MODUL ANGGOTA: PENCARIAN DAN BOOKMARK BUKU
+   MODUL ANGGOTA: KATALOG GLOBAL, PENCARIAN, FILTER KATEGORI,
+   BOOKMARK, DAN NAVIGASI DETAIL BUKU.
 
    Fitur:
-   1. Pencarian berdasarkan judul buku.
-   2. Pencarian berdasarkan nama penulis.
-   3. Pencarian berdasarkan kategori.
-   4. Pencarian berdasarkan ID buku.
-   5. Menampilkan kembali seluruh buku jika pencarian kosong.
-   6. Menambahkan dan menghapus bookmark.
+   1. Menggabungkan buku dari empat halaman kategori.
+   2. Menampilkan seluruh buku pada halaman cari.html.
+   3. Mencari berdasarkan judul, penulis, ID, dan kategori.
+   4. Memfilter buku berdasarkan kategori secara opsional.
+   5. Menyimpan pilihan kategori pada URL.
+   6. Menambah dan menghapus bookmark.
+   7. Menghubungkan tombol Detail dengan ID buku yang benar.
 
    Penyimpanan bookmark menggunakan localStorage.
+   Katalog mengambil data langsung dari file HTML.
    ========================================================= */
 
 (() => {
@@ -20,132 +23,172 @@
   // Kunci penyimpanan bookmark.
   const BOOKMARK_KEY = 'eperpus_anggota_bookmarks';
 
-  // Mengambil elemen HTML.
+  // Daftar halaman sumber katalog.
+  const CATEGORY_PAGES = [
+    {
+      key: 'informatika',
+      label: 'Informatika & Komputer',
+      file: 'cari-informatika.html'
+    },
+    {
+      key: 'sains',
+      label: 'Sains & Matematika',
+      file: 'cari-sains.html'
+    },
+    {
+      key: 'sosial',
+      label: 'Sosial & Bisnis',
+      file: 'cari-sosial.html'
+    },
+    {
+      key: 'sastra',
+      label: 'Sastra & Bahasa',
+      file: 'cari-sastra.html'
+    }
+  ];
+
+  // Mengambil satu elemen HTML.
   const $ = (selector, root = document) =>
     root.querySelector(selector);
 
-  // Mengambil seluruh elemen HTML yang sesuai.
+  // Mengambil seluruh elemen HTML.
   const $$ = (selector, root = document) =>
     [...root.querySelectorAll(selector)];
 
-  // Mengambil input pencarian.
-  const searchInput = $('#keyword');
+  // Variabel untuk menyimpan kondisi katalog.
+  let bookCards = [];
+  let selectedCategory = 'all';
+  let catalogReady = false;
+  let initialBookmarkTitles = [];
 
-  // Mengambil tombol pencarian.
-  const searchButton = $('[data-action="search"]');
+  // Menyamakan format teks agar pencarian tidak sensitif
+  // terhadap huruf besar, kecil, dan spasi berlebihan.
+  function normalizeText(value) {
+    return String(value || '')
+      .normalize('NFKC')
+      .toLocaleLowerCase('id')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
 
-  // Mengambil seluruh kartu buku.
-  function getBookCards() {
-    return $$('.book-card').filter(card =>
+  // Mengambil kartu buku dari halaman.
+  function getBookCards(root = document) {
+    return $$('.book-grid .book-card', root).filter(card =>
       $('.book-card__title', card)
     );
   }
 
-  // Mengubah teks menjadi format huruf kecil.
-  function normalizeText(value) {
-    return String(value || '')
-      .toLocaleLowerCase('id')
-      .trim();
+  // Mengambil nama file halaman yang sedang dibuka.
+  function getCurrentFile() {
+    return window.location.pathname
+      .split('/')
+      .pop()
+      .toLowerCase();
   }
 
-  // Mengambil ID buku dari nama file gambar.
+  // Menentukan kategori awal berdasarkan URL atau halaman aktif.
+  function getInitialCategory() {
+    const params = new URLSearchParams(window.location.search);
+    const queryCategory = params.get('kategori');
+
+    if (queryCategory === 'all') return 'all';
+
+    const validCategory = CATEGORY_PAGES.find(item =>
+      item.key === queryCategory
+    );
+
+    if (validCategory) return validCategory.key;
+
+    const currentPage = CATEGORY_PAGES.find(item =>
+      item.file === getCurrentFile()
+    );
+
+    return currentPage ? currentPage.key : 'all';
+  }
+
+  // Mengambil ID buku dari label sampul atau nama file gambar.
   function getBookId(card) {
-    // Memeriksa ID yang mungkin sudah tersedia pada HTML.
-    if (card.dataset.bookId) {
-      return card.dataset.bookId;
-    }
+    const coverLabel = $('.cover__label', card)?.textContent || '';
 
-    // Mengambil ID dari teks label sampul buku.
-    const coverLabel = $('.cover__label', card);
+    const labelMatch = coverLabel.match(
+      /\bID\s*:\s*(\d+)\b/i
+    );
 
-    if (coverLabel) {
-      const match = coverLabel.textContent.match(/\b\d+\b/);
+    if (labelMatch) return labelMatch[1];
 
-      if (match) return match[0];
-    }
-
-    // Mengambil ID dari nama file gambar.
     const image = $('.cover__image', card);
+    const imagePath = image?.getAttribute('src') || '';
 
-    if (image) {
-      const imagePath = image.getAttribute('src') || '';
+    const imageMatch = imagePath.match(
+      /(?:^|\/)(\d+)\.(?:jpe?g|png|webp)(?:[?#].*)?$/i
+    );
 
-      const match = imagePath.match(
-        /\/(\d+)\.(jpg|jpeg|png|webp)(?:[?#]|$)/i
-      );
+    if (imageMatch) return imageMatch[1];
 
-      if (match) return match[1];
-    }
-
-    return '';
+    return card.dataset.bookId || '';
   }
 
-  // Mengumpulkan seluruh informasi buku untuk pencarian.
-  function getSearchableText(card) {
-    const title = $('.book-card__title', card)?.textContent || '';
-    const author = $('.book-card__author', card)?.textContent || '';
-    const category = $('.tag', card)?.textContent || '';
-    const bookId = getBookId(card);
+  // Memastikan setiap tombol Detail membawa ID buku yang benar.
+  function updateDetailLinks() {
+    bookCards.forEach(card => {
+      const bookId = getBookId(card);
 
-    // Memasukkan teks alternatif gambar agar dapat dicari.
-    const imageAlt = $('.cover__image', card)?.getAttribute('alt') || '';
+      // Lewati kartu yang tidak memiliki ID.
+      if (!bookId) {
+        console.warn(
+          'ID buku tidak ditemukan:',
+          getBookTitle(card)
+        );
+        return;
+      }
 
-    return normalizeText([
-      title,
-      author,
-      category,
-      bookId,
-      imageAlt,
-      card.textContent
-    ].join(' '));
-  }
+      // Membuat alamat detail sesuai ID buku.
+      const detailUrl =
+        `detail.html?id=${encodeURIComponent(bookId)}`;
 
-  // Menampilkan atau menyembunyikan kartu buku.
-  function setCardVisibility(card, isVisible) {
-    card.hidden = !isVisible;
+      // Memperbarui seluruh tautan Detail pada kartu.
+      $$('a', card).forEach(link => {
+        const href = link.getAttribute('href') || '';
+        const route = link.dataset.route || '';
 
-    // Memastikan CSS tidak membuat buku tersembunyi tetap terlihat.
-    card.style.display = isVisible ? '' : 'none';
-  }
-
-  // Fungsi utama pencarian buku.
-  function searchBooks(keyword) {
-    const query = normalizeText(keyword);
-
-    const cards = getBookCards();
-
-    // Kata kunci kosong berarti tampilkan seluruh buku.
-    if (!query) {
-      cards.forEach(card => {
-        setCardVisibility(card, true);
+        // Hanya mengubah tautan yang menuju detail.html.
+        if (
+          href.includes('detail.html') ||
+          route.includes('detail.html')
+        ) {
+          link.href = detailUrl;
+          link.dataset.route = detailUrl;
+        }
       });
-
-      return;
-    }
-
-    // Memisahkan kata kunci berdasarkan spasi.
-    const keywords = query.split(/\s+/);
-
-    cards.forEach(card => {
-      const searchableText = getSearchableText(card);
-
-      // Semua kata kunci harus ditemukan pada informasi buku.
-      const isMatch = keywords.every(keyword =>
-        searchableText.includes(keyword)
-      );
-
-      setCardVisibility(card, isMatch);
     });
   }
 
-  // Membaca data bookmark dari localStorage.
-  function getBookmarks() {
+  // Mengambil judul buku.
+  function getBookTitle(card) {
+    return $('.book-card__title', card)
+      ?.textContent
+      .replace(/\s+/g, ' ')
+      .trim() || '';
+  }
+
+  // Menyimpan bookmark awal yang sudah ditandai pada HTML.
+  function captureInitialBookmarks() {
+    initialBookmarkTitles = getBookCards()
+      .filter(card =>
+        $('.book-card__bookmark--saved', card)
+      )
+      .map(getBookTitle)
+      .filter(Boolean);
+  }
+
+  // Membaca bookmark dari localStorage.
+  function readBookmarks() {
     try {
-      const data = localStorage.getItem(BOOKMARK_KEY);
+      const raw = localStorage.getItem(BOOKMARK_KEY);
 
-      if (data === null) return null;
+      if (raw === null) return null;
 
-      const parsed = JSON.parse(data);
+      const parsed = JSON.parse(raw);
 
       return Array.isArray(parsed) ? parsed : [];
     } catch (error) {
@@ -193,160 +236,455 @@
     );
   }
 
+  // Menampilkan status bookmark pada seluruh kartu.
+  function renderBookmarks() {
+    const storedBookmarks = readBookmarks();
+
+    const bookmarks = storedBookmarks === null
+      ? initialBookmarkTitles
+      : storedBookmarks;
+
+    bookCards.forEach(card => {
+      const button = $('.book-card__bookmark', card);
+      const title = getBookTitle(card);
+
+      if (button && title) {
+        updateBookmarkButton(
+          button,
+          bookmarks.includes(title)
+        );
+      }
+    });
+  }
+
   // Menambahkan atau menghapus bookmark.
   function toggleBookmark(button) {
     const card = button.closest('.book-card');
-
-    if (!card) return;
-
-    const title = $('.book-card__title', card)
-      ?.textContent.trim();
+    const title = card ? getBookTitle(card) : '';
 
     if (!title) {
       window.EPerpus?.notify(
         'Judul buku tidak ditemukan.',
         'error'
       );
-
       return;
     }
 
-    const bookmarks = getBookmarks() || [];
+    const storedBookmarks = readBookmarks();
+
+    const bookmarks = storedBookmarks === null
+      ? [...initialBookmarkTitles]
+      : [...storedBookmarks];
 
     const index = bookmarks.indexOf(title);
+    const isSaved = index === -1;
 
-    // Jika belum disimpan, tambahkan bookmark.
-    if (index === -1) {
+    if (isSaved) {
       bookmarks.push(title);
-
-      if (!saveBookmarks(bookmarks)) return;
-
-      updateBookmarkButton(button, true);
-
-      window.EPerpus?.notify(
-        'Buku berhasil ditambahkan ke bookmark.'
-      );
-
-      return;
+    } else {
+      bookmarks.splice(index, 1);
     }
-
-    // Jika sudah disimpan, hapus bookmark.
-    bookmarks.splice(index, 1);
 
     if (!saveBookmarks(bookmarks)) return;
 
-    updateBookmarkButton(button, false);
+    // Memperbarui semua kartu dengan judul yang sama.
+    bookCards.forEach(item => {
+      if (getBookTitle(item) === title) {
+        const itemButton = $('.book-card__bookmark', item);
+
+        if (itemButton) {
+          updateBookmarkButton(itemButton, isSaved);
+        }
+      }
+    });
 
     window.EPerpus?.notify(
-      'Buku berhasil dihapus dari bookmark.'
+      isSaved
+        ? 'Buku berhasil ditambahkan ke bookmark.'
+        : 'Buku berhasil dihapus dari bookmark.'
     );
   }
 
-  // Menginisialisasi status bookmark.
-  function initializeBookmarks() {
-    const cards = getBookCards();
+  // Mengumpulkan informasi yang dapat digunakan untuk pencarian.
+  function getSearchableText(card) {
+    const title = getBookTitle(card);
 
-    let bookmarks = getBookmarks();
+    const author =
+      $('.book-card__author', card)?.textContent || '';
 
-    // Jika belum pernah menyimpan bookmark,
-    // pertahankan status awal yang sudah ada di HTML.
-    if (bookmarks === null) {
-      bookmarks = cards
-        .filter(card =>
-          $('.book-card__bookmark', card)
-            ?.classList.contains('book-card__bookmark--saved')
-        )
-        .map(card =>
-          $('.book-card__title', card).textContent.trim()
-        );
+    const tag =
+      $('.tag', card)?.textContent || '';
 
-      saveBookmarks(bookmarks);
-    }
+    const imageAlt =
+      $('.cover__image', card)?.getAttribute('alt') || '';
 
-    // Memperbarui seluruh tombol bookmark.
-    cards.forEach(card => {
-      const button = $('.book-card__bookmark', card);
-      const title = $('.book-card__title', card)
-        ?.textContent.trim();
+    const bookId =
+      card.dataset.bookId || getBookId(card);
 
-      if (!button || !title) return;
+    const category = CATEGORY_PAGES.find(item =>
+      item.key === card.dataset.catalogCategory
+    )?.label || '';
 
-      updateBookmarkButton(
-        button,
-        bookmarks.includes(title)
+    return normalizeText([
+      title,
+      author,
+      tag,
+      imageAlt,
+      bookId,
+      category,
+      card.textContent
+    ].join(' '));
+  }
+
+  // Mengatur visibilitas kartu buku.
+  function setCardVisibility(card, isVisible) {
+    card.hidden = !isVisible;
+
+    // Menghindari kartu tersembunyi tetap tampil akibat aturan CSS.
+    card.style.display = isVisible ? '' : 'none';
+  }
+
+  // Fungsi utama pencarian dan filter kategori.
+  function applyFilters() {
+    const input = $('#keyword');
+    const query = normalizeText(input?.value || '');
+
+    // Memecah kata kunci berdasarkan spasi.
+    const keywords = query
+      ? query.split(' ').filter(Boolean)
+      : [];
+
+    bookCards.forEach(card => {
+      // Memeriksa apakah kategori sesuai pilihan pengguna.
+      const categoryMatches =
+        selectedCategory === 'all' ||
+        card.dataset.catalogCategory === selectedCategory;
+
+      // Memeriksa apakah seluruh kata kunci ditemukan.
+      const searchableText = getSearchableText(card);
+
+      const keywordMatches = keywords.every(keyword =>
+        searchableText.includes(keyword)
+      );
+
+      // Buku hanya tampil jika kedua kondisi terpenuhi.
+      setCardVisibility(
+        card,
+        categoryMatches && keywordMatches
       );
     });
   }
 
-  // Event input: pencarian berjalan ketika pengguna mengetik.
-  document.addEventListener('input', event => {
-    if (event.target === searchInput) {
-      searchBooks(searchInput.value);
-    }
-  });
+  // Mengambil kategori dari tautan dropdown.
+  function getCategoryFromLink(link) {
+    const href = link.getAttribute('href') || '';
 
-  // Event change: memperbarui hasil ketika nilai input berubah.
-  document.addEventListener('change', event => {
-    if (event.target === searchInput) {
-      searchBooks(searchInput.value);
-    }
-  });
+    const file = href
+      .split('/')
+      .pop()
+      .toLowerCase();
 
-  // Event click: menjalankan pencarian melalui tombol Cari.
-  document.addEventListener('click', event => {
+    return CATEGORY_PAGES.find(item =>
+      item.file === file
+    ) || null;
+  }
+
+  // Memperbarui penanda kategori yang sedang dipilih.
+  function updateCategoryMenu() {
+    $$('[data-category-dropdown] .dropdown__link')
+      .forEach(link => {
+        const category = getCategoryFromLink(link);
+
+        const isSelected = Boolean(
+          category && category.key === selectedCategory
+        );
+
+        link.classList.toggle(
+          'dropdown__link--selected',
+          isSelected
+        );
+
+        if (isSelected) {
+          link.setAttribute('aria-current', 'page');
+        } else {
+          link.removeAttribute('aria-current');
+        }
+      });
+  }
+
+  // Mengambil empat halaman kategori dan menggabungkan bukunya.
+  async function loadGlobalCatalog() {
+    const grid = $('.book-grid');
+
+    if (!grid) return false;
+
+    const currentFile = getCurrentFile();
+
+    const pageResults = await Promise.all(
+      CATEGORY_PAGES.map(async category => {
+        // Jika halaman sedang aktif termasuk sumber katalog,
+        // gunakan dokumen yang sudah tersedia.
+        if (category.file === currentFile) {
+          return {
+            category,
+            doc: document
+          };
+        }
+
+        try {
+          const pageUrl = new URL(
+            category.file,
+            window.location.href
+          );
+
+          const response = await fetch(pageUrl.href, {
+            cache: 'no-store'
+          });
+
+          if (!response.ok) {
+            throw new Error(
+              `HTTP ${response.status}: ${category.file}`
+            );
+          }
+
+          const html = await response.text();
+
+          // Membaca HTML tanpa menjalankan script di dalamnya.
+          const parsedDocument = new DOMParser()
+            .parseFromString(html, 'text/html');
+
+          return {
+            category,
+            doc: parsedDocument
+          };
+        } catch (error) {
+          console.error(
+            `Gagal memuat ${category.file}:`,
+            error
+          );
+
+          return null;
+        }
+      })
+    );
+
+    const successfulPages = pageResults.filter(Boolean);
+
+    // Katalog global harus berasal dari empat halaman.
+    if (successfulPages.length !== CATEGORY_PAGES.length) {
+      console.warn(
+        'Katalog global belum lengkap. Periksa halaman kategori dan jalankan melalui Live Server.'
+      );
+
+      return false;
+    }
+
+    // Menghindari data buku yang sama dimasukkan dua kali.
+    const uniqueCards = new Map();
+
+    successfulPages.forEach(({ category, doc }) => {
+      const sourceCards = getBookCards(doc);
+
+      sourceCards.forEach(sourceCard => {
+        const title = getBookTitle(sourceCard);
+        const bookId = getBookId(sourceCard);
+
+        const uniqueKey = bookId ||
+          `judul:${normalizeText(title)}`;
+
+        if (!uniqueKey || uniqueCards.has(uniqueKey)) {
+          return;
+        }
+
+        // Menyalin kartu buku ke dokumen aktif.
+        const card = document.importNode(
+          sourceCard,
+          true
+        );
+
+        // Kategori filter mengikuti halaman sumber kartu.
+        card.dataset.catalogCategory = category.key;
+
+        if (bookId) {
+          card.dataset.bookId = bookId;
+        }
+
+        uniqueCards.set(uniqueKey, card);
+      });
+    });
+
+    const catalogCards = [...uniqueCards.values()];
+
+    if (catalogCards.length === 0) {
+      console.error(
+        'Tidak ada data buku yang berhasil dibaca.'
+      );
+
+      return false;
+    }
+
+    // Mengganti kartu lama dengan seluruh katalog.
+    grid.replaceChildren(...catalogCards);
+
+    return true;
+  }
+
+  // Menangani kategori sebagai filter tanpa berpindah halaman.
+  // Menggunakan capture agar navigasi app.js tidak mengambil alih.
+  function handleCategoryClick(event) {
     const target = event.target instanceof Element
       ? event.target
-      : event.target.parentElement;
+      : null;
+
+    const link = target?.closest(
+      '[data-category-dropdown] .dropdown__link'
+    );
+
+    if (!link || !catalogReady) return;
+
+    const category = getCategoryFromLink(link);
+
+    if (!category) return;
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    // Mengubah kategori aktif.
+    selectedCategory = category.key;
+
+    updateCategoryMenu();
+    applyFilters();
+
+    // Menutup dropdown setelah kategori dipilih.
+    link.closest('details')?.removeAttribute('open');
+
+    // Menyimpan pilihan kategori pada URL.
+    const url = new URL(window.location.href);
+
+    url.searchParams.set(
+      'kategori',
+      selectedCategory
+    );
+
+    window.history.replaceState({}, '', url);
+  }
+
+  // Menangani tombol Cari dan bookmark.
+  function handleClick(event) {
+    const target = event.target instanceof Element
+      ? event.target
+      : null;
 
     if (!target) return;
 
-    // Memeriksa tombol pencarian.
-    const clickedSearchButton = target.closest(
+    // Tombol pencarian.
+    const searchButton = target.closest(
       '[data-action="search"]'
     );
 
-    if (clickedSearchButton) {
-      searchBooks(searchInput?.value || '');
+    if (searchButton) {
+      applyFilters();
       return;
     }
 
-    // Memeriksa tombol bookmark.
-    const clickedBookmarkButton = target.closest(
+    // Tombol bookmark.
+    const bookmarkButton = target.closest(
       '[data-action="bookmark"]'
     );
 
-    if (clickedBookmarkButton) {
-      toggleBookmark(clickedBookmarkButton);
+    if (bookmarkButton) {
+      toggleBookmark(bookmarkButton);
+    }
+  }
+
+  // Inisialisasi seluruh fitur pencarian.
+  async function initialize() {
+    if (!$('.book-grid')) return;
+
+    // Menyimpan status bookmark sebelum kartu diganti.
+    captureInitialBookmarks();
+
+    // Menentukan kategori awal.
+    selectedCategory = getInitialCategory();
+
+    // Mengambil seluruh buku dari empat halaman kategori.
+    catalogReady = await loadGlobalCatalog();
+
+    // Memperbarui daftar kartu setelah katalog dimuat.
+    bookCards = getBookCards();
+
+    // Jika pemuatan global gagal, gunakan kartu halaman aktif.
+    if (!catalogReady) {
+      const currentPage = CATEGORY_PAGES.find(item =>
+        item.file === getCurrentFile()
+      );
+
+      bookCards.forEach(card => {
+        card.dataset.catalogCategory =
+          currentPage?.key || 'all';
+
+        const id = getBookId(card);
+
+        if (id) {
+          card.dataset.bookId = id;
+        }
+      });
+
+      selectedCategory = currentPage?.key || 'all';
+    }
+
+    // Memperbarui tautan Detail dengan ID masing-masing buku.
+    updateDetailLinks();
+
+    // Memulihkan bookmark dan menerapkan filter awal.
+    renderBookmarks();
+    updateCategoryMenu();
+    applyFilters();
+  }
+
+  // Event click fase capture untuk filter kategori.
+  document.addEventListener(
+    'click',
+    handleCategoryClick,
+    true
+  );
+
+  // Event input: pencarian langsung ketika pengguna mengetik.
+  document.addEventListener('input', event => {
+    if (event.target.matches('#keyword')) {
+      applyFilters();
     }
   });
 
-  // Event keydown: pencarian dapat dijalankan dengan Enter.
+  // Event change: memperbarui hasil ketika input berubah.
+  document.addEventListener('change', event => {
+    if (event.target.matches('#keyword')) {
+      applyFilters();
+    }
+  });
+
+  // Event click: tombol Cari dan bookmark.
+  document.addEventListener('click', handleClick);
+
+  // Event Enter: menjalankan pencarian melalui keyboard.
   document.addEventListener('keydown', event => {
     if (
-      event.target === searchInput &&
+      event.target.matches('#keyword') &&
       event.key === 'Enter'
     ) {
       event.preventDefault();
-
-      searchBooks(searchInput.value);
+      applyFilters();
     }
   });
 
-  // Inisialisasi ketika halaman selesai dimuat.
-  function initialize() {
-    initializeBookmarks();
-
-    // Memastikan seluruh buku terlihat pada awal halaman.
-    searchBooks('');
-  }
-
+  // Menjalankan inisialisasi setelah HTML selesai diparsing.
   if (document.readyState === 'loading') {
     document.addEventListener(
       'DOMContentLoaded',
-      initialize
+      initialize,
+      { once: true }
     );
   } else {
     initialize();
   }
-
 })();

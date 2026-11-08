@@ -5,303 +5,127 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Detail Buku - E-Perpustakaan</title>
-
-  <!-- GOOGLE FONTS -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <!-- CSS SHARED -->
+  <!-- CSS bersama -->
   <link rel="stylesheet" href="../css/shared/variables.css">
   <link rel="stylesheet" href="../css/shared/base.css">
   <link rel="stylesheet" href="../css/shared/utilities.css">
   <link rel="stylesheet" href="../css/shared/components.css">
   <link rel="stylesheet" href="../css/shared/layout.css">
-
-  <!-- CSS ANGGOTA -->
+  <!-- CSS anggota -->
   <link rel="stylesheet" href="../css/anggota/anggota.css">
-
-  <!-- RESPONSIVE -->
   <link rel="stylesheet" href="../css/shared/responsive.css">
 </head>
 <body>
-
-  <!-- ICON SPRITE -->
+  <!-- Kumpulan ikon -->
   <svg class="icon-sprite" aria-hidden="true">
-    <symbol id="i-arrow-left" viewBox="0 0 24 24">
-      <path d="M19 12H5M12 19l-7-7 7-7"/>
-    </symbol>
-
     <symbol id="i-book" viewBox="0 0 24 24">
       <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
       <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
     </symbol>
-
     <symbol id="i-bookmark" viewBox="0 0 24 24">
       <path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
     </symbol>
-
     <symbol id="i-logout" viewBox="0 0 24 24">
       <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
       <path d="m16 17 5-5-5-5"/>
       <path d="M21 12H9"/>
     </symbol>
-
     <symbol id="i-trend" viewBox="0 0 24 24">
       <path d="m22 7-8.5 8.5-5-5L2 17"/>
       <path d="M16 7h6v6"/>
     </symbol>
   </svg>
 
-  <!-- NAVBAR -->
+  <!-- Navbar -->
   <header class="site-header">
     <div class="site-header__inner">
-
-      <!-- LOGO -->
       <a class="brand" href="beranda.html" data-route="beranda.html">
         <span class="brand__icon">
-          <svg class="icon" aria-hidden="true">
-            <use href="#i-book"/>
-          </svg>
+          <svg class="icon" aria-hidden="true"><use href="#i-book"/></svg>
         </span>
-
         <span class="brand__text">
           <span class="brand__name">E-Perpustakaan</span>
           <span class="brand__sub">Universitas Khairun</span>
         </span>
       </a>
-
-      <!-- MENU NAVIGASI -->
       <nav class="main-nav" aria-label="Menu utama">
         <ul class="main-nav__list">
-
+          <li><a class="main-nav__link" href="beranda.html" data-route="beranda.html">beranda</a></li>
+          <li><a class="main-nav__link main-nav__link--active" href="cari.html" data-route="cari.html" aria-current="page">cari buku</a></li>
           <li>
-            <a class="main-nav__link"
-               href="beranda.html"
-               data-route="beranda.html">
-              beranda
-            </a>
-          </li>
-
-          <li>
-            <a class="main-nav__link main-nav__link--active"
-               href="cari.html"
-               data-route="cari.html"
-               aria-current="page">
-              cari buku
-            </a>
-          </li>
-
-          <li>
-            <a class="main-nav__link main-nav__link--logout"
-               href="../auth/login/anggota.html"
-               data-route="../auth/login/anggota.html">
+            <a class="main-nav__link main-nav__link--logout" href="../auth/login/anggota.html" data-route="../auth/login/anggota.html">
               keluar
-              <svg class="icon icon--sm" aria-hidden="true">
-                <use href="#i-logout"/>
-              </svg>
+              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-logout"/></svg>
             </a>
           </li>
-
         </ul>
       </nav>
-
     </div>
   </header>
 
-  <!-- KONTEN DETAIL -->
+  <!-- Konten detail buku -->
   <main class="page">
-
-    <!-- DETAIL BUKU -->
-    <article class="panel book-detail">
-
-      <!-- SAMPUL DAN TOMBOL PINJAM -->
+    <article class="panel book-detail" data-book-detail>
+      <!-- Sampul dan tombol peminjaman -->
       <div>
         <figure class="cover cover--large">
-          <img
-            class="cover__image"
-            src="../assets/covers/0001.jpg"
-            alt="Sampul buku Struktur Data dan Analisis Algoritma">
+          <img class="cover__image" data-book-image src="../assets/covers/0001.jpg" alt="Sampul buku" loading="lazy">
         </figure>
-
-        <button
-          class="btn btn--navy btn--block book-detail__borrow"
-          type="button"
-          data-action="borrow">
-
-          <svg class="icon icon--sm" aria-hidden="true">
-            <use href="#i-bookmark"/>
-          </svg>
-
+        <button class="btn btn--navy btn--block book-detail__borrow" type="button" data-action="borrow" disabled>
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-bookmark"/></svg>
           Pinjam Buku
         </button>
       </div>
 
-      <!-- INFORMASI BUKU -->
+      <!-- Informasi buku diisi oleh detail.js -->
       <div>
-
-        <h1 class="book-detail__title">
-          Struktur Data &amp; Analisis Algoritma
-        </h1>
-
-        <!-- METADATA BUKU -->
+        <h1 class="book-detail__title" data-book-title>Memuat data buku...</h1>
         <dl class="book-detail__meta">
-
           <div>
             <dt>ID</dt>
-            <dd>0001</dd>
+            <dd data-book-id>—</dd>
           </div>
-
           <div>
             <dt>Penulis</dt>
-            <dd>Dr. Hendra Gunawan, S.Kom., M.T.</dd>
+            <dd data-book-author>—</dd>
           </div>
-
           <div>
             <dt>Kategori</dt>
-            <dd>Informatika &amp; Komputer</dd>
+            <dd data-book-category>—</dd>
           </div>
-
         </dl>
-
-        <!-- STOK -->
-        <p>
-          Stok tersedia :
-          <span class="stock-badge">4</span>
-        </p>
-
-        <!-- DESKRIPSI -->
-        <h2 class="book-detail__label">
-          Deskripsi buku :
-        </h2>
-
-        <p class="book-detail__description">
-          Landasan teoretis dan penerapan struktur data:
-          Linear Lists, Stack, Trees, B-Tree, Heap, hingga
-          Graph, lengkap dengan kompleksitas Big-O.
-        </p>
-
-        <!-- STATISTIK PEMINJAMAN -->
+        <p>Stok tersedia : <span class="stock-badge" data-book-stock>—</span></p>
+        <h2 class="book-detail__label">Deskripsi buku :</h2>
+        <p class="book-detail__description" data-book-description>Memuat deskripsi buku...</p>
         <p class="book-detail__stat">
-          <svg class="icon icon--sm" aria-hidden="true">
-            <use href="#i-trend"/>
-          </svg>
-
-          <strong>Dipinjam 20x</strong>
-          (12 kali oleh Informatika)
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-trend"/></svg>
+          <strong data-book-borrow-count>—</strong>
+          <span data-book-borrow-extra></span>
         </p>
-
       </div>
     </article>
 
-    <!-- BUKU SERUPA -->
+    <!-- Pesan apabila buku tidak ditemukan -->
+    <p data-detail-message role="status" aria-live="polite" hidden></p>
+
+    <!-- Rekomendasi buku dengan kategori serupa -->
     <section>
-
       <h2 class="section-title">Buku Serupa</h2>
-
-      <div class="book-grid">
-
-        <!-- BUKU 1 -->
-        <article class="book-card">
-
-          <div class="book-card__top">
-
-            <figure class="cover cover--small">
-              <img
-                class="cover__image"
-                src="../assets/covers/0002.jpg"
-                alt="Sampul buku Rekayasa Perangkat Lunak Terapan">
-            </figure>
-
-            <div class="book-card__body">
-              <h3 class="book-card__title book-card__title--small">
-                Rekayasa Perangkat Lunak Terapan
-              </h3>
-
-              <span class="badge">dipinjam 2x</span>
-            </div>
-
-          </div>
-
-          <a class="btn btn--light btn--block btn--small"
-             href="detail.html"
-             data-route="detail.html">
-            Detail
-          </a>
-
-        </article>
-
-        <!-- BUKU 2 -->
-        <article class="book-card">
-
-          <div class="book-card__top">
-
-            <figure class="cover cover--small cover--placeholder">
-              <figcaption>
-                Basis Data Relasional &amp; Manajemen SQL
-              </figcaption>
-            </figure>
-
-            <div class="book-card__body">
-              <h3 class="book-card__title book-card__title--small">
-                Basis Data Relasional &amp; Manajemen SQL
-              </h3>
-
-              <span class="badge">dipinjam 5x</span>
-            </div>
-
-          </div>
-
-          <a class="btn btn--light btn--block btn--small"
-             href="detail.html"
-             data-route="detail.html">
-            Detail
-          </a>
-
-        </article>
-
-        <!-- BUKU 3 -->
-        <article class="book-card">
-
-          <div class="book-card__top">
-
-            <figure class="cover cover--small">
-              <img
-                class="cover__image"
-                src="../assets/covers/0004.jpg"
-                alt="Sampul buku Kecerdasan Buatan dan Jaringan Syaraf">
-            </figure>
-
-            <div class="book-card__body">
-              <h3 class="book-card__title book-card__title--small">
-                Kecerdasan Buatan &amp; Jaringan Syaraf
-              </h3>
-
-              <span class="badge">dipinjam 16x</span>
-            </div>
-
-          </div>
-
-          <a class="btn btn--light btn--block btn--small"
-             href="detail.html"
-             data-route="detail.html">
-            Detail
-          </a>
-
-        </article>
-
+      <div class="book-grid" data-related-books>
+        <p>Memuat rekomendasi buku...</p>
       </div>
     </section>
-
   </main>
 
-  <!-- JavaScript untuk proses peminjaman buku oleh anggota -->
-<script src="../js/anggota/transaksi.js" defer></script>
-
-<!-- JavaScript untuk fitur pencarian dan bookmark buku -->
-<script src="../js/anggota/buku.js" defer></script>
-
-<!-- JavaScript untuk fungsi umum, seperti navigasi dan notifikasi -->
-<script src="../js/shared/app.js" defer></script>
-
+  <!-- JavaScript pemuat data detail buku -->
+  <script src="../js/anggota/detail.js" defer></script>
+  <!-- JavaScript transaksi peminjaman -->
+  <script src="../js/anggota/transaksi.js" defer></script>
+  <!-- JavaScript navigasi dan fungsi umum -->
+  <script src="../js/shared/app.js" defer></script>
 </body>
 </html>
