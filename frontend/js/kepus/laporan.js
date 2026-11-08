@@ -4,10 +4,10 @@
    MODUL KEPALA PERPUSTAKAAN: LAPORAN DINAMIS
 
    FITUR:
-   1. Mengambil jumlah anggota dari akun anggota terdaftar.
+   1. Mengambil jumlah anggota dari akun terdaftar.
    2. Mengambil jumlah buku dari empat katalog kategori.
-   3. Menggabungkan data buku tambahan dari localStorage.
-   4. Menghitung transaksi berdasarkan periode bulan dan tahun.
+   3. Menggabungkan buku tambahan dari localStorage.
+   4. Menghitung transaksi berdasarkan periode.
    5. Mengelompokkan transaksi berdasarkan kategori buku.
    6. Memperbarui diagram donat dan diagram batang.
    7. Memvalidasi pilihan periode laporan.
@@ -16,9 +16,7 @@
    CATATAN:
    - Data masih berasal dari localStorage dan file HTML.
    - Belum menggunakan database MySQL.
-   - Sistem anggota belum menyimpan preferensi minat baca.
-     Karena itu diagram menunjukkan distribusi peminjaman,
-     bukan preferensi minat baca anggota.
+   - Belum ada data preferensi minat baca anggota.
    ========================================================= */
 
 (() => {
@@ -36,7 +34,7 @@
     transactions: 'eperpus_demo_transactions'
   };
 
-  // Empat sumber katalog yang sudah tersedia dalam proyek.
+  // Empat sumber katalog yang tersedia dalam proyek.
   const CATEGORY_PAGES = [
     'cari-informatika.html',
     'cari-sains.html',
@@ -44,7 +42,7 @@
     'cari-sastra.html'
   ];
 
-  // Urutan kategori mengikuti diagram donat pada HTML.
+  // Urutan kategori mengikuti diagram donat.
   const CATEGORIES = [
     {
       key: 'informatika',
@@ -68,7 +66,7 @@
     }
   ];
 
-  // Urutan batang mengikuti susunan diagram pada HTML.
+  // Urutan batang pada diagram.
   const BAR_CATEGORY_ORDER = [
     'informatika',
     'sains',
@@ -92,11 +90,11 @@
     desember: '12'
   };
 
-  // Fungsi untuk mengambil elemen HTML.
+  // Mengambil satu elemen HTML.
   const $ = (selector, root = document) =>
     root.querySelector(selector);
 
-  // Fungsi untuk mengambil seluruh elemen HTML.
+  // Mengambil seluruh elemen HTML.
   const $$ = (selector, root = document) =>
     [...root.querySelectorAll(selector)];
 
@@ -331,7 +329,7 @@
 
     catalogMap = books;
 
-    // Katalog dianggap lengkap jika empat halaman berhasil dibaca.
+    // Katalog lengkap jika empat halaman berhasil dibaca.
     catalogComplete =
       successfulPages.length === CATEGORY_PAGES.length;
 
@@ -368,7 +366,7 @@
     return `${match[2]}-${month}`;
   }
 
-  // Mengatur value option dan memilih bulan berjalan jika tersedia.
+  // Mengatur value option dan memilih bulan berjalan.
   function initializePeriodOptions() {
     if (!periodSelect) return false;
 
@@ -557,10 +555,10 @@
     // Menghitung akun anggota yang terdaftar.
     if (values[0]) {
       values[0].textContent =
-        countMembers().toLocaleString('id-ID');
+        String(countMembers()).padStart(3, '0');
     }
 
-    // Menampilkan jumlah buku jika seluruh katalog berhasil dimuat.
+    // Menampilkan jumlah buku jika seluruh katalog dimuat.
     if (values[1]) {
       values[1].textContent = catalogComplete
         ? countBooks().toLocaleString('id-ID')
@@ -581,8 +579,8 @@
 
     const total = report.total;
 
-    // Bagian tengah donat menampilkan jumlah transaksi.
-    hole.textContent = total.toLocaleString('id-ID');
+    // Bagian tengah donat menampilkan total transaksi.
+    hole.textContent = total > 0 ? '100%' : '0%';
 
     donut.setAttribute(
       'aria-label',
@@ -829,7 +827,7 @@
       return;
     }
 
-    // Mengambil katalog sebelum menghitung distribusi transaksi.
+    // Mengambil katalog sebelum menghitung transaksi.
     const catalogResult = await loadCatalog();
 
     // Mengaktifkan pilihan periode.

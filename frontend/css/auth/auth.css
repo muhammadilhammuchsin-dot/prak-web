@@ -1,3 +1,8 @@
+/* AUTH.CSS - E-PERPUSTAKAAN
+   Versi dirapikan: aturan duplikat dan aturan dropdown lama dihapus.
+   Memuat gaya umum, login Figma, halaman pemilih role, dan pendaftaran petugas.
+*/
+
 
 /* =====================================================
    AUTH.CSS - E-PERPUSTAKAAN
@@ -276,304 +281,6 @@
 
 
 
-/* FEEDBACK AUTENTIKASI PUSTAKAWAN */
-
-.auth-feedback {
-  padding: 12px 14px;
-  border: 1px solid #dbe3ef;
-  border-radius: 8px;
-  background: #f1f5f9;
-  color: #334155;
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.auth-feedback[hidden] {
-  display: none;
-}
-
-.auth-feedback--error {
-  border-color: #fecaca;
-  background: #fef2f2;
-  color: #b91c1c;
-}
-
-.auth-feedback--info {
-  border-color: #bbf7d0;
-  background: #f0fdf4;
-  color: #166534;
-}
-
-.form__input[aria-invalid="true"] {
-  border-color: #dc2626;
-}
-
-.form__error[hidden] {
-  display: none;
-}
-
-.form__error {
-  margin-top: 5px;
-  color: #dc2626;
-  font-size: 12px;
-}
-
-button:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-
-
-/* =====================================================
-   10. DESAIN LOGIN FIGMA
-   Digunakan bersama oleh Anggota, Pustakawan, dan Kepus.
-   ===================================================== */
-
-/* Background halaman login */
-.auth-login .auth-page {
-  display: grid;
-  place-items: center;
-  min-height: 100vh;
-  min-height: 100svh;
-  padding: 10px;
-  background: linear-gradient(145deg, #e1f5ff 0%, #bce8ff 48%, #8bd4fa 100%);
-}
-
-/* Card utama login */
-.auth-login .auth-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 10px;
-  width: 100%;
-  max-width: 400px;
-  min-height: 520px;
-  padding: 26px 21px 19px;
-  border: 0;
-  border-radius: 16px;
-  background: #ffffff;
-  box-shadow: 0 7px 20px rgb(11 42 111 / 10%);
-}
-
-/* Header logo dan identitas */
-.auth-login .auth-card__header {
-  text-align: center;
-}
-
-.auth-login .auth-card__logo {
-  display: block;
-  width: 70px;
-  height: 70px;
-  margin: 0 auto 3px;
-  object-fit: contain;
-}
-
-.auth-login .auth-card__title {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 800;
-  line-height: 1.3;
-  letter-spacing: -0.045em;
-  color: #111827;
-}
-
-.auth-login .auth-card__subtitle {
-  margin-top: 1px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  line-height: 1.4;
-  letter-spacing: 0.035em;
-  color: #0284c7;
-}
-
-/* Pilihan role */
-.auth-login .role-tabs {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  width: 100%;
-  padding: 5px;
-  border: 1px solid #e0e7f0;
-  border-radius: 12px;
-  background: #f1f5f9;
-}
-
-.auth-login .role-tabs__link {
-  display: inline-flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  min-width: 0;
-  min-height: 30px;
-  padding: 4px 3px;
-  border: 1px solid #d7e0eb;
-  border-radius: 9px;
-  background: #f8fafc;
-  font-size: 0.59rem;
-  font-weight: 600;
-  line-height: 1.2;
-  white-space: nowrap;
-  color: #334155;
-  transition: background 0.2s ease, box-shadow 0.2s ease;
-}
-
-/* Role yang sedang dipilih */
-.auth-login .role-tabs__link--active {
-  border-color: #d5e7f7;
-  background: #ffffff;
-  color: #0b2a6f;
-  box-shadow: 0 2px 7px rgb(2 132 199 / 20%);
-}
-
-.auth-login .role-tabs__link .icon {
-  width: 11px;
-  height: 11px;
-}
-
-/* Petunjuk login */
-.auth-login .auth-card__hint {
-  margin: 0;
-  font-size: 0.63rem;
-  font-weight: 500;
-  line-height: 1.5;
-  text-align: center;
-  color: #475569;
-}
-
-/* Form login */
-.auth-login .form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-}
-
-.auth-login .form__group {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-/* Label input */
-.auth-login .form__label {
-  font-size: 0.57rem;
-  font-weight: 700;
-  line-height: 1.3;
-  letter-spacing: 0.025em;
-  color: #334155;
-}
-
-/* Input dan placeholder */
-.auth-login .form__input {
-  width: 100%;
-  height: 31px;
-  padding: 6px 9px;
-  border: 1px solid #cbd8e8;
-  border-radius: 8px;
-  background: #ffffff;
-  font-family: var(--font-input);
-  font-size: 0.62rem;
-  line-height: 1.3;
-  color: #334155;
-}
-
-.auth-login .form__input::placeholder {
-  color: #94a3b8;
-}
-
-.auth-login .form__input--icon {
-  padding-left: 28px;
-}
-
-.auth-login .form__input--with-toggle {
-  padding-right: 30px;
-}
-
-/* Ikon input */
-.auth-login .input-field__icon {
-  left: 9px;
-  color: #94a3b8;
-}
-
-.auth-login .input-field__icon .icon {
-  width: 12px;
-  height: 12px;
-}
-
-/* Tombol tampilkan password */
-.auth-login .input-field__toggle {
-  right: 7px;
-  width: 22px;
-  height: 22px;
-}
-
-.auth-login .input-field__toggle .icon {
-  width: 13px;
-  height: 13px;
-}
-
-/* Lupa password */
-.auth-login .auth-card__link {
-  display: block;
-  align-self: flex-end;
-  margin-top: 1px;
-  font-size: 0.56rem;
-  font-weight: 700;
-  color: #0284c7;
-}
-
-/* Tombol login */
-.auth-login .btn--primary {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  width: 100%;
-  min-height: 32px;
-  padding: 6px 10px;
-  border: 0;
-  border-radius: 8px;
-  background: #0788c8;
-  font-size: 0.66rem;
-  font-weight: 700;
-  color: #ffffff;
-}
-
-.auth-login .btn--primary .icon {
-  width: 13px;
-  height: 13px;
-}
-
-/* Footer pendaftaran */
-.auth-login .auth-card__footer {
-  padding-top: 9px;
-  border-top: 1px solid #e2e8f0;
-  font-size: 0.57rem;
-  line-height: 1.5;
-  text-align: center;
-  color: #64748b;
-}
-
-.auth-login .auth-card__footer a {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  font-weight: 700;
-  color: #0284c7;
-}
-
-/* Pesan validasi */
-.auth-login .form__error {
-  margin-top: 2px;
-  font-size: 0.56rem;
-}
-
-.auth-login .auth-feedback {
-  padding: 7px 9px;
-  border-radius: 7px;
-  font-size: 0.6rem;
-}
 
 /* Halaman awal tanpa form login */
 .auth-login .auth-card--selector {
@@ -609,7 +316,6 @@ button:disabled {
     gap: 12px;
   }
 }
-
 
 /* =====================================================
    OVERRIDE LOGIN SESUAI FIGMA
@@ -919,38 +625,264 @@ body.auth-login{
   }
 }
 
-
 /* =========================================================
-   PENDAFTARAN PETUGAS BERSAMA: PUSTAKAWAN DAN KEPUS
+   PENDAFTARAN PETUGAS
+   Desain terpisah untuk halaman Pustakawan dan Kepus.
    ========================================================= */
 
-/* Posisi header pendaftaran */
-.auth-card--wide .staff-register-header {
-  align-items: flex-start;
+body.auth-register {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100svh;
+  background: linear-gradient(135deg, #d9f1ff 0%, #bde6ff 55%, #8fd5ff 100%);
+  font-family: "Plus Jakarta Sans", "Inter", sans-serif;
 }
 
-/* Area judul dan deskripsi */
-.staff-register-header__content {
-  flex: 1;
+.auth-register .auth-page {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 0 15px;
+  background: transparent;
+}
+
+.auth-register .register-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  max-width: 475px;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 40px 36px 48px;
+  border: 1px dashed #269aff;
+  border-bottom: 0;
+  border-radius: 20px 20px 0 0;
+  background: #fbfdff;
+  box-shadow: none;
+}
+
+/* Header dan tombol kembali */
+.auth-register .register-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 19px;
+  margin-bottom: 21px;
+  border-bottom: 1px solid #edf1f6;
+}
+
+.auth-register .register-back {
+  display: inline-flex;
+  flex: 0 0 32px;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: #344054;
+  text-decoration: none;
+}
+
+.auth-register .register-back .icon {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.auth-register .register-title {
+  margin: 0;
+  color: #1d2939;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+/* Form pendaftaran */
+.auth-register .register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  width: 100%;
+}
+
+.auth-register .register-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   min-width: 0;
 }
 
-/* Deskripsi mengikuti perataan judul */
-.staff-register-header .auth-card__hint {
-  margin-top: 0.35rem;
-  text-align: left;
-  line-height: 1.55;
+.auth-register .register-label {
+  color: #475467;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.35;
 }
 
-/* Menghindari judul keluar dari kartu */
-.auth-card--wide .auth-card__title--form {
-  max-width: 100%;
-  overflow-wrap: normal;
+/* Input dan ikon */
+.auth-register .register-input-field {
+  position: relative;
+  width: 100%;
+  height: 49px;
 }
 
-/* Dropdown pilihan jenis akun */
-.staff-role-select {
-  min-height: 2.8rem;
-  padding-right: 2.5rem;
+.auth-register .register-input-field .register-input {
+  display: block;
+  width: 100%;
+  height: 49px;
+  padding: 0 42px 0 40px;
+  border: 1px solid #dce5ef;
+  border-radius: 11px;
+  outline: none;
+  background: #fbfcfe;
+  box-shadow: 0 2px 3px rgb(16 24 40 / 4%);
+  color: #344054;
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.auth-register .register-input::placeholder {
+  color: #94a6bd;
+  opacity: 1;
+}
+
+.auth-register .register-input:focus {
+  border-color: #0789c8;
+  box-shadow: 0 0 0 3px rgb(7 137 200 / 10%);
+}
+
+.auth-register .register-input[aria-invalid="true"] {
+  border-color: #ff6375;
+  box-shadow: none;
+}
+
+.auth-register .register-input-icon {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  transform: translateY(-50%);
+  color: #94a6bd;
+  pointer-events: none;
+}
+
+.auth-register .register-input-icon .icon {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+
+/* Tombol tampil/sembunyikan password */
+.auth-register .register-toggle {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  right: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  color: #94a6bd;
   cursor: pointer;
+  pointer-events: auto;
+}
+
+.auth-register .register-toggle:hover {
+  color: #0789c8;
+}
+
+.auth-register .register-toggle .icon {
+  width: 17px;
+  height: 17px;
+}
+
+/* Pesan validasi */
+.auth-register .register-error {
+  margin: 0;
+  color: #ed1745;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.auth-register .register-error[hidden] {
+  display: none;
+}
+
+/* Tombol daftar */
+.auth-register .register-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 8px;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 11px;
+  background: #0789c8;
+  box-shadow: 0 3px 5px rgb(7 137 200 / 15%);
+  color: #fff;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.auth-register .register-submit:hover {
+  background: #0679b2;
+}
+
+.auth-register .register-submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+/* Pesan hasil pendaftaran */
+.auth-register .register-feedback {
+  margin: 0;
+  padding: 9px 11px;
+  border-radius: 9px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.auth-register .register-feedback[hidden] {
+  display: none;
+}
+
+/* Tampilan layar kecil */
+@media (max-width: 480px) {
+  .auth-register .auth-page {
+    padding: 0 15px;
+  }
+
+  .auth-register .register-card {
+    padding: 40px 24px 42px;
+  }
+}
+
+@media (max-width: 360px) {
+  .auth-register .register-card {
+    padding-right: 19px;
+    padding-left: 19px;
+  }
 }
