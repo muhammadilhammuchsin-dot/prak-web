@@ -53,6 +53,16 @@
   font-size: 26px;
 }
 
+.pb-brand-icon svg {
+  width: 25px;
+  height: 25px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .pb-navigation {
   display: flex;
   flex-direction: column;
@@ -105,54 +115,8 @@
 .pb-main {
   margin-left: var(--pb-sidebar-width);
   min-height: 100vh;
-  padding: clamp(20px, 2.5vw, 36px);
+  padding: 48px clamp(18px, 2.2vw, 30px) 28px;
   box-sizing: border-box;
-}
-
-.pb-page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 28px;
-}
-
-.pb-page-header h1 {
-  margin: 0;
-  color: #172033;
-  font-size: clamp(25px, 2.7vw, 40px);
-  font-weight: 800;
-}
-
-.pb-add-button {
-  min-height: 60px;
-  padding: 0 24px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  border-radius: 16px;
-  background: #102f78;
-  color: #fff;
-  text-decoration: none;
-  font-size: 17px;
-  font-weight: 700;
-  white-space: nowrap;
-  transition: background 0.2s ease;
-}
-
-.pb-add-button:hover {
-  background: #214b99;
-}
-
-.pb-add-button svg {
-  width: 22px;
-  height: 22px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
 }
 
 /* =====================================================
@@ -160,9 +124,9 @@
    ===================================================== */
 
 .pb-form-title {
-  margin: 5px 0 20px;
+  margin: 0 0 8px;
   color: #172033;
-  font-size: clamp(22px, 2vw, 30px);
+  font-size: clamp(18px, 2.2vw, 30px);
   font-weight: 700;
 }
 
@@ -173,8 +137,8 @@
 .pb-form-grid {
   display: grid;
   grid-template-columns: minmax(220px, 0.85fr) minmax(0, 1.15fr);
-  gap: clamp(20px, 2.2vw, 32px);
-  padding: clamp(20px, 2vw, 28px);
+  gap: clamp(16px, 2.2vw, 28px);
+  padding: clamp(12px, 1.5vw, 20px);
   border-radius: 10px;
   background: #fff;
   box-sizing: border-box;
@@ -190,8 +154,8 @@
 
 .pb-upload-box {
   width: 100%;
-  aspect-ratio: 1.25 / 1;
-  max-height: 300px;
+  aspect-ratio: 1.6 / 1;
+  max-height: clamp(161px, 18vw, 300px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -203,8 +167,8 @@
 }
 
 .pb-upload-placeholder {
-  width: 66px;
-  height: 66px;
+  width: clamp(48px, 5vw, 66px);
+  height: clamp(48px, 5vw, 66px);
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -212,8 +176,8 @@
 }
 
 .pb-upload-placeholder svg {
-  width: 28px;
-  height: 28px;
+  width: clamp(20px, 2.2vw, 28px);
+  height: clamp(20px, 2.2vw, 28px);
   fill: none;
   stroke: #082b70;
   stroke-width: 2;
@@ -229,18 +193,11 @@
 }
 
 .pb-upload-caption {
-  margin-top: 10px;
+  margin-top: 7px;
   color: #172033;
-  font-size: 13px;
+  font-size: clamp(9px, 1vw, 13px);
   font-weight: 600;
   cursor: pointer;
-}
-
-.pb-upload-info {
-  margin: 7px 0 0;
-  color: #8290a7;
-  font-size: 11px;
-  text-align: center;
 }
 
 /* Input */
@@ -248,18 +205,18 @@
 .pb-fields {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: clamp(6px, 0.8vw, 10px);
 }
 
 .pb-field {
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: clamp(4px, 0.5vw, 7px);
 }
 
 .pb-field label {
   color: #172033;
-  font-size: 13px;
+  font-size: clamp(9px, 1vw, 13px);
   font-weight: 600;
 }
 
@@ -267,21 +224,21 @@
 .pb-field select,
 .pb-field textarea {
   width: 100%;
-  min-height: 40px;
-  padding: 0 13px;
+  min-height: clamp(27px, 3vw, 40px);
+  padding: 0 10px;
   border: 1px solid transparent;
-  border-radius: 8px;
+  border-radius: 6px;
   outline: none;
   box-sizing: border-box;
   background: #f0f2ff;
   color: #172033;
   font-family: 'Inter', sans-serif;
-  font-size: 13px;
+  font-size: clamp(9px, 1vw, 13px);
 }
 
 .pb-field textarea {
-  min-height: 100px;
-  padding: 12px 13px;
+  min-height: clamp(68px, 7.8vw, 100px);
+  padding: 10px;
   resize: vertical;
 }
 
@@ -307,20 +264,20 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 12px;
+  margin-top: 5px;
 }
 
 .pb-cancel-button,
 .pb-save-button {
-  width: 150px;
-  min-height: 43px;
+  width: clamp(117px, 11vw, 150px);
+  min-height: clamp(28px, 3.2vw, 43px);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: none;
   border-radius: 8px;
   font-family: inherit;
-  font-size: 13px;
+  font-size: clamp(9px, 1vw, 13px);
   font-weight: 700;
   text-decoration: none;
   cursor: pointer;
@@ -346,8 +303,8 @@
 }
 
 .pb-feedback {
-  min-height: 20px;
-  margin-top: 12px;
+  min-height: 0;
+  margin-top: 8px;
   color: #52627a;
   font-size: 13px;
 }
@@ -355,62 +312,6 @@
 /* =====================================================
    BERANDA - STOK TERSEDIA
    ===================================================== */
-
-.pb-stock-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
-}
-
-.pb-stock-card {
-  min-width: 0;
-  padding: 14px;
-  border: 1px solid #e0e6f0;
-  border-radius: 14px;
-  background: #fff;
-}
-
-.pb-stock-cover {
-  width: 100%;
-  height: 220px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  border-radius: 10px;
-  background: #f0f2ff;
-}
-
-.pb-stock-cover img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.pb-stock-placeholder {
-  padding: 15px;
-  color: #fff;
-  background: #343080;
-  font-weight: 700;
-  text-align: center;
-}
-
-.pb-stock-title {
-  margin: 12px 0;
-  color: #172033;
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.pb-stock-quantity {
-  display: inline-block;
-  padding: 5px 12px;
-  border-radius: 20px;
-  background: #edf1ff;
-  color: #082b70;
-  font-size: 12px;
-  font-weight: 700;
-}
 
 .pb-stock-empty {
   padding: 25px;
@@ -424,17 +325,13 @@
    RESPONSIVE
    ===================================================== */
 
-@media (max-width: 850px) {
+@media (max-width: 700px) {
   .pb-form-grid {
     grid-template-columns: 1fr;
   }
 
   .pb-upload-box {
     max-width: 400px;
-  }
-
-  .pb-stock-grid {
-    grid-template-columns: 1fr;
   }
 }
 
@@ -478,15 +375,6 @@
     padding: 15px;
   }
 
-  .pb-page-header {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .pb-add-button {
-    width: 100%;
-  }
-
   .pb-form-actions {
     flex-direction: column;
   }
@@ -494,5 +382,523 @@
   .pb-cancel-button,
   .pb-save-button {
     width: 100%;
+  }
+}
+
+/* =====================================================
+   LAYOUT PUSTAKAWAN UNTUK BERANDA, ANGGOTA, TRANSAKSI
+   ===================================================== */
+
+.admin-layout {
+  --admin-sidebar-width: clamp(154px, 18vw, 250px);
+  min-height: 100vh;
+}
+
+.admin-layout > .sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  width: var(--admin-sidebar-width);
+  height: 100vh;
+  padding: 12px;
+  overflow-y: auto;
+  background: #082b70;
+  color: #fff;
+}
+
+.admin-layout .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+  padding: 6px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.admin-layout .brand__icon {
+  display: grid;
+  flex: 0 0 46px;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  background: #214b99;
+  color: #fff;
+}
+
+.admin-layout .brand__name {
+  overflow: hidden;
+  font-size: clamp(12px, 1.2vw, 17px);
+  font-weight: 800;
+  text-overflow: ellipsis;
+}
+
+.admin-layout .sidebar__nav {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 30px;
+}
+
+.admin-layout .sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 43px;
+  padding: 0 12px;
+  border-radius: 11px;
+  color: #e4eaf8;
+  font-size: clamp(11px, 1.1vw, 15px);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.admin-layout .sidebar__link:hover,
+.admin-layout .sidebar__link--active {
+  background: #254a92;
+  color: #fff;
+}
+
+.admin-layout .sidebar__link--active {
+  font-weight: 700;
+}
+
+.admin-layout .sidebar__link--logout {
+  margin-top: auto;
+}
+
+.admin-layout .sidebar__link .icon {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.admin-layout .admin-content {
+  min-width: 0;
+  min-height: 100vh;
+  margin-left: var(--admin-sidebar-width);
+  padding: clamp(20px, 2.5vw, 36px);
+}
+
+.admin-content > .page-title {
+  margin: 0 0 22px;
+  color: #172033;
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 800;
+}
+
+/* Profil admin */
+
+.admin-profile {
+  padding: 18px 20px;
+}
+
+.admin-profile > .page-title {
+  margin: 0 0 16px;
+  color: #172033;
+  font-size: clamp(25px, 2.4vw, 34px);
+}
+
+.admin-profile .user-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #f8f9ff;
+}
+
+.admin-profile .user-info__avatar--large {
+  flex: 0 0 72px;
+  width: 72px;
+  height: 72px;
+}
+
+.profile__list {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.profile__list > div {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 8px;
+}
+
+.profile__list dt {
+  color: #172033;
+  font-weight: 700;
+}
+
+.profile__list dt::after {
+  content: ":";
+  margin-left: 4px;
+}
+
+.profile__list dd {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #172033;
+}
+
+/* Stok buku */
+
+.stock-section {
+  margin-top: 18px;
+}
+
+.book-grid--admin {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: min(100%, 950px);
+  gap: 20px;
+}
+
+.book-grid--admin .book-card {
+  min-width: 0;
+}
+
+.book-grid--admin .cover--banner {
+  height: clamp(150px, 18vw, 220px);
+}
+
+.book-grid--admin .book-card__title {
+  min-height: 2.5em;
+  overflow-wrap: anywhere;
+}
+
+/* Pencarian */
+
+.admin-content .search-bar {
+  align-items: stretch;
+}
+
+.admin-content .search-bar__field {
+  min-width: 0;
+}
+
+.admin-content .search-bar__input {
+  min-height: 48px;
+  color: #172033;
+}
+
+/* Tabel */
+
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.data-table th,
+.data-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: middle;
+}
+
+.data-table th {
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.data-table td {
+  color: #172033;
+  font-size: 14px;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Identitas anggota */
+
+.member {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 180px;
+}
+
+.member__initial {
+  display: grid;
+  flex: 0 0 34px;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #eef2ff;
+  color: #0b2a6f;
+  font-weight: 800;
+}
+
+.member__email {
+  display: block;
+  margin-top: 2px;
+  color: #64748b;
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+/* Label status */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #0b2a6f;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.pill--code {
+  min-width: 58px;
+  background: #e8edff;
+}
+
+.pill--category {
+  background: #eef2ff;
+}
+
+.admin-content .btn--delete {
+  white-space: nowrap;
+}
+
+/* Feedback */
+
+.pb-feedback--success {
+  color: #15803d;
+}
+
+.pb-feedback--error {
+  color: #e11d48;
+}
+
+/* Dialog detail buku */
+
+.pb-book-dialog {
+  width: min(520px, calc(100vw - 32px));
+  max-width: 520px;
+  padding: 0;
+  border: 0;
+  border-radius: 16px;
+  color: #172033;
+  box-shadow: 0 18px 55px rgb(15 23 42 / 24%);
+}
+
+.pb-book-dialog::backdrop {
+  background: rgb(15 23 42 / 48%);
+}
+
+.pb-book-dialog__panel {
+  position: relative;
+  padding: 26px;
+  background: #fff;
+}
+
+.pb-book-dialog__panel h2 {
+  margin: 0 42px 20px 0;
+  font-size: 22px;
+}
+
+.pb-book-dialog__close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: #eef2ff;
+  color: #0b2a6f;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.pb-book-dialog__details {
+  display: grid;
+  gap: 12px;
+}
+
+.pb-book-dialog__details > div {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  gap: 12px;
+}
+
+.pb-book-dialog__details dt {
+  color: #64748b;
+  font-weight: 700;
+}
+
+.pb-book-dialog__details dd {
+  overflow-wrap: anywhere;
+}
+
+/* =====================================================
+   RESPONSIVE PUSTAKAWAN
+   ===================================================== */
+
+@media (max-width: 850px) {
+  .book-grid--admin {
+    width: 100%;
+  }
+
+  .admin-content .panel {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-layout > .sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 10px 12px;
+    overflow: visible;
+  }
+
+  .admin-layout .brand {
+    min-height: 42px;
+  }
+
+  .admin-layout .brand__icon {
+    flex-basis: 38px;
+    width: 38px;
+    height: 38px;
+  }
+
+  .admin-layout .sidebar__nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .admin-layout .sidebar__link {
+    min-height: 38px;
+    font-size: 12px;
+  }
+
+  .admin-layout .sidebar__link--logout {
+    margin-top: 0;
+  }
+
+  .admin-layout .admin-content {
+    margin-left: 0;
+    padding: 16px 12px 24px;
+  }
+
+  .admin-profile .user-info {
+    align-items: flex-start;
+    padding: 12px;
+  }
+
+  .admin-profile .user-info__avatar--large {
+    flex-basis: 54px;
+    width: 54px;
+    height: 54px;
+  }
+
+  .profile__list > div {
+    grid-template-columns: 1fr;
+    gap: 1px;
+  }
+
+  .profile__list dt::after {
+    content: "";
+  }
+
+  .book-grid--admin {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-content .search-bar {
+    flex-direction: column;
+  }
+
+  .admin-content .search-bar__button {
+    min-height: 42px;
+  }
+
+  .pb-book-dialog__panel {
+    padding: 20px;
+  }
+
+  .pb-book-dialog__details > div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
+
+.pb-feedback:empty {
+  display: none;
+}
+
+
+/* =====================================================
+   SIDEBAR TAMBAH BUKU DISAMAKAN DENGAN HALAMAN LAIN
+   ===================================================== */
+
+.admin-layout {
+  --admin-sidebar-width: clamp(154px, 18.2vw, 330px);
+}
+
+.admin-layout > .sidebar {
+  width: var(--admin-sidebar-width);
+}
+
+.admin-content.pb-main {
+  margin-left: var(--admin-sidebar-width);
+  min-height: 100vh;
+  padding: clamp(36px, 4vw, 64px)
+           clamp(18px, 2.2vw, 30px)
+           28px;
+}
+
+/* Form tetap responsif */
+.pb-form-grid {
+  grid-template-columns: minmax(220px, 0.85fr) minmax(0, 1.15fr);
+}
+
+/* Tampilan mobile */
+@media (max-width: 600px) {
+  .admin-layout > .sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+  }
+
+  .admin-content.pb-main {
+    margin-left: 0;
+    padding: 16px 12px 24px;
+  }
+
+  .pb-form-grid {
+    grid-template-columns: 1fr;
   }
 }

@@ -101,7 +101,7 @@
         </a>
 
         <a class="sidebar__link"
-           data-route="data-buku.html"
+           data-route="tambah-buku.html"
            role="link"
            tabindex="0">
           <svg class="icon icon--sm" aria-hidden="true">
@@ -155,7 +155,6 @@
 
         <div class="user-info">
 
-          <!-- Ikon profil admin -->
           <span class="user-info__avatar user-info__avatar--large"
                 aria-hidden="true">
             <svg class="icon icon--lg">
@@ -163,7 +162,6 @@
             </svg>
           </span>
 
-          <!-- Identitas admin -->
           <dl class="profile__list">
 
             <div>
@@ -206,15 +204,19 @@
 
             <span class="badge">dipinjam 20x</span>
 
-            <a class="btn btn--navy btn--block btn--small"
-               data-route="data-buku.html"
-               role="link"
-               tabindex="0">
+            <button class="btn btn--navy btn--block btn--small"
+                    type="button"
+                    data-book-detail
+                    data-book-title="Rekayasa Perangkat Lunak Terapan"
+                    data-book-author="Belum tersedia"
+                    data-book-category="Informatika & Komputer"
+                    data-book-stock="Data stok contoh"
+                    data-book-description="Informasi ini merupakan data contoh pada tampilan Beranda.">
               <svg class="icon icon--sm" aria-hidden="true">
                 <use href="#i-eye"/>
               </svg>
               Detail
-            </a>
+            </button>
 
           </article>
 
@@ -238,20 +240,62 @@
 
             <span class="badge">dipinjam 30x</span>
 
-            <a class="btn btn--navy btn--block btn--small"
-               data-route="data-buku.html"
-               role="link"
-               tabindex="0">
+            <button class="btn btn--navy btn--block btn--small"
+                    type="button"
+                    data-book-detail
+                    data-book-title="Sistem Basis Data Relasional"
+                    data-book-author="Belum tersedia"
+                    data-book-category="Informatika & Komputer"
+                    data-book-stock="Data stok contoh"
+                    data-book-description="Informasi ini merupakan data contoh pada tampilan Beranda.">
               <svg class="icon icon--sm" aria-hidden="true">
                 <use href="#i-eye"/>
               </svg>
               Detail
-            </a>
+            </button>
 
           </article>
 
         </div>
       </section>
+
+      <!-- Dialog detail buku -->
+      <dialog class="pb-book-dialog" id="bookDetailDialog" aria-labelledby="bookDetailTitle">
+        <div class="pb-book-dialog__panel">
+
+          <button class="pb-book-dialog__close"
+                  type="button"
+                  data-close-book-detail
+                  aria-label="Tutup detail">
+            ×
+          </button>
+
+          <h2 id="bookDetailTitle">Detail Buku</h2>
+
+          <dl class="pb-book-dialog__details">
+            <div>
+              <dt>Penulis</dt>
+              <dd id="bookDetailAuthor">-</dd>
+            </div>
+
+            <div>
+              <dt>Kategori</dt>
+              <dd id="bookDetailCategory">-</dd>
+            </div>
+
+            <div>
+              <dt>Stok</dt>
+              <dd id="bookDetailStock">-</dd>
+            </div>
+
+            <div>
+              <dt>Deskripsi</dt>
+              <dd id="bookDetailDescription">-</dd>
+            </div>
+          </dl>
+
+        </div>
+      </dialog>
 
     </main>
   </div>

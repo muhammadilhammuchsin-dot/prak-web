@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -17,43 +18,108 @@
   <link rel="stylesheet" href="../css/pustakawan/pustakawan.css">
   <link rel="stylesheet" href="../css/shared/responsive.css">
 </head>
+<body>
 
-<body class="pb-body">
+  <!-- ICON YANG SAMA DENGAN HALAMAN LAIN -->
+  <svg class="icon-sprite" aria-hidden="true">
+    <symbol id="i-book" viewBox="0 0 24 24">
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+    </symbol>
 
-  <div class="pb-layout">
+    <symbol id="i-grid" viewBox="0 0 24 24">
+      <rect x="3" y="3" width="7" height="7"/>
+      <rect x="14" y="3" width="7" height="7"/>
+      <rect x="14" y="14" width="7" height="7"/>
+      <rect x="3" y="14" width="7" height="7"/>
+    </symbol>
 
-    <!-- SIDEBAR -->
-    <aside class="pb-sidebar">
-      <a href="beranda.html" class="pb-brand">
-        <span class="pb-brand-icon">♧</span>
-        <span>E-Perpustakaan</span>
-      </a>
+    <symbol id="i-users" viewBox="0 0 24 24">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+    </symbol>
 
-      <nav class="pb-navigation">
-        <a href="beranda.html" class="pb-nav-link">
-          <span>▦</span> Beranda
+    <symbol id="i-swap" viewBox="0 0 24 24">
+      <path d="M17 1l4 4-4 4"/>
+      <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+      <path d="M7 23l-4-4 4-4"/>
+      <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+    </symbol>
+
+    <symbol id="i-logout" viewBox="0 0 24 24">
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+      <path d="m16 17 5-5-5-5"/>
+      <path d="M21 12H9"/>
+    </symbol>
+  </svg>
+
+  <div class="admin-layout">
+
+    <!-- SIDEBAR BERSAMA -->
+    <aside class="sidebar">
+
+      <div class="brand brand--light">
+        <span class="brand__icon">
+          <svg class="icon" aria-hidden="true">
+            <use href="#i-book"/>
+          </svg>
+        </span>
+        <span class="brand__name">E-Perpustakaan</span>
+      </div>
+
+      <nav class="sidebar__nav" aria-label="Menu pustakawan">
+
+        <a href="beranda.html"
+           class="sidebar__link"
+           data-route="beranda.html">
+          <svg class="icon icon--sm" aria-hidden="true">
+            <use href="#i-grid"/>
+          </svg>
+          <span>Beranda</span>
         </a>
 
-        <a href="data-buku.html" class="pb-nav-link active">
-          <span>▣</span> Data Buku
+        <a href="tambah-buku.html"
+           class="sidebar__link sidebar__link--active"
+           data-route="tambah-buku.html"
+           aria-current="page">
+          <svg class="icon icon--sm" aria-hidden="true">
+            <use href="#i-book"/>
+          </svg>
+          <span>Data Buku</span>
         </a>
 
-        <a href="data-anggota.html" class="pb-nav-link">
-          <span>♙</span> Data Anggota
+        <a href="data-anggota.html"
+           class="sidebar__link"
+           data-route="data-anggota.html">
+          <svg class="icon icon--sm" aria-hidden="true">
+            <use href="#i-users"/>
+          </svg>
+          <span>Data Anggota</span>
         </a>
 
-        <a href="transaksi.html" class="pb-nav-link">
-          <span>⇄</span> Transaksi
+        <a href="transaksi.html"
+           class="sidebar__link"
+           data-route="transaksi.html">
+          <svg class="icon icon--sm" aria-hidden="true">
+            <use href="#i-swap"/>
+          </svg>
+          <span>Transaksi</span>
         </a>
+
+        <a href="../auth/login/pustakawan.html"
+           class="sidebar__link sidebar__link--logout">
+          <svg class="icon icon--sm" aria-hidden="true">
+            <use href="#i-logout"/>
+          </svg>
+          <span>Keluar</span>
+        </a>
+
       </nav>
-
-      <a href="../auth/login/pustakawan.html" class="pb-logout">
-        <span>⇥</span> Keluar
-      </a>
     </aside>
 
-    <!-- KONTEN -->
-    <main class="pb-main">
+    <!-- KONTEN TAMBAH BUKU -->
+    <main class="admin-content pb-main">
 
       <h1 class="pb-form-title">Tambah buku baru</h1>
 
@@ -61,17 +127,15 @@
 
         <div class="pb-form-grid">
 
-          <!-- UPLOAD SAMPUL -->
+          <!-- UPLOAD GAMBAR -->
           <div class="pb-upload-section">
 
             <label for="gambar" class="pb-upload-box">
 
-              <img
-                id="coverPreview"
-                class="pb-cover-preview"
-                alt="Pratinjau sampul buku"
-                hidden
-              >
+              <img id="coverPreview"
+                   class="pb-cover-preview"
+                   alt="Pratinjau sampul buku"
+                   hidden>
 
               <div id="uploadPlaceholder" class="pb-upload-placeholder">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -82,103 +146,79 @@
 
             </label>
 
-            <input
-              type="file"
-              id="gambar"
-              name="gambar"
-              accept="image/jpeg,image/png,image/webp"
-              hidden
-            >
+            <input type="file"
+                   id="gambar"
+                   name="gambar"
+                   accept="image/jpeg,image/png,image/webp"
+                   hidden>
 
             <label for="gambar" class="pb-upload-caption">
               Upload gambar
             </label>
 
-            <p class="pb-upload-info">
-              JPG, PNG, atau WEBP. Maksimal 5 MB.
-            </p>
-
           </div>
 
-          <!-- FORM INPUT -->
+          <!-- INPUT BUKU -->
           <div class="pb-fields">
 
             <div class="pb-field">
               <label for="judul">Judul buku</label>
-              <input
-                type="text"
-                id="judul"
-                name="judul"
-                placeholder="masukkan judul buku"
-                maxlength="200"
-                required
-              >
+              <input type="text"
+                     id="judul"
+                     name="judul"
+                     placeholder="masukkan judul buku"
+                     maxlength="200"
+                     required>
             </div>
 
             <div class="pb-field">
               <label for="id-buku">ID buku</label>
-              <input
-                type="text"
-                id="id-buku"
-                name="id_buku"
-                placeholder="masukkan ID buku"
-                maxlength="50"
-                required
-              >
+              <input type="text"
+                     id="id-buku"
+                     name="id_buku"
+                     placeholder="masukkan ID buku"
+                     maxlength="50"
+                     required>
             </div>
 
             <div class="pb-field">
               <label for="penulis">Penulis</label>
-              <input
-                type="text"
-                id="penulis"
-                name="penulis"
-                placeholder="masukkan nama penulis"
-                maxlength="150"
-                required
-              >
+              <input type="text"
+                     id="penulis"
+                     name="penulis"
+                     placeholder="masukkan nama penulis"
+                     maxlength="150"
+                     required>
             </div>
 
             <div class="pb-field">
               <label for="kategori">Kategori</label>
               <select id="kategori" name="kategori" required>
                 <option value="">Pilih Kategori...</option>
-                <option value="Informatika & Komputer">
-                  Informatika & Komputer
-                </option>
-                <option value="Sains & Matematika">
-                  Sains & Matematika
-                </option>
-                <option value="Sastra & Bahasa">
-                  Sastra & Bahasa
-                </option>
-                <option value="Sosial & Bisnis">
-                  Sosial & Bisnis
-                </option>
+                <option value="Informatika & Komputer">Informatika & Komputer</option>
+                <option value="Sains & Matematika">Sains & Matematika</option>
+                <option value="Sastra & Bahasa">Sastra & Bahasa</option>
+                <option value="Sosial & Bisnis">Sosial & Bisnis</option>
               </select>
             </div>
 
             <div class="pb-field">
               <label for="stok">Stok</label>
-              <input
-                type="number"
-                id="stok"
-                name="stok"
-                placeholder="masukkan jumlah stok"
-                min="0"
-                step="1"
-                required
-              >
+              <input type="number"
+                     id="stok"
+                     name="stok"
+                     placeholder="masukkan jumlah stok"
+                     min="0"
+                     step="1"
+                     required>
             </div>
 
             <div class="pb-field">
               <label for="deskripsi">Deskripsi</label>
-              <textarea
-                id="deskripsi"
-                name="deskripsi"
-                placeholder="masukkan deskripsi buku..."
-                rows="5"
-              ></textarea>
+              <textarea id="deskripsi"
+                        name="deskripsi"
+                        placeholder="masukkan deskripsi buku..."
+                        rows="5"></textarea>
             </div>
 
           </div>
@@ -186,22 +226,18 @@
 
         <!-- TOMBOL -->
         <div class="pb-form-actions">
-
-          <a href="data-buku.html" class="pb-cancel-button">
-            Batal
-          </a>
-
-          <button
-            type="submit"
-            id="saveBookButton"
-            class="pb-save-button"
-          >
+          <a href="beranda.html" class="pb-cancel-button">Batal</a>
+          <button type="submit"
+                  id="saveBookButton"
+                  class="pb-save-button">
             Simpan
           </button>
-
         </div>
 
-        <p id="bookFeedback" class="pb-feedback" role="status" aria-live="polite"></p>
+        <p id="bookFeedback"
+           class="pb-feedback"
+           role="status"
+           aria-live="polite"></p>
 
       </form>
 

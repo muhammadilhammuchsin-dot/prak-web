@@ -1,74 +1,213 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Transaksi - E-Perpustakaan</title>
-  <!-- Font dari Google Fonts (butuh internet) dan file CSS -->
 
-
-  <!-- GOOGLE FONTS ASLI -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 
-  <!-- CSS SHARED -->
+  <!-- CSS bersama -->
   <link rel="stylesheet" href="../css/shared/variables.css">
   <link rel="stylesheet" href="../css/shared/base.css">
   <link rel="stylesheet" href="../css/shared/utilities.css">
   <link rel="stylesheet" href="../css/shared/components.css">
   <link rel="stylesheet" href="../css/shared/layout.css">
 
-  <!-- CSS PUSTAKAWAN -->
+  <!-- CSS pustakawan -->
   <link rel="stylesheet" href="../css/pustakawan/pustakawan.css">
 
-  <!-- RESPONSIVE -->
+  <!-- Responsive -->
   <link rel="stylesheet" href="../css/shared/responsive.css">
-
-
 </head>
-<body>
-  <!-- Kumpulan ikon halaman ini; dipanggil dengan <use href="#i-nama"> -->
-  <svg class="icon-sprite" aria-hidden="true"><symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol><symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></symbol><symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></symbol><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol><symbol id="i-swap" viewBox="0 0 24 24"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></symbol><symbol id="i-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol></svg>
 
+<body>
+
+  <!-- ICON SPRITE -->
+  <svg class="icon-sprite" aria-hidden="true">
+
+    <symbol id="i-book" viewBox="0 0 24 24">
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+    </symbol>
+
+    <symbol id="i-grid" viewBox="0 0 24 24">
+      <rect x="3" y="3" width="7" height="7"/>
+      <rect x="14" y="3" width="7" height="7"/>
+      <rect x="14" y="14" width="7" height="7"/>
+      <rect x="3" y="14" width="7" height="7"/>
+    </symbol>
+
+    <symbol id="i-logout" viewBox="0 0 24 24">
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+      <path d="m16 17 5-5-5-5"/>
+      <path d="M21 12H9"/>
+    </symbol>
+
+    <symbol id="i-search" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="8"/>
+      <path d="m21 21-4.3-4.3"/>
+    </symbol>
+
+    <symbol id="i-swap" viewBox="0 0 24 24">
+      <path d="M17 1l4 4-4 4"/>
+      <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+      <path d="M7 23l-4-4 4-4"/>
+      <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+    </symbol>
+
+    <symbol id="i-users" viewBox="0 0 24 24">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+    </symbol>
+
+  </svg>
+
+  <!-- LAYOUT UTAMA -->
   <div class="admin-layout">
+
+    <!-- SIDEBAR -->
     <aside class="sidebar">
+
       <div class="brand brand--light">
-        <span class="brand__icon"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
+        <span class="brand__icon">
+          <svg class="icon" aria-hidden="true">
+            <use href="#i-book"/>
+          </svg>
+        </span>
+
         <span class="brand__name">E-Perpustakaan</span>
       </div>
 
       <nav class="sidebar__nav" aria-label="Menu pustakawan">
-        <a class="sidebar__link" data-route="beranda.html" role="link" tabindex="0"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-grid"/></svg> Beranda</a>
-        <a class="sidebar__link" data-route="data-buku.html" role="link" tabindex="0"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-book"/></svg> Data Buku</a>
-        <a class="sidebar__link" data-route="data-anggota.html" role="link" tabindex="0"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-users"/></svg> Data Anggota</a>
-        <a class="sidebar__link sidebar__link--active" data-route="transaksi.html" aria-current="page" role="link" tabindex="0"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-swap"/></svg> Transaksi</a>
-        <a class="sidebar__link sidebar__link--logout" data-route="../auth/login/pustakawan.html" role="link" tabindex="0"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-logout"/></svg> Keluar</a>
+
+        <a class="sidebar__link"
+           data-route="beranda.html"
+           role="link"
+           tabindex="0">
+          <svg class="icon icon--sm" aria-hidden="true">
+            <use href="#i-grid"/>
+          </svg>
+          Beranda
+        </a>
+
+        <a class="sidebar__link"
+           data-route="tambah-buku.html"
+           role="link"
+           tabindex="0">
+          <svg class="icon icon--sm" aria-hidden="true">
+            <use href="#i-book"/>
+          </svg>
+          Data Buku
+        </a>
+
+        <a class="sidebar__link"
+           data-route="data-anggota.html"
+           role="link"
+           tabindex="0">
+          <svg class="icon icon--sm" aria-hidden="true">
+            <use href="#i-users"/>
+          </svg>
+          Data Anggota
+        </a>
+
+        <a class="sidebar__link sidebar__link--active"
+           data-route="transaksi.html"
+           aria-current="page"
+           role="link"
+           tabindex="0">
+          <svg class="icon icon--sm" aria-hidden="true">
+            <use href="#i-swap"/>
+          </svg>
+          Transaksi
+        </a>
+
+        <a class="sidebar__link sidebar__link--logout"
+           data-route="../auth/login/pustakawan.html"
+           role="link"
+           tabindex="0">
+          <svg class="icon icon--sm" aria-hidden="true">
+            <use href="#i-logout"/>
+          </svg>
+          Keluar
+        </a>
+
       </nav>
     </aside>
 
+    <!-- KONTEN UTAMA -->
     <main class="admin-content">
+
       <h1 class="page-title">Transaksi Peminjaman</h1>
 
+      <!-- PENCARIAN -->
       <section class="panel" aria-label="Pencarian">
-        <div class="search-bar" role="search" data-search-form="transactions">
+
+        <div class="search-bar"
+             role="search"
+             data-search-form="transactions">
+
           <div class="input-field search-bar__field">
-            <span class="input-field__icon"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-search"/></svg></span>
-            <label class="visually-hidden" for="keyword">id buku</label>
-            <input class="search-bar__input" id="keyword" name="keyword" type="search" placeholder="id buku">
+
+            <span class="input-field__icon">
+              <svg class="icon icon--sm" aria-hidden="true">
+                <use href="#i-search"/>
+              </svg>
+            </span>
+
+            <label class="visually-hidden" for="keyword">
+              ID buku
+            </label>
+
+            <input
+              class="search-bar__input"
+              id="keyword"
+              name="keyword"
+              type="search"
+              placeholder="id buku"
+            >
+
           </div>
-          <button class="btn btn--navy search-bar__button" type="button" data-action="search-transactions">CARI</button>
+
+          <button
+            class="btn btn--navy search-bar__button"
+            type="button"
+            data-action="search-transactions">
+            CARI
+          </button>
+
         </div>
       </section>
 
+      <!-- TABEL TRANSAKSI -->
       <section class="panel table-wrap">
-        <h2 class="panel__title panel__title--divided">Daftar Transaksi Sirkulasi</h2>
+
+        <h2 class="panel__title panel__title--divided">
+          Daftar Transaksi Sirkulasi
+        </h2>
+
         <table class="data-table">
-          <caption class="visually-hidden">Daftar transaksi sirkulasi</caption>
+
+          <caption class="visually-hidden">
+            Daftar transaksi sirkulasi
+          </caption>
+
           <thead>
-            <tr><th scope="col">ID</th><th scope="col">ANGGOTA</th><th scope="col">PRODI</th><th scope="col">BUKU</th><th scope="col">TANGGAL</th><th scope="col">STATUS</th></tr>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">ANGGOTA</th>
+              <th scope="col">PRODI</th>
+              <th scope="col">BUKU</th>
+              <th scope="col">TANGGAL</th>
+              <th scope="col">STATUS</th>
+            </tr>
           </thead>
+
           <tbody>
+
             <tr>
               <td><span class="pill pill--code">101</span></td>
               <td><strong>Anti</strong></td>
@@ -77,6 +216,7 @@
               <td>10/11/2026</td>
               <td><span class="pill">dipinjam</span></td>
             </tr>
+
             <tr>
               <td><span class="pill pill--code">102</span></td>
               <td><strong>Demak</strong></td>
@@ -85,6 +225,7 @@
               <td>11/12/2026</td>
               <td><span class="pill">dikembalikan</span></td>
             </tr>
+
             <tr>
               <td><span class="pill pill--code">103</span></td>
               <td><strong>Muti</strong></td>
@@ -93,6 +234,7 @@
               <td>12/12/2026</td>
               <td><span class="pill">dipinjam</span></td>
             </tr>
+
             <tr>
               <td><span class="pill pill--code">104</span></td>
               <td><strong>Aan</strong></td>
@@ -101,6 +243,7 @@
               <td>13/12/2026</td>
               <td><span class="pill">dipinjam</span></td>
             </tr>
+
             <tr>
               <td><span class="pill pill--code">105</span></td>
               <td><strong>Ilham</strong></td>
@@ -109,18 +252,19 @@
               <td>15/12/2026</td>
               <td><span class="pill">dipinjam</span></td>
             </tr>
+
           </tbody>
         </table>
       </section>
+
     </main>
   </div>
 
-  <!-- JavaScript untuk menampilkan dan mencari data transaksi peminjaman -->
-<script src="../js/pustakawan/transaksi.js" defer></script>
+  <!-- JavaScript transaksi -->
+  <script src="../js/pustakawan/transaksi.js" defer></script>
 
-<!-- JavaScript untuk fungsi umum, seperti navigasi dan notifikasi -->
-<script src="../js/shared/app.js" defer></script>
-
+  <!-- JavaScript umum -->
+  <script src="../js/shared/app.js" defer></script>
 
 </body>
 </html>
