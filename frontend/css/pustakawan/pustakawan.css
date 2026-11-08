@@ -1,859 +1,498 @@
+/* =====================================================
+   PUSTAKAWAN - LAYOUT TAMBAHAN
+   ===================================================== */
 
-/* =========================================================
-   E-PERPUSTAKAAN - DASHBOARD PUSTAKAWAN
-   Digunakan untuk:
-   1. Beranda
-   2. Data Buku
-   3. Data Anggota
-   4. Transaksi
-   5. Tambah Buku
-
-   Target desktop: Chrome 100%
-   Lebar sidebar desktop: 284px pada viewport 1800px.
-   ========================================================= */
-
-/* =========================================================
-   1. RESET DAN LAYOUT UTAMA
-   ========================================================= */
-
-.admin-layout {
-  display: grid;
-  grid-template-columns: clamp(220px, 15.8vw, 284px) minmax(0, 1fr);
-  width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
+.pb-body {
   margin: 0;
-}
-
-.admin-content {
-  width: 100%;
-  min-width: 0;
   min-height: 100vh;
-  min-height: 100dvh;
-  padding: clamp(22px, 1.9vw, 34px);
-  overflow-x: hidden;
-  background: var(--color-page);
+  background: #f7f7fc;
+  color: #172033;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-/* =========================================================
-   2. SIDEBAR
-   ========================================================= */
+.pb-layout {
+  --pb-sidebar-width: clamp(154px, 18vw, 250px);
+  min-height: 100vh;
+}
 
-.sidebar {
-  position: sticky;
-  top: 0;
+.pb-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: var(--pb-sidebar-width);
+  height: 100vh;
+  padding: 12px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100vh;
-  min-height: 100vh;
-  padding: 28px 12px 18px;
-  overflow-y: auto;
-  background: var(--color-navy);
+  background: #082b70;
   color: #fff;
+  z-index: 100;
 }
 
-.sidebar .brand {
+.pb-brand {
+  min-height: 58px;
   display: flex;
   align-items: center;
   gap: 12px;
-  min-width: 0;
-  margin: 0 0 30px;
-  padding: 0 10px;
+  padding: 6px;
   color: #fff;
-}
-
-.sidebar .brand__icon {
-  display: grid;
-  flex: 0 0 56px;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
-  background: #1e438f;
-  color: #fff;
-}
-
-.sidebar .brand__icon .icon {
-  width: 27px;
-  height: 27px;
-}
-
-.sidebar .brand__name {
-  overflow: hidden;
-  color: #fff;
-  font-size: clamp(15px, 1.25vw, 21px);
+  text-decoration: none;
+  font-size: clamp(12px, 1.2vw, 17px);
   font-weight: 800;
-  line-height: 1.2;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.sidebar__nav {
+.pb-brand-icon {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  background: #214b99;
+  font-size: 26px;
+}
+
+.pb-navigation {
   display: flex;
-  flex: 1;
   flex-direction: column;
   gap: 8px;
-  min-height: 0;
+  margin-top: 30px;
 }
 
-.sidebar__link {
+.pb-nav-link,
+.pb-logout {
+  min-height: 43px;
   display: flex;
   align-items: center;
-  gap: 14px;
-  width: 100%;
-  min-height: 48px;
-  padding: 11px 16px;
+  gap: 12px;
+  padding: 0 12px;
   border-radius: 11px;
-  color: #dbe7ff;
-  font-size: clamp(14px, 1.1vw, 18px);
-  font-weight: 500;
-  line-height: 1.35;
+  color: #e4eaf8;
   text-decoration: none;
-  cursor: pointer;
-  transition: background-color 160ms ease, color 160ms ease;
+  font-size: clamp(11px, 1.1vw, 15px);
+  font-weight: 500;
+  transition: background 0.2s ease;
 }
 
-.sidebar__link .icon {
-  width: 21px;
-  height: 21px;
-  color: currentColor;
+.pb-nav-link span,
+.pb-logout span {
+  width: 20px;
+  text-align: center;
+  font-size: 19px;
 }
 
-.sidebar__link:hover,
-.sidebar__link:focus-visible {
-  background: rgb(255 255 255 / 10%);
+.pb-nav-link:hover,
+.pb-logout:hover {
+  background: #21458c;
+}
+
+.pb-nav-link.active {
+  background: #254a92;
   color: #fff;
+  font-weight: 700;
 }
 
-.sidebar__link--active {
-  background: #24478f;
-  color: #fff;
-  font-weight: 800;
-}
-
-.sidebar__link--logout {
+.pb-logout {
   margin-top: auto;
-  color: #dbe7ff;
+  margin-bottom: 10px;
 }
 
-/* =========================================================
-   3. JUDUL DAN HEADER HALAMAN
-   ========================================================= */
+/* =====================================================
+   KONTEN UTAMA
+   ===================================================== */
 
-.page-header {
+.pb-main {
+  margin-left: var(--pb-sidebar-width);
+  min-height: 100vh;
+  padding: clamp(20px, 2.5vw, 36px);
+  box-sizing: border-box;
+}
+
+.pb-page-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 18px;
-  margin: 0 0 22px;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 28px;
 }
 
-.page-title {
-  margin: 0 0 22px;
-  color: var(--color-title);
-  font-size: clamp(28px, 2.35vw, 42px);
-  font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -0.035em;
-}
-
-.page-header .page-title {
+.pb-page-header h1 {
   margin: 0;
-}
-
-/* =========================================================
-   4. PANEL DAN KONTEN
-   ========================================================= */
-
-.admin-content > .panel,
-.admin-content > section.panel {
-  margin: 0 0 22px;
-  padding: clamp(18px, 1.55vw, 28px) clamp(20px, 1.8vw, 34px);
-  border: 1px solid var(--color-border);
-  border-radius: 22px;
-  background: #fff;
-  box-shadow: 0 1px 2px rgb(15 23 42 / 2%);
-}
-
-.panel__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 18px;
-}
-
-.panel__title {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 0;
-  color: var(--color-title);
-  font-size: clamp(18px, 1.35vw, 24px);
+  color: #172033;
+  font-size: clamp(25px, 2.7vw, 40px);
   font-weight: 800;
 }
 
-.panel__title .icon {
-  color: var(--color-blue);
-}
-
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 0 0 18px;
-  color: var(--color-navy);
-  font-size: clamp(18px, 1.35vw, 24px);
-  font-weight: 800;
-}
-
-/* =========================================================
-   5. SEARCH BAR
-   ========================================================= */
-
-.search-bar {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  width: 100%;
-}
-
-.search-bar__field {
-  position: relative;
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.search-bar__field .input-field__icon {
-  left: 22px;
-  color: var(--color-placeholder);
-}
-
-.search-bar__field .input-field__icon .icon {
-  width: 22px;
-  height: 22px;
-}
-
-.search-bar__input {
-  display: block;
-  width: 100%;
-  min-height: 64px;
-  padding: 14px 22px 14px 60px;
-  border: 0;
-  border-radius: 17px;
-  outline: none;
-  background: var(--color-soft);
-  color: var(--color-text);
-  font-family: var(--font-main);
-  font-size: clamp(15px, 1.15vw, 19px);
-}
-
-.search-bar__input::placeholder {
-  color: var(--color-muted);
-  opacity: 1;
-}
-
-.search-bar__input:focus {
-  box-shadow: 0 0 0 2px rgb(2 132 199 / 18%);
-}
-
-.search-bar__button {
-  flex: 0 0 auto;
-  min-width: 108px;
-  min-height: 64px;
+.pb-add-button {
+  min-height: 60px;
   padding: 0 24px;
-  border-radius: 16px;
-  font-size: clamp(15px, 1.1vw, 18px);
-}
-
-/* =========================================================
-   6. TABEL DATA BUKU, ANGGOTA, DAN TRANSAKSI
-   ========================================================= */
-
-.table-wrap {
-  min-width: 0;
-  overflow-x: auto;
-}
-
-.table-wrap .panel__header {
-  margin-bottom: 20px;
-}
-
-.data-table {
-  width: 100%;
-  min-width: 760px;
-  border-collapse: collapse;
-  border-spacing: 0;
-  color: var(--color-text);
-  text-align: left;
-}
-
-.data-table thead th {
-  padding: 16px;
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-muted);
-  font-size: clamp(12px, 0.95vw, 16px);
-  font-weight: 700;
-  line-height: 1.3;
-  white-space: nowrap;
-}
-
-.data-table tbody td {
-  padding: 16px;
-  border-bottom: 1px solid var(--color-border);
-  font-size: clamp(14px, 1.05vw, 18px);
-  vertical-align: middle;
-}
-
-.data-table tbody tr:last-child td {
-  border-bottom: 0;
-}
-
-.data-table tbody td strong {
-  font-weight: 700;
-}
-
-.data-table__actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  white-space: nowrap;
-}
-
-/* Label kode dan kategori */
-.pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  max-width: 100%;
-  padding: 5px 14px;
-  border-radius: 999px;
-  background: var(--color-soft);
-  color: var(--color-navy);
-  font-size: clamp(12px, 0.95vw, 16px);
-  font-weight: 700;
-  line-height: 1.35;
-  white-space: nowrap;
-}
-
-.pill--code {
-  min-width: 76px;
-}
-
-.pill--category {
-  background: var(--color-soft);
-  color: var(--color-navy);
-}
-
-.pill--danger {
-  background: var(--color-danger-soft);
-  color: var(--color-danger);
-}
-
-/* =========================================================
-   7. DATA ANGGOTA
-   ========================================================= */
-
-.member {
-  display: flex;
-  align-items: center;
   gap: 12px;
-  min-width: 180px;
+  border-radius: 16px;
+  background: #102f78;
+  color: #fff;
+  text-decoration: none;
+  font-size: 17px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background 0.2s ease;
 }
 
-.member__initial {
-  display: grid;
-  flex: 0 0 40px;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--color-soft);
-  color: var(--color-navy);
-  font-weight: 800;
+.pb-add-button:hover {
+  background: #214b99;
 }
 
-.member > span:last-child {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
+.pb-add-button svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.member__email {
-  color: var(--color-muted);
-  font-size: 12px;
-  overflow-wrap: anywhere;
-}
+/* =====================================================
+   FORM TAMBAH BUKU
+   ===================================================== */
 
-/* =========================================================
-   8. FORM TAMBAH BUKU
-   ========================================================= */
-
-.book-form {
-  display: grid;
-  grid-template-columns: minmax(220px, 0.75fr) minmax(0, 1.25fr);
-  align-items: start;
-  gap: 28px;
-}
-
-.book-form > div {
-  min-width: 0;
-}
-
-.book-form .form {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.book-form .form__group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.book-form .form__label {
-  color: var(--color-label);
-  font-size: 14px;
+.pb-form-title {
+  margin: 5px 0 20px;
+  color: #172033;
+  font-size: clamp(22px, 2vw, 30px);
   font-weight: 700;
 }
 
-.book-form .form__input {
+.pb-book-form {
   width: 100%;
-  min-height: 48px;
-  padding: 12px 16px;
-  border: 1px solid var(--color-border-strong);
+}
+
+.pb-form-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(20px, 2.2vw, 32px);
+  padding: clamp(20px, 2vw, 28px);
   border-radius: 10px;
-  background: var(--color-soft);
-  color: var(--color-text);
-  font-family: var(--font-main);
-  font-size: 14px;
+  background: #fff;
+  box-sizing: border-box;
 }
 
-.book-form textarea.form__input {
-  min-height: 120px;
-  resize: vertical;
-}
+/* Upload gambar */
 
-.upload-box {
+.pb-upload-section {
   display: flex;
   flex-direction: column;
+  align-items: center;
+}
+
+.pb-upload-box {
+  width: 100%;
+  aspect-ratio: 1.25 / 1;
+  max-height: 300px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  min-height: 230px;
-  padding: 20px;
-  border: 2px dashed var(--color-border-strong);
-  border-radius: 16px;
-  background: var(--color-soft);
-  color: var(--color-navy);
-  font-weight: 700;
-  text-align: center;
+  overflow: hidden;
+  position: relative;
+  border-radius: 9px;
+  background: #f0f2ff;
   cursor: pointer;
 }
 
-.upload-box__icon {
+.pb-upload-placeholder {
+  width: 66px;
+  height: 66px;
   display: grid;
   place-items: center;
-  width: 54px;
-  height: 54px;
   border-radius: 50%;
-  background: #fff;
-  color: var(--color-blue);
+  background: #e0e6ff;
 }
 
-.upload-box__icon .icon {
-  width: 26px;
-  height: 26px;
+.pb-upload-placeholder svg {
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: #082b70;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 18px;
-}
-
-/* =========================================================
-   9. BERANDA PUSTAKAWAN
-   ========================================================= */
-
-.pustakawan-home {
-  min-width: 320px;
-  min-height: 100vh;
-  margin: 0;
-  overflow-x: hidden;
-  background: var(--color-page);
-}
-
-.pustakawan-home .admin-content {
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-}
-
-/* Panel profil admin */
-.pustakawan-home .admin-profile.panel {
-  display: block;
+.pb-cover-preview {
   width: 100%;
-  margin: 0;
-  padding: clamp(20px, 1.8vw, 32px);
-  border: 1px solid var(--color-border);
-  border-radius: 22px;
-  background: #fff;
+  height: 100%;
+  object-fit: contain;
+  background: #f0f2ff;
 }
 
-.pustakawan-home .admin-profile .page-title {
-  margin: 0 0 20px;
-  color: var(--color-title);
-  font-size: clamp(28px, 2.35vw, 42px);
-  font-weight: 800;
-  letter-spacing: -0.035em;
+.pb-upload-caption {
+  margin-top: 10px;
+  color: #172033;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-/* Foto atau ikon profil */
-.pustakawan-home .admin-profile .user-info {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  min-width: 0;
+.pb-upload-info {
+  margin: 7px 0 0;
+  color: #8290a7;
+  font-size: 11px;
+  text-align: center;
 }
 
-.pustakawan-home .admin-profile .user-info__avatar--large {
-  display: grid;
-  flex: 0 0 clamp(64px, 5.8vw, 104px);
-  place-items: center;
-  width: clamp(64px, 5.8vw, 104px);
-  height: clamp(64px, 5.8vw, 104px);
-  border-radius: 50%;
-  background: var(--color-soft);
-  color: var(--color-navy);
-}
+/* Input */
 
-.pustakawan-home .admin-profile .user-info__avatar--large .icon {
-  width: clamp(30px, 2.5vw, 44px);
-  height: clamp(30px, 2.5vw, 44px);
-}
-
-/* Informasi Nama Admin dan NIP */
-.pustakawan-home .profile__list {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 10px;
-  min-width: 0;
-  margin: 0;
-}
-
-.pustakawan-home .profile__list > div {
-  display: grid;
-  grid-template-columns: 150px minmax(0, 1fr);
-  align-items: center;
-  gap: 18px;
-  min-width: 0;
-}
-
-.pustakawan-home .profile__list dt,
-.pustakawan-home .profile__list dd {
-  margin: 0;
-  color: var(--color-text);
-  font-size: clamp(14px, 1.15vw, 19px);
-  line-height: 1.5;
-}
-
-.pustakawan-home .profile__list dt {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-/* Titik dua rata pada satu garis vertikal */
-.pustakawan-home .profile__list dt::after {
-  content: ":";
-  font-weight: 700;
-}
-
-.pustakawan-home .profile__list dd {
-  min-width: 0;
-  font-weight: 500;
-  overflow-wrap: anywhere;
-}
-
-/* =========================================================
-   10. BAGIAN STOK BUKU
-   ========================================================= */
-
-.pustakawan-home .stock-section {
-  width: 100%;
-  min-width: 0;
-}
-
-.pustakawan-home .stock-section .section-title {
-  margin: 0 0 18px;
-  color: var(--color-navy);
-  font-size: clamp(18px, 1.35vw, 24px);
-  font-weight: 800;
-}
-
-/* Dua kartu buku */
-.pustakawan-home .book-grid--admin {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px;
-  width: 100%;
-  min-width: 0;
-}
-
-.pustakawan-home .book-grid--admin .book-card {
+.pb-fields {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  min-width: 0;
-  padding: clamp(16px, 1.3vw, 24px);
-  border: 1px solid var(--color-border);
-  border-radius: 18px;
-  background: #fff;
-  box-shadow: 0 1px 2px rgb(15 23 42 / 3%);
 }
 
-/* Sampul buku */
-.pustakawan-home .book-grid--admin .cover--banner {
+.pb-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.pb-field label {
+  color: #172033;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pb-field input,
+.pb-field select,
+.pb-field textarea {
   width: 100%;
-  height: clamp(170px, 15vw, 230px);
-  margin: 0;
-  overflow: hidden;
-  border-radius: 13px;
-  background: var(--color-soft);
-  box-shadow: 0 4px 12px rgb(15 23 42 / 12%);
+  min-height: 40px;
+  padding: 0 13px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  outline: none;
+  box-sizing: border-box;
+  background: #f0f2ff;
+  color: #172033;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
 }
 
-.pustakawan-home .book-grid--admin .cover__image {
-  display: block;
+.pb-field textarea {
+  min-height: 100px;
+  padding: 12px 13px;
+  resize: vertical;
+}
+
+.pb-field input::placeholder,
+.pb-field textarea::placeholder {
+  color: #8c96a9;
+}
+
+.pb-field input:focus,
+.pb-field select:focus,
+.pb-field textarea:focus {
+  border-color: #168ac5;
+  background: #fff;
+}
+
+.pb-field input:invalid:not(:placeholder-shown) {
+  border-color: #e45b68;
+}
+
+/* Tombol form */
+
+.pb-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.pb-cancel-button,
+.pb-save-button {
+  width: 150px;
+  min-height: 43px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.pb-cancel-button {
+  background: #dfe5ff;
+  color: #172033;
+}
+
+.pb-save-button {
+  background: #082b70;
+  color: #fff;
+}
+
+.pb-save-button:hover {
+  background: #174397;
+}
+
+.pb-save-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pb-feedback {
+  min-height: 20px;
+  margin-top: 12px;
+  color: #52627a;
+  font-size: 13px;
+}
+
+/* =====================================================
+   BERANDA - STOK TERSEDIA
+   ===================================================== */
+
+.pb-stock-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.pb-stock-card {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid #e0e6f0;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.pb-stock-cover {
+  width: 100%;
+  height: 220px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #f0f2ff;
+}
+
+.pb-stock-cover img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-/* Sampul buku tanpa gambar */
-.pustakawan-home .book-grid--admin .cover--placeholder {
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-start;
-  padding: 16px;
-  background: #34318a;
+.pb-stock-placeholder {
+  padding: 15px;
   color: #fff;
-}
-
-.pustakawan-home .book-grid--admin .cover--placeholder figcaption {
-  color: #fff;
-  font-size: clamp(14px, 1.1vw, 19px);
-  font-weight: 800;
-  line-height: 1.25;
-}
-
-.pustakawan-home .book-grid--admin .cover--placeholder small {
-  display: block;
-  margin-top: 3px;
-  font-size: 0.72em;
-  font-weight: 500;
-}
-
-/* Judul dan badge buku */
-.pustakawan-home .book-grid--admin .book-card__title {
-  margin: 0;
-  color: var(--color-text);
-  font-size: clamp(17px, 1.35vw, 24px);
+  background: #343080;
   font-weight: 700;
-  line-height: 1.35;
+  text-align: center;
 }
 
-.pustakawan-home .book-grid--admin .badge {
-  align-self: flex-start;
+.pb-stock-title {
+  margin: 12px 0;
+  color: #172033;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.pb-stock-quantity {
+  display: inline-block;
   padding: 5px 12px;
-  border-radius: 999px;
-  background: var(--color-soft);
-  color: var(--color-navy);
-  font-size: clamp(12px, 0.95vw, 16px);
+  border-radius: 20px;
+  background: #edf1ff;
+  color: #082b70;
+  font-size: 12px;
   font-weight: 700;
 }
 
-/* Tombol detail */
-.pustakawan-home .book-grid--admin .btn {
-  min-height: 44px;
-  margin-top: auto;
-  border-radius: 12px;
-  font-size: clamp(14px, 1.05vw, 18px);
+.pb-stock-empty {
+  padding: 25px;
+  color: #718096;
+  text-align: center;
+  background: #fff;
+  border-radius: 10px;
 }
 
-/* =========================================================
-   11. RESPONSIVE TABLET
-   ========================================================= */
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
 
-@media (max-width: 1100px) {
-  .admin-layout {
-    grid-template-columns: 220px minmax(0, 1fr);
-  }
-
-  .admin-content {
-    padding: 22px;
-  }
-
-  .pustakawan-home .book-grid--admin {
-    gap: 16px;
-  }
-}
-
-/* =========================================================
-   12. RESPONSIVE MOBILE
-   ========================================================= */
-
-@media (max-width: 760px) {
-  .admin-layout {
+@media (max-width: 850px) {
+  .pb-form-grid {
     grid-template-columns: 1fr;
   }
 
-  .sidebar {
-    position: relative;
-    width: 100%;
-    height: auto;
-    min-height: auto;
-    padding: 14px;
-    overflow: visible;
+  .pb-upload-box {
+    max-width: 400px;
   }
 
-  .sidebar .brand {
-    margin-bottom: 14px;
-  }
-
-  .sidebar__nav {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 7px;
-  }
-
-  .sidebar__link {
-    min-height: 42px;
-    padding: 9px 10px;
-    font-size: 13px;
-  }
-
-  .sidebar__link--logout {
-    margin-top: 0;
-  }
-
-  .admin-content {
-    min-height: auto;
-    padding: 18px;
-  }
-
-  .page-title {
-    font-size: 28px;
-  }
-
-  .page-header {
-    align-items: flex-start;
-  }
-
-  .admin-content > .panel,
-  .admin-content > section.panel {
-    padding: 18px;
-    border-radius: 16px;
-  }
-
-  .search-bar {
-    align-items: stretch;
-  }
-
-  .search-bar__input,
-  .search-bar__button {
-    min-height: 48px;
-  }
-
-  .search-bar__button {
-    min-width: 76px;
-    padding-inline: 14px;
-  }
-
-  .book-form {
-    grid-template-columns: 1fr;
-  }
-
-  .upload-box {
-    min-height: 160px;
-  }
-
-  .pustakawan-home .admin-content {
-    gap: 16px;
-  }
-
-  .pustakawan-home .admin-profile .user-info {
-    align-items: flex-start;
-  }
-
-  .pustakawan-home .profile__list > div {
-    grid-template-columns: 120px minmax(0, 1fr);
-    gap: 10px;
-  }
-
-  .pustakawan-home .book-grid--admin {
+  .pb-stock-grid {
     grid-template-columns: 1fr;
   }
 }
 
-/* =========================================================
-   13. RESPONSIVE MOBILE KECIL
-   ========================================================= */
-
-@media (max-width: 480px) {
-  .sidebar .brand__icon {
-    flex-basis: 44px;
-    width: 44px;
-    height: 44px;
+@media (max-width: 550px) {
+  .pb-sidebar {
+    width: 72px;
+    padding: 8px;
   }
 
-  .sidebar__nav {
-    grid-template-columns: 1fr 1fr;
+  .pb-brand {
+    justify-content: center;
+    padding: 0;
   }
 
-  .admin-content {
-    padding: 14px;
+  .pb-brand > span:last-child,
+  .pb-nav-link:not(.active) {
+    font-size: 0;
   }
 
-  .page-header {
-    flex-direction: column;
+  .pb-nav-link {
+    justify-content: center;
+    padding: 0;
   }
 
-  .page-header > .btn {
-    width: 100%;
+  .pb-nav-link span {
+    font-size: 20px;
   }
 
-  .pustakawan-home .admin-profile .user-info {
-    flex-direction: column;
+  .pb-logout {
+    justify-content: center;
+    padding: 0;
+    font-size: 0;
   }
 
-  .pustakawan-home .profile__list {
-    width: 100%;
+  .pb-logout span {
+    font-size: 20px;
   }
 
-  .pustakawan-home .profile__list > div {
-    grid-template-columns: 110px minmax(0, 1fr);
-    gap: 8px;
+  .pb-main {
+    margin-left: 72px;
+    padding: 15px;
   }
 
-  .search-bar {
-    flex-direction: column;
-  }
-
-  .search-bar__button {
-    width: 100%;
-  }
-
-  .panel__header {
+  .pb-page-header {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .pb-add-button {
+    width: 100%;
+  }
+
+  .pb-form-actions {
+    flex-direction: column;
+  }
+
+  .pb-cancel-button,
+  .pb-save-button {
+    width: 100%;
   }
 }

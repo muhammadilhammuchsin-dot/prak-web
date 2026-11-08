@@ -1,571 +1,460 @@
+/* =====================================================
+   E-PERPUSTAKAAN
+   PENGELOLAAN BUKU PUSTAKAWAN
 
-/* =========================================================
-   FITUR PUSTAKAWAN: KELOLA DATA BUKU
-   Mendukung pencarian, tambah, edit, hapus, dan validasi.
-   Semua perubahan bersifat simulasi localStorage.
-   ========================================================= */
+   Fungsi:
+   1. Menambahkan buku melalui API backend.
+   2. Mengirim data ke database MySQL melalui backend.
+   3. Validasi ID dan stok.
+   4. Preview sampul buku.
+   5. Menampilkan buku pada Beranda.
+   ===================================================== */
+
 (() => {
   'use strict';
 
-  const BOOK_KEY = 'eperpus_demo_books';
-  const DELETED_KEY = 'eperpus_demo_deleted_books';
-  const EDIT_KEY = 'eperpus_demo_book_edit';
-  const EDIT_PAYLOAD_KEY = 'eperpus_demo_book_edit_payload';
+  // ===================================================
+  // KONFIGURASI API
+  // ===================================================
 
-  const $ = (selector, root = document) => root.querySelector(selector);
-  const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+  // Jika frontend dan backend menggunakan origin yang sama:
+  const API_BASE = '/api/buku';
 
-  function readArray(key) {
-    const value = window.EPerpus?.read(key, []);
-    return Array.isArray(value) ? value : [];
-  }
+  // Jika backend berjalan pada port 3000 dan frontend
+  // menggunakan Live Server, gunakan:
+  // const API_BASE = 'http://localhost:3000/api/buku';
 
-  function getField(name) {
-    return $(`[name="${name}"]`);
-  }
+  // ===================================================
+  // HELPER
+  // ===================================================
 
-  function getTableBody() {
-    return $('.data-table tbody') || $('tbody');
-  }
+  const $ = (selector, root = document) =>
+    root.querySelector(selector);
 
-  function parseStock(text) {
-    const match = String(text || '').match(/\d+/);
-    return match ? Number(match[0]) : 0;
-  }
+  const $$ = (selector, root = document) =>
+    [...root.querySelectorAll(selector)];
 
-  // Mengambil data awal dari tabel HTML.
-  function readInitialRows() {
-    const body = getTableBody();
-
-    if (!body) return [];
-
-    return $$('tr', body).map(row => {
-      const cells = $$('td', row);
-
-      if (cells.length < 4) return null;
-
-      const id = cells[0].textContent.trim();
-
-      if (!id) return null;
-
-      return {
-        id,
-        judul: cells[1].textContent.trim(),
-        penulis: '',
-        kategori: cells[2].textContent.trim(),
-        stok: parseStock(cells[3].textContent),
-        deskripsi: ''
-      };
-    }).filter(Boolean);
-  }
-
-  // Menggabungkan data HTML dan localStorage.
-  function getAllBooks() {
-    const combined = new Map();
-
-    readInitialRows().forEach(book => {
-      combined.set(book.id, book);
+  async function apiRequest(url, options = {}) {
+    const response = await fetch(url, {
+      credentials: 'same-origin',
+      ...options
     });
 
-    readArray(BOOK_KEY).forEach(book => {
-      if (book && book.id) {
-        combined.set(book.id, book);
-      }
-    });
+    const result = await response.json().catch(() => ({}));
 
-    const deleted = readArray(DELETED_KEY);
+    if (!response.ok) {
+      throw new Error(
+        result.message ||
+        result.error ||
+        `Permintaan gagal (${response.status}).`
+      );
+    }
 
-    return [...combined.values()].filter(
-      book => !deleted.includes(book.id)
+    return result;
+  }
+
+  function extractBooks(result) {
+    if (Array.isArray(result)) return result;
+    if (Array.isArray(result.data)) return result.data;
+    if (Array.isArray(result.books)) return result.books;
+
+    return [];
+  }
+
+  function getBookId(book) {
+    return String(
+      book.id_buku ??
+      book.id ??
+      book.kode_buku ??
+      ''
     );
   }
 
-  function saveAllBooks(books) {
-    return window.EPerpus?.write(BOOK_KEY, books) ?? false;
-  }
-
-  function createCell(value, className = '') {
-    const cell = document.createElement('td');
-
-    if (className) {
-      cell.className = className;
-    }
-
-    cell.textContent = String(value ?? '');
-
-    return cell;
-  }
-
-  // Membuat tombol aksi pada tabel.
-  function createActionLink(label, className, action, bookId, route = '') {
-    const link = document.createElement('a');
-
-    link.className = className;
-    link.textContent = label;
-    link.setAttribute('role', action === 'edit-book' ? 'link' : 'button');
-    link.setAttribute('tabindex', '0');
-    link.dataset.action = action;
-    link.dataset.bookId = bookId;
-
-    if (route) {
-      link.dataset.route = route;
-    }
-
-    return link;
-  }
-
-  // Menampilkan data buku pada tabel.
-  function renderTable() {
-    const body = getTableBody();
-
-    if (!body) return;
-
-    const books = getAllBooks();
-
-    saveAllBooks(books);
-
-    body.replaceChildren();
-
-    books.forEach(book => {
-      const row = document.createElement('tr');
-
-      const code = document.createElement('span');
-      code.className = 'pill pill--code';
-      code.textContent = book.id;
-
-      const category = document.createElement('span');
-      category.className = 'pill pill--category';
-      category.textContent = book.kategori;
-
-      const stock = document.createElement('span');
-      stock.className = Number(book.stok) > 0
-        ? 'pill'
-        : 'pill pill--danger';
-
-      stock.textContent = Number(book.stok) > 0
-        ? `${book.stok} Eks`
-        : '0 (Habis)';
-
-      const codeCell = document.createElement('td');
-      codeCell.appendChild(code);
-
-      const titleCell = document.createElement('td');
-      const title = document.createElement('strong');
-      title.textContent = book.judul;
-      titleCell.appendChild(title);
-
-      const categoryCell = document.createElement('td');
-      categoryCell.appendChild(category);
-
-      const stockCell = document.createElement('td');
-      stockCell.appendChild(stock);
-
-      const actionCell = document.createElement('td');
-      const actionGroup = document.createElement('div');
-
-      actionGroup.className = 'data-table__actions';
-
-      actionGroup.append(
-        createActionLink(
-          'Edit',
-          'btn btn--edit btn--small',
-          'edit-book',
-          book.id,
-          'tambah-buku.html'
-        ),
-        createActionLink(
-          'Hapus',
-          'btn btn--delete btn--small',
-          'delete-book',
-          book.id
-        )
-      );
-
-      actionCell.appendChild(actionGroup);
-
-      row.append(
-        codeCell,
-        titleCell,
-        categoryCell,
-        stockCell,
-        actionCell
-      );
-
-      body.appendChild(row);
-    });
-
-    const countLabel = $('.panel__header .muted');
-
-    if (countLabel) {
-      countLabel.textContent = `Menampilkan ${books.length} buku`;
-    }
-  }
-
-  function showTableFeedback(message) {
-    let feedback = $('[data-table-feedback]');
-
-    if (!feedback) {
-      feedback = document.createElement('p');
-      feedback.dataset.tableFeedback = 'true';
-      feedback.setAttribute('role', 'status');
-
-      $('[data-search-form="books"]')?.after(feedback);
-    }
-
-    if (feedback) {
-      feedback.textContent = message;
-    }
-  }
-
-  // Pencarian buku.
-  function filterBooks(keyword) {
-    const query = String(keyword || '').trim().toLocaleLowerCase('id');
-    let visibleCount = 0;
-
-    getTableBody()?.querySelectorAll('tr').forEach(row => {
-      const visible = !query ||
-        row.textContent.toLocaleLowerCase('id').includes(query);
-
-      row.hidden = !visible;
-
-      if (visible) visibleCount++;
-    });
-
-    showTableFeedback(
-      query
-        ? `${visibleCount} data buku ditemukan.`
-        : `Menampilkan ${visibleCount} data buku.`
+  function getBookTitle(book) {
+    return String(
+      book.judul ??
+      book.judul_buku ??
+      book.title ??
+      'Tanpa judul'
     );
   }
 
-  // Memberikan tanda kesalahan pada input.
-  function setFieldError(field, message) {
-    field.setAttribute('aria-invalid', 'true');
-    field.classList.add('form__input--error');
-    field.dataset.validationMessage = message;
-  }
-
-  // Menghapus tanda kesalahan setelah input diperbaiki.
-  function clearFieldError(field) {
-    field.removeAttribute('aria-invalid');
-    field.classList.remove('form__input--error');
-    delete field.dataset.validationMessage;
-  }
-
-  // Validasi seluruh input buku.
-  function validateBookForm() {
-    const rules = [
-      ['judul', 'Judul buku wajib diisi.'],
-      ['id-buku', 'ID buku wajib diisi.'],
-      ['penulis', 'Nama penulis wajib diisi.'],
-      ['kategori', 'Kategori buku wajib dipilih.'],
-      ['stok', 'Stok harus berupa bilangan bulat 0 atau lebih.']
-    ];
-
-    let valid = true;
-    let firstInvalid = null;
-
-    rules.forEach(([name, message]) => {
-      const field = getField(name);
-
-      if (!field) return;
-
-      const value = field.value.trim();
-      let invalid = !value;
-
-      if (name === 'stok') {
-        invalid = !/^\d+$/.test(value) ||
-          !Number.isSafeInteger(Number(value));
-      }
-
-      if (invalid) {
-        valid = false;
-        setFieldError(field, message);
-        firstInvalid ||= field;
-      } else {
-        clearFieldError(field);
-      }
-    });
-
-    if (!valid && firstInvalid) {
-      window.EPerpus?.notify(
-        firstInvalid.dataset.validationMessage,
-        'error'
-      );
-
-      firstInvalid.focus();
-    }
-
-    return valid;
-  }
-
-  // Mengambil seluruh nilai form.
-  function getFormBook() {
-    return {
-      id: getField('id-buku').value.trim().toUpperCase(),
-      judul: getField('judul').value.trim(),
-      penulis: getField('penulis').value.trim(),
-      kategori: getField('kategori').value.trim(),
-      stok: Number(getField('stok').value),
-      deskripsi: getField('deskripsi')?.value.trim() || ''
-    };
-  }
-
-  // Menyimpan buku baru atau perubahan buku.
-  function saveBook() {
-    if (!validateBookForm()) return;
-
-    const book = getFormBook();
-    const oldId = sessionStorage.getItem(EDIT_KEY);
-    const books = readArray(BOOK_KEY);
-
-    const duplicate = books.some(item =>
-      item.id.toUpperCase() === book.id &&
-      item.id !== oldId
-    );
-
-    if (duplicate) {
-      const idField = getField('id-buku');
-
-      setFieldError(idField, 'ID buku sudah digunakan.');
-
-      window.EPerpus?.notify(
-        'ID buku sudah digunakan. Gunakan ID lain.',
-        'error'
-      );
-
-      idField.focus();
-      return;
-    }
-
-    const index = books.findIndex(item => item.id === oldId);
-
-    if (index >= 0) {
-      books[index] = book;
-    } else {
-      books.push(book);
-    }
-
-    const deleted = readArray(DELETED_KEY);
-    const updatedDeleted = deleted.filter(id => id !== book.id);
-
-    if (oldId && oldId !== book.id && !updatedDeleted.includes(oldId)) {
-      updatedDeleted.push(oldId);
-    }
-
-    if (!saveAllBooks(books)) return;
-
-    window.EPerpus?.write(DELETED_KEY, updatedDeleted);
-
-    sessionStorage.removeItem(EDIT_KEY);
-    sessionStorage.removeItem(EDIT_PAYLOAD_KEY);
-
-    window.EPerpus?.notify(
-      'Data buku berhasil disimpan pada simulasi browser.'
-    );
-
-    window.location.href = 'data-buku.html';
-  }
-
-  // Menghapus buku.
-  function deleteBook(button) {
-    const id = button.dataset.bookId;
-
-    if (!id) {
-      window.EPerpus?.notify('ID buku tidak ditemukan.', 'error');
-      return;
-    }
-
-    if (!window.confirm(`Hapus buku ${id} dari daftar simulasi?`)) {
-      return;
-    }
-
-    const books = getAllBooks().filter(book => book.id !== id);
-    const deleted = readArray(DELETED_KEY);
-
-    if (!deleted.includes(id)) {
-      deleted.push(id);
-    }
-
-    if (!saveAllBooks(books)) return;
-    if (!window.EPerpus?.write(DELETED_KEY, deleted)) return;
-
-    renderTable();
-
-    window.EPerpus?.notify(
-      'Buku berhasil dihapus dari daftar simulasi browser.'
+  function getBookStock(book) {
+    return Number(
+      book.stok ??
+      book.stok_tersedia ??
+      book.stock ??
+      0
     );
   }
 
-  // Menyiapkan data ketika pengguna memilih Edit.
-  function startEdit(button) {
-    const id = button.dataset.bookId;
-    const row = button.closest('tr');
-    const books = getAllBooks();
-
-    let book = books.find(item => item.id === id);
-
-    if (!book && row) {
-      const cells = $$('td', row);
-
-      book = {
-        id,
-        judul: cells[1]?.textContent.trim() || '',
-        penulis: '',
-        kategori: cells[2]?.textContent.trim() || '',
-        stok: parseStock(cells[3]?.textContent),
-        deskripsi: ''
-      };
-    }
-
-    if (!book) {
-      window.EPerpus?.notify(
-        'Data buku untuk diedit tidak ditemukan.',
-        'error'
-      );
-      return;
-    }
-
-    sessionStorage.setItem(EDIT_KEY, id);
-    sessionStorage.setItem(EDIT_PAYLOAD_KEY, JSON.stringify(book));
+  function getBookCover(book) {
+    return (
+      book.gambar_url ||
+      book.cover_url ||
+      book.gambar ||
+      book.cover ||
+      ''
+    );
   }
 
-  // Mengisi form berdasarkan data buku yang dipilih.
-  function loadEditForm() {
-    if (!getField('id-buku')) return;
+  function showFeedback(message, type = 'success') {
+    const feedback = $('#bookFeedback');
 
-    const editId = sessionStorage.getItem(EDIT_KEY);
+    if (!feedback) return;
 
-    if (!editId) return;
+    feedback.textContent = message;
 
-    let book = readArray(BOOK_KEY).find(item => item.id === editId);
+    feedback.className = `pb-feedback pb-feedback--${type}`;
+  }
 
-    if (!book) {
-      try {
-        book = JSON.parse(
-          sessionStorage.getItem(EDIT_PAYLOAD_KEY) || 'null'
+  // ===================================================
+  // PREVIEW GAMBAR
+  // ===================================================
+
+  function initializeImagePreview() {
+    const input = $('#gambar');
+    const preview = $('#coverPreview');
+    const placeholder = $('#uploadPlaceholder');
+
+    if (!input || !preview || !placeholder) return;
+
+    let currentObjectUrl = null;
+
+    input.addEventListener('change', () => {
+      const file = input.files?.[0];
+
+      if (!file) return;
+
+      const allowedTypes = [
+        'image/jpeg',
+        'image/png',
+        'image/webp'
+      ];
+
+      if (!allowedTypes.includes(file.type)) {
+        input.value = '';
+
+        showFeedback(
+          'Format gambar harus JPG, PNG, atau WEBP.',
+          'error'
         );
-      } catch (error) {
-        console.error('Data edit buku tidak valid:', error);
+
+        return;
       }
-    }
 
-    if (!book) {
-      window.EPerpus?.notify(
-        'Data buku tidak ditemukan. Form dapat diisi sebagai data baru.',
-        'error'
-      );
+      if (file.size > 5 * 1024 * 1024) {
+        input.value = '';
 
-      sessionStorage.removeItem(EDIT_KEY);
-      sessionStorage.removeItem(EDIT_PAYLOAD_KEY);
-      return;
-    }
+        showFeedback(
+          'Ukuran gambar maksimal 5 MB.',
+          'error'
+        );
 
-    const values = {
-      'id-buku': book.id,
-      judul: book.judul,
-      penulis: book.penulis,
-      kategori: book.kategori,
-      stok: book.stok,
-      deskripsi: book.deskripsi
-    };
-
-    Object.entries(values).forEach(([name, value]) => {
-      const field = getField(name);
-
-      if (field) {
-        field.value = value ?? '';
+        return;
       }
+
+      if (currentObjectUrl) {
+        URL.revokeObjectURL(currentObjectUrl);
+      }
+
+      currentObjectUrl = URL.createObjectURL(file);
+
+      preview.src = currentObjectUrl;
+      preview.hidden = false;
+      placeholder.hidden = true;
+
+      showFeedback('');
     });
   }
 
-  // Inisialisasi halaman.
-  document.addEventListener('DOMContentLoaded', () => {
-    if (getTableBody()) {
-      renderTable();
+  // ===================================================
+  // VALIDASI FORM
+  // ===================================================
+
+  function validateBookForm(form) {
+    const id = form.elements.id_buku.value.trim();
+    const title = form.elements.judul.value.trim();
+    const author = form.elements.penulis.value.trim();
+    const category = form.elements.kategori.value;
+    const stock = form.elements.stok.value;
+
+    if (!title || !id || !author || !category || stock === '') {
+      showFeedback(
+        'Semua kolom wajib harus diisi.',
+        'error'
+      );
+
+      return false;
     }
 
-    loadEditForm();
-  });
+    if (!/^\d+$/.test(stock)) {
+      showFeedback(
+        'Stok harus berupa bilangan bulat nonnegatif.',
+        'error'
+      );
 
-  // Event input pencarian dan validasi.
-  document.addEventListener('input', event => {
-    if (event.target.matches('[data-search-form="books"] #keyword')) {
-      filterBooks(event.target.value);
+      return false;
     }
 
-    if (
-      event.target.matches('[name]') &&
-      event.target.hasAttribute('aria-invalid')
-    ) {
-      clearFieldError(event.target);
-    }
-  });
+    if (!Number.isSafeInteger(Number(stock))) {
+      showFeedback(
+        'Jumlah stok tidak valid.',
+        'error'
+      );
 
-  document.addEventListener('change', event => {
-    if (event.target.matches('[data-search-form="books"] #keyword')) {
-      filterBooks(event.target.value);
+      return false;
     }
 
-    if (
-      event.target.matches('[name]') &&
-      event.target.hasAttribute('aria-invalid')
-    ) {
-      clearFieldError(event.target);
+    if (!/^[a-zA-Z0-9_-]+$/.test(id)) {
+      showFeedback(
+        'ID buku hanya boleh menggunakan huruf, angka, tanda hubung, dan garis bawah.',
+        'error'
+      );
+
+      return false;
     }
-  });
 
-  // Pencarian menggunakan Enter.
-  document.addEventListener('keydown', event => {
-    if (
-      event.target.matches('[data-search-form="books"] #keyword') &&
-      event.key === 'Enter'
-    ) {
-      event.preventDefault();
-      filterBooks(event.target.value);
+    return true;
+  }
+
+  // ===================================================
+  // TAMBAH BUKU
+  // ===================================================
+
+  async function saveBook(event) {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const button = $('#saveBookButton');
+
+    if (!validateBookForm(form)) return;
+
+    const image = form.elements.gambar.files?.[0];
+
+    if (!image) {
+      showFeedback(
+        'Silakan unggah gambar sampul buku.',
+        'error'
+      );
+
+      return;
     }
-  });
 
-  // Event click untuk seluruh aksi pustakawan.
-  document.addEventListener('click', event => {
-    const searchButton = event.target.closest('[data-action="search-books"]');
+    const formData = new FormData();
 
-    if (searchButton) {
-      const input = $('#keyword');
+    formData.append(
+      'id_buku',
+      form.elements.id_buku.value.trim()
+    );
 
-      if (!input || !input.value.trim()) {
-        window.EPerpus?.notify('Masukkan kata kunci pencarian buku.');
-        input?.focus();
-        filterBooks('');
-      } else {
-        filterBooks(input.value);
+    formData.append(
+      'judul',
+      form.elements.judul.value.trim()
+    );
+
+    formData.append(
+      'penulis',
+      form.elements.penulis.value.trim()
+    );
+
+    formData.append(
+      'kategori',
+      form.elements.kategori.value
+    );
+
+    formData.append(
+      'stok',
+      String(Number(form.elements.stok.value))
+    );
+
+    formData.append(
+      'deskripsi',
+      form.elements.deskripsi.value.trim()
+    );
+
+    formData.append('gambar', image);
+
+    try {
+      button.disabled = true;
+      button.textContent = 'Menyimpan...';
+
+      await apiRequest(API_BASE, {
+        method: 'POST',
+        body: formData
+      });
+
+      showFeedback(
+        'Buku berhasil ditambahkan.',
+        'success'
+      );
+
+      form.reset();
+
+      const preview = $('#coverPreview');
+      const placeholder = $('#uploadPlaceholder');
+
+      preview.hidden = true;
+      preview.removeAttribute('src');
+
+      placeholder.hidden = false;
+
+      // Kembali ke halaman Data Buku.
+      // Buku akan dimuat pada Beranda dari database.
+      setTimeout(() => {
+        window.location.href = 'data-buku.html';
+      }, 700);
+
+    } catch (error) {
+      console.error('Gagal menambahkan buku:', error);
+
+      showFeedback(
+        error.message || 'Buku gagal disimpan.',
+        'error'
+      );
+
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Simpan';
+    }
+  }
+
+  // ===================================================
+  // MEMUAT DATA BUKU DARI BACKEND
+  // ===================================================
+
+  async function loadBooks() {
+    const result = await apiRequest(API_BASE, {
+      method: 'GET'
+    });
+
+    return extractBooks(result);
+  }
+
+  // ===================================================
+  // MEMBUAT KARTU BUKU PADA BERANDA
+  // ===================================================
+
+  function createBookCard(book) {
+    const card = document.createElement('article');
+
+    card.className = 'pb-stock-card';
+
+    // Sampul.
+    const cover = document.createElement('div');
+
+    cover.className = 'pb-stock-cover';
+
+    const imageUrl = getBookCover(book);
+
+    if (imageUrl) {
+      const image = document.createElement('img');
+
+      image.src = imageUrl;
+      image.alt = `Sampul ${getBookTitle(book)}`;
+      image.loading = 'lazy';
+
+      cover.appendChild(image);
+
+    } else {
+      const placeholder = document.createElement('div');
+
+      placeholder.className = 'pb-stock-placeholder';
+      placeholder.textContent = getBookTitle(book);
+
+      cover.appendChild(placeholder);
+    }
+
+    // Judul.
+    const title = document.createElement('h3');
+
+    title.className = 'pb-stock-title';
+    title.textContent = getBookTitle(book);
+
+    // Stok.
+    const quantity = document.createElement('span');
+
+    quantity.className = 'pb-stock-quantity';
+    quantity.textContent = `Stok tersedia ${getBookStock(book)} Eks`;
+
+    // Kartu.
+    card.append(
+      cover,
+      title,
+      quantity
+    );
+
+    return card;
+  }
+
+  // ===================================================
+  // MENAMPILKAN STOK PADA BERANDA
+  // ===================================================
+
+  async function renderHomeBooks() {
+    const container = $('[data-stok-buku]');
+
+    if (!container) return;
+
+    container.setAttribute('aria-live', 'polite');
+
+    container.innerHTML = '';
+
+    try {
+      const books = await loadBooks();
+
+      // Hanya buku dengan stok lebih dari nol.
+      const availableBooks = books.filter(book =>
+        getBookStock(book) > 0
+      );
+
+      if (availableBooks.length === 0) {
+        const empty = document.createElement('p');
+
+        empty.className = 'pb-stock-empty';
+
+        empty.textContent =
+          'Belum ada buku dengan stok tersedia.';
+
+        container.appendChild(empty);
+
+        return;
       }
+
+      availableBooks.forEach(book => {
+        container.appendChild(
+          createBookCard(book)
+        );
+      });
+
+    } catch (error) {
+      console.error('Gagal memuat stok buku:', error);
+
+      const message = document.createElement('p');
+
+      message.className = 'pb-stock-empty';
+
+      message.textContent =
+        'Data buku gagal dimuat. Periksa koneksi server.';
+
+      container.appendChild(message);
+    }
+  }
+
+  // ===================================================
+  // INISIALISASI
+  // ===================================================
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = $('#bookForm');
+
+    if (form) {
+      initializeImagePreview();
+
+      form.addEventListener('submit', saveBook);
     }
 
-    const deleteButton = event.target.closest('[data-action="delete-book"]');
-
-    if (deleteButton) {
-      deleteBook(deleteButton);
-    }
-
-    const editButton = event.target.closest('[data-action="edit-book"]');
-
-    if (editButton) {
-      startEdit(editButton);
-    }
-
-    const saveButton = event.target.closest('[data-action="save-book"]');
-
-    if (saveButton) {
-      saveBook();
-    }
-
-    // Membersihkan data edit jika pengguna memilih Tambah Buku.
-    const addRoute = event.target.closest('[data-route="tambah-buku.html"]');
-
-    if (addRoute && !addRoute.matches('[data-action="edit-book"]')) {
-      sessionStorage.removeItem(EDIT_KEY);
-      sessionStorage.removeItem(EDIT_PAYLOAD_KEY);
-    }
+    renderHomeBooks();
   });
+
 })();

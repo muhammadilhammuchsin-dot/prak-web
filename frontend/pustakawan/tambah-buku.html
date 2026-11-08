@@ -1,117 +1,215 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tambah Buku - E-Perpustakaan</title>
-  <!-- Font dari Google Fonts (butuh internet) dan file CSS -->
 
-
-  <!-- GOOGLE FONTS ASLI -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- CSS SHARED -->
   <link rel="stylesheet" href="../css/shared/variables.css">
   <link rel="stylesheet" href="../css/shared/base.css">
   <link rel="stylesheet" href="../css/shared/utilities.css">
   <link rel="stylesheet" href="../css/shared/components.css">
   <link rel="stylesheet" href="../css/shared/layout.css">
-
-  <!-- CSS PUSTAKAWAN -->
   <link rel="stylesheet" href="../css/pustakawan/pustakawan.css">
-
-  <!-- RESPONSIVE -->
   <link rel="stylesheet" href="../css/shared/responsive.css">
-
-
 </head>
-<body>
-  <!-- Kumpulan ikon halaman ini; dipanggil dengan <use href="#i-nama"> -->
-  <svg class="icon-sprite" aria-hidden="true"><symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol><symbol id="i-camera" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></symbol><symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></symbol><symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></symbol><symbol id="i-swap" viewBox="0 0 24 24"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></symbol><symbol id="i-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol></svg>
 
-  <div class="admin-layout">
-    <aside class="sidebar">
-      <div class="brand brand--light">
-        <span class="brand__icon"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
-        <span class="brand__name">E-Perpustakaan</span>
-      </div>
+<body class="pb-body">
 
-      <nav class="sidebar__nav" aria-label="Menu pustakawan">
-        <a class="sidebar__link" data-route="beranda.html" role="link" tabindex="0"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-grid"/></svg> Beranda</a>
-        <a class="sidebar__link sidebar__link--active" data-route="data-buku.html" aria-current="page" role="link" tabindex="0"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-book"/></svg> Data Buku</a>
-        <a class="sidebar__link" data-route="data-anggota.html" role="link" tabindex="0"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-users"/></svg> Data Anggota</a>
-        <a class="sidebar__link" data-route="transaksi.html" role="link" tabindex="0"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-swap"/></svg> Transaksi</a>
-        <a class="sidebar__link sidebar__link--logout" data-route="../auth/login/pustakawan.html" role="link" tabindex="0"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-logout"/></svg> Keluar</a>
+  <div class="pb-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="pb-sidebar">
+      <a href="beranda.html" class="pb-brand">
+        <span class="pb-brand-icon">♧</span>
+        <span>E-Perpustakaan</span>
+      </a>
+
+      <nav class="pb-navigation">
+        <a href="beranda.html" class="pb-nav-link">
+          <span>▦</span> Beranda
+        </a>
+
+        <a href="data-buku.html" class="pb-nav-link active">
+          <span>▣</span> Data Buku
+        </a>
+
+        <a href="data-anggota.html" class="pb-nav-link">
+          <span>♙</span> Data Anggota
+        </a>
+
+        <a href="transaksi.html" class="pb-nav-link">
+          <span>⇄</span> Transaksi
+        </a>
       </nav>
+
+      <a href="../auth/login/pustakawan.html" class="pb-logout">
+        <span>⇥</span> Keluar
+      </a>
     </aside>
 
-    <main class="admin-content">
-      <h1 class="page-title">Tambah buku baru</h1>
+    <!-- KONTEN -->
+    <main class="pb-main">
 
-      <div data-book-form>
-        <div class="panel book-form">
-          <div>
-            <label class="upload-box" for="gambar">
-              <span class="upload-box__icon"><svg class="icon" aria-hidden="true"><use href="#i-camera"/></svg></span>
-              upload gambar
+      <h1 class="pb-form-title">Tambah buku baru</h1>
+
+      <form id="bookForm" class="pb-book-form" enctype="multipart/form-data">
+
+        <div class="pb-form-grid">
+
+          <!-- UPLOAD SAMPUL -->
+          <div class="pb-upload-section">
+
+            <label for="gambar" class="pb-upload-box">
+
+              <img
+                id="coverPreview"
+                class="pb-cover-preview"
+                alt="Pratinjau sampul buku"
+                hidden
+              >
+
+              <div id="uploadPlaceholder" class="pb-upload-placeholder">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z"/>
+                  <circle cx="12" cy="13" r="4"/>
+                </svg>
+              </div>
+
             </label>
-            <input class="visually-hidden" id="gambar" name="gambar" type="file" accept="image/*">
+
+            <input
+              type="file"
+              id="gambar"
+              name="gambar"
+              accept="image/jpeg,image/png,image/webp"
+              hidden
+            >
+
+            <label for="gambar" class="pb-upload-caption">
+              Upload gambar
+            </label>
+
+            <p class="pb-upload-info">
+              JPG, PNG, atau WEBP. Maksimal 5 MB.
+            </p>
+
           </div>
 
-          <div class="form">
-            <div class="form__group">
-              <label class="form__label" for="judul">Judul buku</label>
-              <input class="form__input form__input--plain" id="judul" name="judul" placeholder="masukkan judul buku">
+          <!-- FORM INPUT -->
+          <div class="pb-fields">
+
+            <div class="pb-field">
+              <label for="judul">Judul buku</label>
+              <input
+                type="text"
+                id="judul"
+                name="judul"
+                placeholder="masukkan judul buku"
+                maxlength="200"
+                required
+              >
             </div>
 
-            <div class="form__group">
-              <label class="form__label" for="id-buku">ID buku</label>
-              <input class="form__input form__input--plain" id="id-buku" name="id-buku" placeholder="masukkan ID buku">
+            <div class="pb-field">
+              <label for="id-buku">ID buku</label>
+              <input
+                type="text"
+                id="id-buku"
+                name="id_buku"
+                placeholder="masukkan ID buku"
+                maxlength="50"
+                required
+              >
             </div>
 
-            <div class="form__group">
-              <label class="form__label" for="penulis">Penulis</label>
-              <input class="form__input form__input--plain" id="penulis" name="penulis" placeholder="masukkan nama penulis">
+            <div class="pb-field">
+              <label for="penulis">Penulis</label>
+              <input
+                type="text"
+                id="penulis"
+                name="penulis"
+                placeholder="masukkan nama penulis"
+                maxlength="150"
+                required
+              >
             </div>
 
-            <div class="form__group">
-              <label class="form__label" for="kategori">Kategori</label>
-              <select class="form__input form__input--plain" id="kategori" name="kategori">
+            <div class="pb-field">
+              <label for="kategori">Kategori</label>
+              <select id="kategori" name="kategori" required>
                 <option value="">Pilih Kategori...</option>
-                <option>Informatika &amp; Komputer</option>
-                <option>Sains &amp; Matematika</option>
-                <option>Sosial &amp; Bisnis</option>
-                <option>Sastra &amp; Bahasa</option>
+                <option value="Informatika & Komputer">
+                  Informatika & Komputer
+                </option>
+                <option value="Sains & Matematika">
+                  Sains & Matematika
+                </option>
+                <option value="Sastra & Bahasa">
+                  Sastra & Bahasa
+                </option>
+                <option value="Sosial & Bisnis">
+                  Sosial & Bisnis
+                </option>
               </select>
             </div>
 
-            <div class="form__group">
-              <label class="form__label" for="stok">Stok</label>
-              <input class="form__input form__input--plain" id="stok" name="stok" placeholder="masukkan jumlah stok">
+            <div class="pb-field">
+              <label for="stok">Stok</label>
+              <input
+                type="number"
+                id="stok"
+                name="stok"
+                placeholder="masukkan jumlah stok"
+                min="0"
+                step="1"
+                required
+              >
             </div>
 
-            <div class="form__group">
-              <label class="form__label" for="deskripsi">Deskripsi</label>
-              <textarea class="form__input form__input--plain" id="deskripsi" name="deskripsi" rows="4" placeholder="masukkan deskripsi buku..."></textarea>
+            <div class="pb-field">
+              <label for="deskripsi">Deskripsi</label>
+              <textarea
+                id="deskripsi"
+                name="deskripsi"
+                placeholder="masukkan deskripsi buku..."
+                rows="5"
+              ></textarea>
             </div>
+
           </div>
         </div>
 
-        <div class="form-actions">
-          <a class="btn btn--cancel" data-route="data-buku.html" role="link" tabindex="0">Batal</a>
-          <button class="btn btn--navy" type="button" data-action="save-book">Simpan</button>
+        <!-- TOMBOL -->
+        <div class="pb-form-actions">
+
+          <a href="data-buku.html" class="pb-cancel-button">
+            Batal
+          </a>
+
+          <button
+            type="submit"
+            id="saveBookButton"
+            class="pb-save-button"
+          >
+            Simpan
+          </button>
+
         </div>
-      </div>
+
+        <p id="bookFeedback" class="pb-feedback" role="status" aria-live="polite"></p>
+
+      </form>
+
     </main>
   </div>
 
-  <!-- JavaScript untuk pengelolaan data buku, meliputi tambah, edit, hapus, dan pencarian -->
-<script src="../js/pustakawan/buku.js" defer></script>
-
-<!-- JavaScript untuk fungsi umum, seperti navigasi dan notifikasi -->
-<script src="../js/shared/app.js" defer></script>
+  <script src="../js/pustakawan/buku.js" defer></script>
+  <script src="../js/shared/app.js" defer></script>
 
 </body>
 </html>
