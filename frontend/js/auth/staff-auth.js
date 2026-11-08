@@ -1,20 +1,22 @@
 
 /* =========================================================
    STAFF-AUTH.JS
-   AUTENTIKASI BERSAMA PUSTAKAWAN DAN KEPUS
+   AUTENTIKASI BERSAMA PUSTAKAWAN DAN KEPALA PERPUSTAKAAN
 
-   FITUR:
-   1. Satu sistem pendaftaran untuk dua jenis akun.
-   2. Menyimpan role setiap akun.
-   3. Login berdasarkan role yang sesuai.
-   4. Migrasi akun Pustakawan lama.
-   5. Validasi input dan akun duplikat.
-   6. Hash password menggunakan PBKDF2-SHA256.
-   7. Tampilkan/sembunyikan password.
-   8. Membuat sesi terpisah.
-   9. Mengarahkan pengguna ke beranda sesuai role.
+   Fitur:
+   1. Satu halaman pendaftaran untuk dua jenis akun.
+   2. Role dipilih langsung pada formulir pendaftaran.
+   3. Akun menyimpan role: pustakawan atau kepus.
+   4. Login tetap terpisah berdasarkan role.
+   5. Migrasi akun Pustakawan dari penyimpanan lama.
+   6. Validasi input dan pencegahan identitas ganda.
+   7. Hash password PBKDF2-SHA256.
+   8. Tampilkan/sembunyikan password.
+   9. Sesi dan tujuan beranda terpisah.
 
-   MODE: SIMULASI FRONTEND MENGGUNAKAN localStorage.
+   MODE:
+   Simulasi frontend menggunakan localStorage.
+   Belum menggunakan MySQL atau endpoint PHP.
    ========================================================= */
 
 (() => {
@@ -29,7 +31,7 @@
   const PASSWORD_ITERATIONS = 120000;
   const FORM_SELECTOR = 'form[data-auth-form]';
 
-  // Pengaturan masing-masing jenis akun.
+  // Konfigurasi setiap jenis akun.
   const ROLE_CONFIG = {
     pustakawan: {
       label: 'Pustakawan',
@@ -47,16 +49,14 @@
     }
   };
 
-  const $ = (selector, root = document) =>
-    root.querySelector(selector);
-
-  const $$ = (selector, root = document) =>
-    [...root.querySelectorAll(selector)];
+  const $ = (selector, root = document) => root.querySelector(selector);
+  const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
   // =======================================================
-  // 2. NORMALISASI IDENTITAS
+  // 2. FUNGSI DASAR
   // =======================================================
 
+  // Menyamakan format identitas.
   function normalizeIdentity(value) {
     return String(value || '')
       .trim()
@@ -64,15 +64,13 @@
       .toUpperCase();
   }
 
+  // Memastikan role hanya berasal dari konfigurasi.
   function isValidRole(role) {
-    return Object.prototype.hasOwnProperty.call(
-      ROLE_CONFIG,
-      role
-    );
+    return Object.prototype.hasOwnProperty.call(ROLE_CONFIG, role);
   }
 
   // =======================================================
-  // 3. MEMBACA PENYIMPANAN AKUN
+  // 3. MEMBACA DAN MENYIMPAN AKUN
   // =======================================================
 
   function readAccounts(key) {
@@ -90,56 +88,38 @@
       return accounts;
     } catch (error) {
       console.error(`Gagal membaca ${key}:`, error);
-      throw new Error(
-        'Data akun tidak dapat dibaca. Periksa penyimpanan browser.'
-      );
+      throw new Error('Data akun tidak dapat dibaca. Periksa penyimpanan browser.');
     }
   }
-
-  // =======================================================
-  // 4. MENYIMPAN AKUN
-  // =======================================================
 
   function saveAccounts(accounts) {
     try {
-      localStorage.setItem(
-        ACCOUNT_KEY,
-        JSON.stringify(accounts)
-      );
-
+      localStorage.setItem(ACCOUNT_KEY, JSON.stringify(accounts));
       return true;
     } catch (error) {
       console.error('Gagal menyimpan akun:', error);
-      throw new Error(
-        'Akun gagal disimpan. Periksa kapasitas penyimpanan browser.'
-      );
+      throw new Error('Akun gagal disimpan. Periksa kapasitas penyimpanan browser.');
     }
   }
 
-  // =======================================================
-  // 5. MIGRASI AKUN PUSTAKAWAN LAMA
-  // =======================================================
-
+  // Migrasi akun Pustakawan dari penyimpanan versi lama.
+  // Akun lama tidak otomatis memperoleh hak akses Kepus.
   function getAccounts() {
     const accounts = readAccounts(ACCOUNT_KEY);
     const legacyAccounts = readAccounts(LEGACY_ACCOUNT_KEY);
     let changed = false;
 
-    // Akun lama dimigrasikan sebagai Pustakawan.
-    // Akun lama tidak otomatis memperoleh hak akses Kepus.
     legacyAccounts.forEach(oldAccount => {
+      if (!oldAccount || typeof oldAccount !== 'object') return;
+
       const identity = normalizeIdentity(oldAccount.identity);
 
-      if (
-        !identity ||
-        !oldAccount.salt ||
-        !oldAccount.passwordHash
-      ) {
+      if (!identity || !oldAccount.salt || !oldAccount.passwordHash) {
         return;
       }
 
+      // Identitas yang sudah ada tidak dimigrasikan ulang.
       const exists = accounts.some(account =>
-        account.role === 'pustakawan' &&
         normalizeIdentity(account.identity) === identity
       );
 
@@ -151,23 +131,20 @@
           email: oldAccount.email || '',
           salt: oldAccount.salt,
           passwordHash: oldAccount.passwordHash,
-          createdAt: oldAccount.createdAt ||
-            new Date().toISOString()
+          createdAt: oldAccount.createdAt || new Date().toISOString()
         });
 
         changed = true;
       }
     });
 
-    if (changed) {
-      saveAccounts(accounts);
-    }
+    if (changed) saveAccounts(accounts);
 
     return accounts;
   }
 
   // =======================================================
-  // 6. HASH PASSWORD PBKDF2
+  // 4. HASH PASSWORD PBKDF2-SHA256
   // =======================================================
 
   function toBase64(bytes) {
@@ -189,26 +166,20 @@
 
   function generateSalt() {
     if (!window.crypto?.getRandomValues) {
-      throw new Error('Browser tidak mendukung keamanan password.');
+      throw new Error('Browser tidak mendukung fungsi keamanan password.');
     }
 
-    return window.crypto.getRandomValues(
-      new Uint8Array(16)
-    );
+    return window.crypto.getRandomValues(new Uint8Array(16));
   }
 
   async function hashPassword(password, salt) {
     if (!window.crypto?.subtle) {
-      throw new Error(
-        'Web Crypto tidak tersedia. Jalankan proyek melalui Live Server.'
-      );
+      throw new Error('Web Crypto tidak tersedia. Jalankan proyek melalui Live Server atau HTTPS.');
     }
-
-    const encoder = new TextEncoder();
 
     const keyMaterial = await window.crypto.subtle.importKey(
       'raw',
-      encoder.encode(password),
+      new TextEncoder().encode(password),
       'PBKDF2',
       false,
       ['deriveBits']
@@ -228,7 +199,7 @@
     return toBase64(new Uint8Array(hash));
   }
 
-  // Membandingkan hash tanpa berhenti pada karakter pertama.
+  // Membandingkan hash dengan operasi XOR.
   function compareHash(first, second) {
     if (
       typeof first !== 'string' ||
@@ -248,7 +219,7 @@
   }
 
   // =======================================================
-  // 7. FEEDBACK FORM
+  // 5. PESAN FEEDBACK DAN VALIDASI
   // =======================================================
 
   function showFeedback(form, message, type = 'info') {
@@ -270,10 +241,6 @@
     feedback.hidden = true;
     feedback.className = 'auth-feedback';
   }
-
-  // =======================================================
-  // 8. VALIDASI INPUT
-  // =======================================================
 
   function getErrorElement(form, name) {
     return $$('[data-error-for]', form).find(element =>
@@ -307,18 +274,24 @@
 
   function validateField(form, field) {
     const formType = form.dataset.authForm;
-    const value = field.value.trim();
+    const value = String(field.value || '').trim();
 
-    // Pemeriksaan input wajib.
+    // Validasi field wajib.
     if (field.required && !value) {
       setFieldError(form, field, 'Bagian ini wajib diisi.');
       return false;
     }
 
-    // Input opsional boleh kosong.
+    // Field opsional boleh kosong.
     if (!value) {
       clearFieldError(form, field);
       return true;
+    }
+
+    // Validasi pilihan role.
+    if (field.name === 'role' && !isValidRole(value)) {
+      setFieldError(form, field, 'Pilih jenis akun terlebih dahulu.');
+      return false;
     }
 
     // Validasi identitas pegawai.
@@ -326,30 +299,22 @@
       const identity = normalizeIdentity(value);
 
       if (!/^[A-Z0-9][A-Z0-9._-]{2,39}$/.test(identity)) {
-        setFieldError(
-          form,
-          field,
-          'NIP atau kode identitas tidak valid.'
-        );
+        setFieldError(form, field, 'NIP atau kode identitas tidak valid.');
         return false;
       }
     }
 
-    // Validasi nama.
+    // Validasi nama lengkap.
     if (field.name === 'nama') {
       if (value.length < 3 || value.length > 100) {
-        setFieldError(
-          form,
-          field,
-          'Nama harus terdiri dari 3 sampai 100 karakter.'
-        );
+        setFieldError(form, field, 'Nama harus terdiri dari 3 sampai 100 karakter.');
         return false;
       }
     }
 
     // Validasi email opsional.
     if (field.name === 'email') {
-      if (field.validity.typeMismatch) {
+      if (field.validity?.typeMismatch) {
         setFieldError(form, field, 'Format email tidak valid.');
         return false;
       }
@@ -360,21 +325,17 @@
       }
     }
 
-    // Validasi panjang password saat pendaftaran.
+    // Password minimal 8 karakter saat pendaftaran.
     if (
       field.name === 'password' &&
       formType === 'register' &&
-      Array.from(field.value).length < 8
+      field.value.length < 8
     ) {
-      setFieldError(
-        form,
-        field,
-        'Password minimal 8 karakter.'
-      );
+      setFieldError(form, field, 'Password minimal 8 karakter.');
       return false;
     }
 
-    // Validasi konfirmasi password.
+    // Konfirmasi password harus sama.
     if (
       field.name === 'password-confirm' &&
       formType === 'register'
@@ -382,11 +343,7 @@
       const password = form.elements.namedItem('password');
 
       if (field.value !== password.value) {
-        setFieldError(
-          form,
-          field,
-          'Konfirmasi password tidak sama.'
-        );
+        setFieldError(form, field, 'Konfirmasi password tidak sama.');
         return false;
       }
     }
@@ -396,19 +353,23 @@
   }
 
   function validateForm(form) {
-    const fields = $$('input[name]', form);
+    const fields = $$('input[name], select[name]', form);
     let valid = true;
     let firstInvalid = null;
 
     fields.forEach(field => {
       if (!validateField(form, field)) {
         valid = false;
-        firstInvalid ||= field;
+
+        if (!firstInvalid) {
+          firstInvalid = field;
+        }
       }
     });
 
     if (firstInvalid) {
       firstInvalid.focus();
+
       showFeedback(
         form,
         'Periksa kembali data yang Anda masukkan.',
@@ -420,21 +381,69 @@
   }
 
   // =======================================================
-  // 9. MENENTUKAN ROLE PENDAFTARAN
+  // 6. PILIHAN ROLE PADA FORM PENDAFTARAN BERSAMA
   // =======================================================
 
+  function updateRegistrationRole(form, role) {
+    const validRole = isValidRole(role);
+    const config = validRole ? ROLE_CONFIG[role] : null;
+
+    const heading = $('[data-role-title]');
+    const description = $('[data-role-description]');
+    const identityLabel = $('[data-role-identity-label]');
+    const identityInput = $('#npm', form);
+
+    // Simpan role yang dipilih.
+    if (validRole) {
+      form.dataset.userRole = role;
+    } else {
+      delete form.dataset.userRole;
+    }
+
+    // Ubah judul sesuai role.
+    if (heading) {
+      heading.textContent = validRole
+        ? `Daftar Akun ${config.label}`
+        : 'Daftar Akun Petugas Perpustakaan';
+    }
+
+    // Ubah deskripsi.
+    if (description) {
+      description.textContent = validRole
+        ? `Buat akun ${config.label} menggunakan identitas pegawai.`
+        : 'Pilih jenis akun, kemudian lengkapi data pendaftaran.';
+    }
+
+    // Ubah label dan placeholder identitas.
+    if (identityLabel) {
+      identityLabel.textContent = validRole
+        ? config.identityLabel
+        : 'NIP / Kode Pegawai';
+    }
+
+    if (identityInput) {
+      identityInput.placeholder = validRole
+        ? `Masukkan ${config.identityLabel}`
+        : 'Masukkan NIP / Kode Pegawai';
+    }
+
+    // Ubah tautan kembali dan login berdasarkan role.
+    const loginUrl = validRole
+      ? config.loginUrl
+      : ROLE_CONFIG.pustakawan.loginUrl;
+
+    $$('[data-role-login-link]').forEach(link => {
+      link.href = loginUrl;
+    });
+  }
+
   function initializeRegistrationRole(form) {
-    const params = new URLSearchParams(
-      window.location.search
-    );
+    const roleSelect = $('[name="role"]', form);
 
-    const role = params.get('role');
-
-    // Hanya dua role yang diperbolehkan.
-    if (!isValidRole(role)) {
+    if (!roleSelect) {
       showFeedback(
         form,
-        'Jenis akun tidak valid. Kembali ke halaman login dan pilih Daftar di sana.',
+        'Pilihan jenis akun tidak ditemukan pada formulir.',
         'error'
       );
 
@@ -442,67 +451,38 @@
 
       if (button) button.disabled = true;
 
-      return false;
+      return;
     }
 
-    form.dataset.userRole = role;
-
-    const config = ROLE_CONFIG[role];
-
-    // Mengubah judul sesuai role.
-    const heading = $('[data-role-title]');
-    const description = $('[data-role-description]');
-    const identityLabel = $('[data-role-identity-label]');
-    const identityInput = $('#npm');
-
-    if (heading) {
-      heading.textContent = `Daftar Akun ${config.label}`;
-    }
-
-    if (description) {
-      description.textContent =
-        `Buat akun ${config.label} menggunakan identitas pegawai.`;
-    }
-
-    if (identityLabel) {
-      identityLabel.textContent = config.identityLabel;
-    }
-
-    if (identityInput) {
-      identityInput.placeholder =
-        `Masukkan ${config.identityLabel}`;
-    }
-
-    // Memperbarui tautan kembali ke login sesuai role.
-    $$('[data-role-login-link]').forEach(link => {
-      link.href = config.loginUrl;
-    });
-
-    return true;
+    // Role tidak lagi diambil dari parameter URL.
+    // Pengguna memilih role langsung pada formulir.
+    updateRegistrationRole(form, roleSelect.value);
   }
 
   // =======================================================
-  // 10. PEMERIKSAAN AKUN DUPLIKAT
+  // 7. PEMERIKSAAN AKUN DUPLIKAT
   // =======================================================
 
-  function checkDuplicate(accounts, role, identity, email) {
-    const duplicateIdentity = accounts.some(account =>
-      account.role === role &&
+  function checkDuplicate(accounts, identity, email) {
+    // Satu identitas hanya boleh memiliki satu role petugas.
+    const existingIdentity = accounts.find(account =>
       normalizeIdentity(account.identity) === identity
     );
 
-    if (duplicateIdentity) {
-      return 'NIP atau kode identitas sudah terdaftar.';
+    if (existingIdentity) {
+      const roleName = ROLE_CONFIG[existingIdentity.role]?.label || 'petugas';
+
+      return `NIP/kode identitas sudah terdaftar sebagai ${roleName}. Gunakan identitas lain atau login dengan akun tersebut.`;
     }
 
+    // Email juga tidak boleh digunakan oleh akun petugas lain.
     if (email) {
-      const duplicateEmail = accounts.some(account =>
-        account.role === role &&
-        String(account.email || '').toLowerCase() === email
+      const existingEmail = accounts.find(account =>
+        String(account.email || '').trim().toLowerCase() === email
       );
 
-      if (duplicateEmail) {
-        return 'Email sudah digunakan pada jenis akun ini.';
+      if (existingEmail) {
+        return 'Email sudah digunakan oleh akun petugas lain.';
       }
     }
 
@@ -510,14 +490,18 @@
   }
 
   // =======================================================
-  // 11. PROSES PENDAFTARAN
+  // 8. PROSES PENDAFTARAN
   // =======================================================
 
   async function handleRegistration(form) {
-    const role = form.dataset.userRole;
+    const role = form.elements.namedItem('role')?.value || '';
 
     if (!isValidRole(role)) {
-      showFeedback(form, 'Jenis akun tidak valid.', 'error');
+      showFeedback(
+        form,
+        'Pilih Pustakawan atau Kepala Perpustakaan.',
+        'error'
+      );
       return;
     }
 
@@ -535,10 +519,9 @@
 
     const accounts = getAccounts();
 
-    // Mencegah identitas dan email ganda pada role yang sama.
+    // Periksa identitas dan email duplikat.
     const duplicateMessage = checkDuplicate(
       accounts,
-      role,
       identity,
       email
     );
@@ -548,11 +531,11 @@
       return;
     }
 
-    // Membuat salt dan hash password.
+    // Buat salt acak dan hash password.
     const salt = generateSalt();
     const passwordHash = await hashPassword(password, salt);
 
-    // Menyimpan akun beserta role.
+    // Simpan akun beserta role yang dipilih.
     const newAccount = {
       role,
       nama,
@@ -568,18 +551,18 @@
 
     showFeedback(
       form,
-      `Pendaftaran ${ROLE_CONFIG[role].label} berhasil. Silakan login.`,
+      `Pendaftaran ${ROLE_CONFIG[role].label} berhasil. Anda akan diarahkan ke halaman login yang sesuai.`,
       'info'
     );
 
-    // Kembali ke halaman login sesuai role.
+    // Arahkan ke login berdasarkan role.
     window.setTimeout(() => {
       window.location.href = ROLE_CONFIG[role].loginUrl;
     }, 1000);
   }
 
   // =======================================================
-  // 12. PROSES LOGIN
+  // 9. PROSES LOGIN BERDASARKAN ROLE
   // =======================================================
 
   async function handleLogin(form) {
@@ -596,14 +579,14 @@
 
     const password = form.elements.namedItem('password').value;
 
-    // Menghapus sesi role sebelumnya agar tidak tertukar.
+    // Hapus sesi petugas sebelumnya.
     Object.values(ROLE_CONFIG).forEach(config => {
       sessionStorage.removeItem(config.sessionKey);
     });
 
     const accounts = getAccounts();
 
-    // Identitas dan role harus cocok.
+    // Identitas dan role wajib cocok.
     const account = accounts.find(item =>
       normalizeIdentity(item.identity) === identity &&
       item.role === role
@@ -635,7 +618,7 @@
       throw new Error('Data autentikasi akun tidak lengkap.');
     }
 
-    // Memverifikasi password.
+    // Verifikasi password.
     const salt = fromBase64(account.salt);
     const inputHash = await hashPassword(password, salt);
 
@@ -648,7 +631,7 @@
       return;
     }
 
-    // Membuat sesi berdasarkan role.
+    // Buat sesi sesuai role.
     const session = {
       role,
       identity: account.identity,
@@ -668,14 +651,14 @@
       'info'
     );
 
-    // Tujuan halaman berbeda untuk setiap role.
+    // Arahkan ke beranda masing-masing.
     window.setTimeout(() => {
       window.location.href = ROLE_CONFIG[role].homeUrl;
     }, 700);
   }
 
   // =======================================================
-  // 13. TAMPILKAN / SEMBUNYIKAN PASSWORD
+  // 10. TAMPILKAN / SEMBUNYIKAN PASSWORD
   // =======================================================
 
   function togglePassword(button) {
@@ -701,7 +684,7 @@
   }
 
   // =======================================================
-  // 14. EVENT SUBMIT
+  // 11. EVENT SUBMIT FORM
   // =======================================================
 
   async function handleFormSubmit(event) {
@@ -745,21 +728,33 @@
   }
 
   // =======================================================
-  // 15. EVENT INPUT DAN CHANGE
+  // 12. EVENT INPUT DAN PERUBAHAN ROLE
   // =======================================================
 
   function handleFieldChange(event) {
     const field = event.target;
 
-    if (!(field instanceof HTMLInputElement)) return;
+    const isSupportedField =
+      field instanceof HTMLInputElement ||
+      field instanceof HTMLSelectElement;
+
+    if (!isSupportedField) return;
 
     const form = field.closest(FORM_SELECTOR);
 
     if (!form || !field.name) return;
 
+    // Perbarui informasi halaman ketika pilihan role berubah.
+    if (
+      field.name === 'role' &&
+      form.dataset.authForm === 'register'
+    ) {
+      updateRegistrationRole(form, field.value);
+    }
+
     validateField(form, field);
 
-    // Memeriksa ulang konfirmasi ketika password berubah.
+    // Periksa ulang konfirmasi jika password utama berubah.
     if (
       field.name === 'password' &&
       form.dataset.authForm === 'register'
@@ -776,14 +771,15 @@
   }
 
   // =======================================================
-  // 16. INISIALISASI
+  // 13. INISIALISASI
   // =======================================================
 
   function initialize() {
     const forms = $$(FORM_SELECTOR);
 
     forms.forEach(form => {
-      // Form pendaftaran mengambil role dari URL.
+      // Form daftar memakai pilihan role.
+      // Form login tetap menggunakan role dari HTML.
       if (form.dataset.authForm === 'register') {
         initializeRegistrationRole(form);
       }

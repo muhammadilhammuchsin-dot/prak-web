@@ -1,264 +1,35 @@
 ﻿
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Laporan Kepala Perpustakaan - E-Perpustakaan</title>
-
-  <!-- GOOGLE FONTS ASLI -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <!-- CSS SHARED -->
-  <link rel="stylesheet" href="../css/shared/variables.css">
-  <link rel="stylesheet" href="../css/shared/base.css">
-  <link rel="stylesheet" href="../css/shared/utilities.css">
-  <link rel="stylesheet" href="../css/shared/components.css">
-  <link rel="stylesheet" href="../css/shared/layout.css">
-
-  <!-- CSS KEPUS -->
-  <link rel="stylesheet" href="../css/kepus/kepus.css">
-
-  <!-- RESPONSIVE -->
-  <link rel="stylesheet" href="../css/shared/responsive.css">
-</head>
-
-<body data-kepus-protected="true">
-
-  <!-- KUMPULAN IKON HALAMAN -->
-  <svg class="icon-sprite" aria-hidden="true">
-    <symbol id="i-logout" viewBox="0 0 24 24">
-      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-      <path d="m16 17 5-5-5-5"/>
-      <path d="M21 12H9"/>
-    </symbol>
-  </svg>
-
-  <!-- HEADER -->
-  <header class="page report__header">
-
-    <h1>LAPORAN KEPALA PERPUSTAKAAN</h1>
-
-    <!-- TOMBOL LOGOUT -->
-    <a class="report__logout"
-       href="../auth/login/kepus.html"
-       data-kepus-logout>
-
-      <svg class="icon icon--sm" aria-hidden="true">
-        <use href="#i-logout"/>
-      </svg>
-
-      Keluar
-    </a>
-
-  </header>
-
-  <!-- KONTEN UTAMA -->
-  <main class="page">
-
-    <!-- PERIODE LAPORAN -->
-    <section class="panel period-picker" aria-label="Periode laporan">
-
-      <label class="period-picker__label" for="period">
-        PERIODE
-      </label>
-
-      <select class="select"
-              id="period"
-              name="period"
-              data-action="change-period"
-              disabled>
-
-        <option>September 2026</option>
-        <option>Oktober 2026</option>
-        <option>November 2026</option>
-        <option>Desember 2026</option>
-
-      </select>
-
-    </section>
-
-    <!-- RINGKASAN -->
-    <section class="stats" aria-label="Ringkasan">
-
-      <article class="stat-card">
-
-        <h2 class="stat-card__label">
-          TOTAL ANGGOTA
-        </h2>
-
-        <p class="stat-card__value">
-          012
-        </p>
-
-      </article>
-
-      <article class="stat-card">
-
-        <h2 class="stat-card__label">
-          TOTAL BUKU
-        </h2>
-
-        <p class="stat-card__value">
-          200
-        </p>
-
-      </article>
-
-    </section>
-
-    <!-- DIAGRAM MINAT BACA -->
-    <section class="panel">
-
-      <h2 class="panel__title">
-        Data minat Baca anggota
-      </h2>
-
-      <div class="chart-row">
-
-        <!-- DIAGRAM DONAT -->
-        <div class="donut"
-             role="img"
-             aria-label="Diagram donat minat baca anggota">
-
-          <span class="donut__hole">
-            100%
-          </span>
-
-        </div>
-
-        <!-- KETERANGAN DIAGRAM -->
-        <ul class="legend">
-
-          <li class="legend__item">
-            <span class="legend__dot legend__dot--1"></span>
-            Teknologi &amp; Informatika
-            <strong>60%</strong>
-          </li>
-
-          <li class="legend__item">
-            <span class="legend__dot legend__dot--2"></span>
-            Sains &amp; Matematika
-            <strong>20%</strong>
-          </li>
-
-          <li class="legend__item">
-            <span class="legend__dot legend__dot--3"></span>
-            Sosial &amp; Bisnis
-            <strong>12%</strong>
-          </li>
-
-          <li class="legend__item">
-            <span class="legend__dot legend__dot--4"></span>
-            Sastra &amp; Bahasa
-            <strong>8%</strong>
-          </li>
-
-        </ul>
-
-      </div>
-
-    </section>
-
-    <!-- DIAGRAM PEMINJAMAN BUKU -->
-    <section class="panel">
-
-      <h2 class="panel__title">
-        Diagram peminjaman buku
-      </h2>
-
-      <div class="bar-chart"
-           role="img"
-           aria-label="Diagram batang peminjaman buku per kategori">
-
-        <!-- SUMBU PERSENTASE -->
-        <ol class="bar-chart__axis">
-
-          <li>100%</li>
-          <li>75%</li>
-          <li>50%</li>
-          <li>25%</li>
-          <li>0%</li>
-
-        </ol>
-
-        <div class="bar-chart__body">
-
-          <!-- BATANG DIAGRAM -->
-          <ul class="bar-chart__plot">
-
-            <li class="bar-chart__item">
-              <span>91%</span>
-              <span class="bar-chart__bar bar-chart__bar--1"></span>
-            </li>
-
-            <li class="bar-chart__item">
-              <span>72%</span>
-              <span class="bar-chart__bar bar-chart__bar--2"></span>
-            </li>
-
-            <li class="bar-chart__item">
-              <span>30%</span>
-              <span class="bar-chart__bar bar-chart__bar--3"></span>
-            </li>
-
-            <li class="bar-chart__item">
-              <span>31%</span>
-              <span class="bar-chart__bar bar-chart__bar--4"></span>
-            </li>
-
-          </ul>
-
-          <!-- LABEL KATEGORI -->
-          <ul class="bar-chart__labels">
-
-            <li>
-              Teknologi
-              <span class="bar-chart__note">
-                91% dipinjam
-              </span>
-            </li>
-
-            <li>
-              Sains
-              <span class="bar-chart__note">
-                72% dipinjam
-              </span>
-            </li>
-
-            <li>
-              Sastra
-              <span class="bar-chart__note">
-                30% dipinjam
-              </span>
-            </li>
-
-            <li>
-              Sosial
-              <span class="bar-chart__note">
-                31% dipinjam
-              </span>
-            </li>
-
-          </ul>
-
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
-
-  <!-- JAVASCRIPT LAPORAN -->
-  <script src="../js/kepus/laporan.js" defer></script>
-
-  <!-- JAVASCRIPT AUTENTIKASI KEPUS -->
-  <script src="../js/auth/kepus-auth.js" defer></script>
-
-  <!-- JavaScript untuk fungsi umum, seperti navigasi dan notifikasi -->
-  <script src="../js/shared/app.js" defer></script>
-
-</body>
-</html>
+/* =========================================================
+   PENDAFTARAN PETUGAS BERSAMA: PUSTAKAWAN DAN KEPUS
+   ========================================================= */
+
+/* Posisi header pendaftaran */
+.auth-card--wide .staff-register-header {
+  align-items: flex-start;
+}
+
+/* Area judul dan deskripsi */
+.staff-register-header__content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Deskripsi mengikuti perataan judul */
+.staff-register-header .auth-card__hint {
+  margin-top: 0.35rem;
+  text-align: left;
+  line-height: 1.55;
+}
+
+/* Menghindari judul keluar dari kartu */
+.auth-card--wide .auth-card__title--form {
+  max-width: 100%;
+  overflow-wrap: normal;
+}
+
+/* Dropdown pilihan jenis akun */
+.staff-role-select {
+  min-height: 2.8rem;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}

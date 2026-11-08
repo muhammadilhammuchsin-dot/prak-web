@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daftar Pustakawan - E-Perpustakaan</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- CSS bersama -->
+  <link rel="stylesheet" href="../../css/shared/variables.css">
+  <link rel="stylesheet" href="../../css/shared/base.css">
+  <link rel="stylesheet" href="../../css/shared/utilities.css">
+  <link rel="stylesheet" href="../../css/shared/components.css">
+  <link rel="stylesheet" href="../../css/auth/auth.css">
+  <link rel="stylesheet" href="../../css/shared/layout.css">
+  <link rel="stylesheet" href="../../css/shared/responsive.css">
+</head>
+<body class="auth-login">
+  <!-- Ikon halaman -->
+  <svg class="icon-sprite" aria-hidden="true">
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol>
+    <symbol id="i-login" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="m10 17 5-5-5-5"/><path d="M15 12H3"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+  </svg>
+
+  <main class="auth-page">
+    <section class="auth-card" aria-labelledby="judul">
+      <!-- Header -->
+      <header class="auth-card__header">
+        <img class="auth-card__logo" src="../../assets/logo.png" alt="Logo Universitas Khairun">
+        <h1 class="auth-card__title" id="judul">Daftar Akun Pustakawan</h1>
+        <p class="auth-card__subtitle">UNIVERSITAS KHAIRUN</p>
+      </header>
+
+      <p class="auth-card__hint">Buat akun Pustakawan menggunakan identitas pegawai.</p>
+
+      <!-- Form pendaftaran Pustakawan -->
+      <form class="form" data-auth-form="register" data-user-role="pustakawan" method="post" novalidate>
+        <input type="hidden" name="role" value="pustakawan">
+
+        <!-- Nama lengkap -->
+        <div class="form__group">
+          <label class="form__label" for="nama">NAMA LENGKAP</label>
+          <div class="input-field">
+            <span class="input-field__icon"><svg class="icon"><use href="#i-user"/></svg></span>
+            <input class="form__input form__input--icon" id="nama" name="nama" type="text" placeholder="Masukkan nama lengkap" autocomplete="name" required>
+          </div>
+          <p class="form__error" data-error-for="nama" role="alert" hidden></p>
+        </div>
+
+        <!-- NIP Pustakawan -->
+        <div class="form__group">
+          <label class="form__label" for="npm">NIP / KODE PUSTAKAWAN</label>
+          <div class="input-field">
+            <span class="input-field__icon"><svg class="icon"><use href="#i-user"/></svg></span>
+            <input class="form__input form__input--icon" id="npm" name="npm" type="text" placeholder="Masukkan NIP / Kode Pustakawan" autocomplete="username" required>
+          </div>
+          <p class="form__error" data-error-for="npm" role="alert" hidden></p>
+        </div>
+
+        <!-- Email -->
+        <div class="form__group">
+          <label class="form__label" for="email">EMAIL</label>
+          <div class="input-field">
+            <span class="input-field__icon"><svg class="icon"><use href="#i-mail"/></svg></span>
+            <input class="form__input form__input--icon" id="email" name="email" type="email" placeholder="Masukkan email aktif" autocomplete="email" required>
+          </div>
+          <p class="form__error" data-error-for="email" role="alert" hidden></p>
+        </div>
+
+        <!-- Password -->
+        <div class="form__group">
+          <label class="form__label" for="password">PASSWORD</label>
+          <div class="input-field">
+            <span class="input-field__icon"><svg class="icon"><use href="#i-lock"/></svg></span>
+            <input class="form__input form__input--icon form__input--with-toggle" id="password" name="password" type="password" placeholder="Buat password Anda" autocomplete="new-password" required>
+            <button class="input-field__toggle" type="button" data-toggle-password="password" aria-label="Tampilkan password" aria-pressed="false">
+              <svg class="icon"><use href="#i-eye"/></svg>
+            </button>
+          </div>
+          <p class="form__error" data-error-for="password" role="alert" hidden></p>
+        </div>
+
+        <!-- Konfirmasi password -->
+        <div class="form__group">
+          <label class="form__label" for="konfirmasi_password">KONFIRMASI PASSWORD</label>
+          <div class="input-field">
+            <span class="input-field__icon"><svg class="icon"><use href="#i-lock"/></svg></span>
+            <input class="form__input form__input--icon" id="konfirmasi_password" name="konfirmasi_password" type="password" placeholder="Masukkan ulang password" autocomplete="new-password" required>
+          </div>
+          <p class="form__error" data-error-for="konfirmasi_password" role="alert" hidden></p>
+        </div>
+
+        <!-- Tombol daftar -->
+        <button class="btn btn--primary" type="submit">
+          Daftar Akun
+          <svg class="icon"><use href="#i-login"/></svg>
+        </button>
+        <p class="auth-feedback" data-auth-feedback role="status" aria-live="polite" hidden></p>
+      </form>
+
+      <!-- Kembali ke login Pustakawan -->
+      <footer class="auth-card__footer">
+        <p>Sudah punya akun? <a href="../login/pustakawan.html">Login di sini</a></p>
+      </footer>
+    </section>
+  </main>
+
+  <!-- Handler pendaftaran petugas -->
+  <script src="../../js/auth/staff-register.js" defer></script>
+</body>
+</html>

@@ -918,3 +918,39 @@ body.auth-login{
     padding:8px 6px;
   }
 }
+
+
+/* =========================================================
+   PENDAFTARAN PETUGAS BERSAMA: PUSTAKAWAN DAN KEPUS
+   ========================================================= */
+
+/* Posisi header pendaftaran */
+.auth-card--wide .staff-register-header {
+  align-items: flex-start;
+}
+
+/* Area judul dan deskripsi */
+.staff-register-header__content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Deskripsi mengikuti perataan judul */
+.staff-register-header .auth-card__hint {
+  margin-top: 0.35rem;
+  text-align: left;
+  line-height: 1.55;
+}
+
+/* Menghindari judul keluar dari kartu */
+.auth-card--wide .auth-card__title--form {
+  max-width: 100%;
+  overflow-wrap: normal;
+}
+
+/* Dropdown pilihan jenis akun */
+.staff-role-select {
+  min-height: 2.8rem;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
