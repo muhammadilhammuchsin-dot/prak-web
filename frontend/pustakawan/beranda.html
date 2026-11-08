@@ -5,176 +5,260 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Beranda Pustakawan - E-Perpustakaan</title>
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
   <!-- CSS bersama -->
   <link rel="stylesheet" href="../css/shared/variables.css">
   <link rel="stylesheet" href="../css/shared/base.css">
   <link rel="stylesheet" href="../css/shared/utilities.css">
   <link rel="stylesheet" href="../css/shared/components.css">
   <link rel="stylesheet" href="../css/shared/layout.css">
+
   <!-- CSS khusus pustakawan -->
   <link rel="stylesheet" href="../css/pustakawan/pustakawan.css">
+
+  <!-- CSS responsive -->
   <link rel="stylesheet" href="../css/shared/responsive.css">
 </head>
 <body class="pustakawan-home">
+
   <!-- Kumpulan ikon SVG -->
   <svg class="icon-sprite" aria-hidden="true">
     <symbol id="i-book" viewBox="0 0 24 24">
       <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
       <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
     </symbol>
+
     <symbol id="i-eye" viewBox="0 0 24 24">
       <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
       <circle cx="12" cy="12" r="3"/>
     </symbol>
+
     <symbol id="i-grid" viewBox="0 0 24 24">
       <rect x="3" y="3" width="7" height="7"/>
       <rect x="14" y="3" width="7" height="7"/>
       <rect x="14" y="14" width="7" height="7"/>
       <rect x="3" y="14" width="7" height="7"/>
     </symbol>
+
     <symbol id="i-logout" viewBox="0 0 24 24">
       <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
       <path d="m16 17 5-5-5-5"/>
       <path d="M21 12H9"/>
     </symbol>
+
     <symbol id="i-profile" viewBox="0 0 24 24">
       <circle cx="12" cy="12" r="10"/>
       <circle cx="12" cy="10" r="3"/>
       <path d="M7 20.7a5 5 0 0 1 10 0"/>
     </symbol>
+
     <symbol id="i-swap" viewBox="0 0 24 24">
       <path d="M17 1l4 4-4 4"/>
       <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
       <path d="M7 23l-4-4 4-4"/>
       <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
     </symbol>
+
     <symbol id="i-users" viewBox="0 0 24 24">
       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
       <circle cx="9" cy="7" r="4"/>
       <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
     </symbol>
   </svg>
+
+  <!-- LAYOUT UTAMA -->
   <div class="admin-layout">
-    <!-- Sidebar navigasi -->
+
+    <!-- SIDEBAR -->
     <aside class="sidebar">
+
+      <!-- Logo -->
       <div class="brand brand--light">
         <span class="brand__icon">
-          <svg class="icon" aria-hidden="true"><use href="#i-book"/></svg>
+          <svg class="icon" aria-hidden="true">
+            <use href="#i-book"/>
+          </svg>
         </span>
         <span class="brand__name">E-Perpustakaan</span>
       </div>
+
+      <!-- Navigasi -->
       <nav class="sidebar__nav" aria-label="Menu pustakawan">
+
         <a class="sidebar__link sidebar__link--active"
            data-route="beranda.html"
            aria-current="page"
            role="link"
            tabindex="0">
-          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-grid"/></svg>
+          <svg class="icon icon--sm" aria-hidden="true">
+            <use href="#i-grid"/>
+          </svg>
           <span>Beranda</span>
         </a>
+
         <a class="sidebar__link"
            data-route="data-buku.html"
            role="link"
            tabindex="0">
-          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-book"/></svg>
+          <svg class="icon icon--sm" aria-hidden="true">
+            <use href="#i-book"/>
+          </svg>
           <span>Data Buku</span>
         </a>
+
         <a class="sidebar__link"
            data-route="data-anggota.html"
            role="link"
            tabindex="0">
-          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-users"/></svg>
+          <svg class="icon icon--sm" aria-hidden="true">
+            <use href="#i-users"/>
+          </svg>
           <span>Data Anggota</span>
         </a>
+
         <a class="sidebar__link"
            data-route="transaksi.html"
            role="link"
            tabindex="0">
-          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-swap"/></svg>
+          <svg class="icon icon--sm" aria-hidden="true">
+            <use href="#i-swap"/>
+          </svg>
           <span>Transaksi</span>
         </a>
+
         <a class="sidebar__link sidebar__link--logout"
            data-route="../auth/login/pustakawan.html"
            role="link"
            tabindex="0">
-          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-logout"/></svg>
+          <svg class="icon icon--sm" aria-hidden="true">
+            <use href="#i-logout"/>
+          </svg>
           <span>Keluar</span>
         </a>
+
       </nav>
     </aside>
-    <!-- Konten utama -->
+
+    <!-- KONTEN UTAMA -->
     <main class="admin-content">
-      <!-- Informasi admin -->
+
+      <!-- INFORMASI ADMIN -->
       <section class="admin-profile panel" aria-labelledby="page-title">
-        <h1 class="page-title" id="page-title">Admin Perpustakaan</h1>
+
+        <h1 class="page-title" id="page-title">
+          Admin Perpustakaan
+        </h1>
+
         <div class="user-info">
-          <!-- Ikon profil sementara karena foto admin belum tersedia -->
-          <span class="user-info__avatar user-info__avatar--large" aria-hidden="true">
-            <svg class="icon icon--lg"><use href="#i-profile"/></svg>
+
+          <!-- Ikon profil admin -->
+          <span class="user-info__avatar user-info__avatar--large"
+                aria-hidden="true">
+            <svg class="icon icon--lg">
+              <use href="#i-profile"/>
+            </svg>
           </span>
+
+          <!-- Identitas admin -->
           <dl class="profile__list">
+
             <div>
-              <dt>Nama Admin :</dt>
+              <dt>Nama Admin</dt>
               <dd>Siti Rahmawati, S.Kom.</dd>
             </div>
+
             <div>
-              <dt>NIP :</dt>
+              <dt>NIP</dt>
               <dd>19880412 201404 2 001</dd>
             </div>
+
           </dl>
         </div>
       </section>
-      <!-- Stok buku -->
+
+      <!-- STOK BUKU -->
       <section class="stock-section" aria-labelledby="stock-title">
-        <h2 class="section-title" id="stock-title">Stok yang tersedia</h2>
+
+        <h2 class="section-title" id="stock-title">
+          Stok yang tersedia
+        </h2>
+
         <div class="book-grid book-grid--admin">
-          <!-- Buku pertama -->
+
+          <!-- BUKU PERTAMA -->
           <article class="book-card">
+
             <figure class="cover cover--banner">
-              <img class="cover__image"
-                   src="../assets/covers/0002.jpg"
-                   alt="Sampul buku Rekayasa Perangkat Lunak Terapan"
-                   loading="eager">
+              <img
+                class="cover__image"
+                src="../assets/covers/0002.jpg"
+                alt="Sampul buku Rekayasa Perangkat Lunak Terapan"
+                loading="eager">
             </figure>
-            <h3 class="book-card__title">Rekayasa Perangkat Lunak Terapan</h3>
+
+            <h3 class="book-card__title">
+              Rekayasa Perangkat Lunak Terapan
+            </h3>
+
             <span class="badge">dipinjam 20x</span>
+
             <a class="btn btn--navy btn--block btn--small"
                data-route="data-buku.html"
                role="link"
                tabindex="0">
-              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-eye"/></svg>
+              <svg class="icon icon--sm" aria-hidden="true">
+                <use href="#i-eye"/>
+              </svg>
               Detail
             </a>
+
           </article>
-          <!-- Buku kedua -->
+
+          <!-- BUKU KEDUA -->
           <article class="book-card">
+
             <figure class="cover cover--banner cover--placeholder"
                     role="img"
                     aria-label="Ilustrasi sampul Sistem Basis Data Relasional">
+
               <figcaption>
                 SISTEM BASIS DATA RELASIONAL
                 <small>Teori, Desain, dan Implementasi</small>
               </figcaption>
+
             </figure>
-            <h3 class="book-card__title">Sistem Basis Data Relasional</h3>
+
+            <h3 class="book-card__title">
+              Sistem Basis Data Relasional
+            </h3>
+
             <span class="badge">dipinjam 30x</span>
+
             <a class="btn btn--navy btn--block btn--small"
                data-route="data-buku.html"
                role="link"
                tabindex="0">
-              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-eye"/></svg>
+              <svg class="icon icon--sm" aria-hidden="true">
+                <use href="#i-eye"/>
+              </svg>
               Detail
             </a>
+
           </article>
+
         </div>
       </section>
+
     </main>
   </div>
+
   <!-- JavaScript navigasi bersama -->
   <script src="../js/shared/app.js" defer></script>
+
 </body>
 </html>

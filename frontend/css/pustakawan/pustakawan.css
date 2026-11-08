@@ -1,99 +1,859 @@
 
 /* =========================================================
-   LAYOUT UTAMA PUSTAKAWAN
-   Mengikuti ukuran layout halaman Data Buku pada Figma.
-   Target: Chrome 100%, viewport 1800px.
+   E-PERPUSTAKAAN - DASHBOARD PUSTAKAWAN
+   Digunakan untuk:
+   1. Beranda
+   2. Data Buku
+   3. Data Anggota
+   4. Transaksi
+   5. Tambah Buku
+
+   Target desktop: Chrome 100%
+   Lebar sidebar desktop: 284px pada viewport 1800px.
    ========================================================= */
 
-.pustakawan-home {
-  min-height: 100vh;
-  margin: 0;
-  background: #f5f6fb;
-  overflow-x: hidden;
-  box-sizing: border-box;
-}
+/* =========================================================
+   1. RESET DAN LAYOUT UTAMA
+   ========================================================= */
 
-.pustakawan-home *,
-.pustakawan-home *::before,
-.pustakawan-home *::after {
-  box-sizing: border-box;
-}
-
-/* Sidebar dan konten utama */
-.pustakawan-home .admin-layout {
+.admin-layout {
   display: grid;
   grid-template-columns: clamp(220px, 15.8vw, 284px) minmax(0, 1fr);
-  min-height: 100vh;
   width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
   margin: 0;
 }
 
-/* Sidebar */
-.pustakawan-home .admin-sidebar {
+.admin-content {
   width: 100%;
   min-width: 0;
   min-height: 100vh;
-  position: sticky;
-  top: 0;
-  align-self: start;
-}
-
-/* Area konten */
-.pustakawan-home .admin-content {
-  width: 100%;
-  min-width: 0;
-  min-height: 100vh;
-  padding: clamp(20px, 1.9vw, 34px);
-  background: #f5f6fb;
+  min-height: 100dvh;
+  padding: clamp(22px, 1.9vw, 34px);
   overflow-x: hidden;
-}
-
-/* Judul halaman */
-.pustakawan-home .admin-content h1 {
-  margin-top: 0;
-  max-width: 100%;
-}
-
-/* Elemen konten tidak boleh melewati lebar halaman */
-.pustakawan-home .admin-content img,
-.pustakawan-home .admin-content table,
-.pustakawan-home .admin-content .panel,
-.pustakawan-home .admin-content .book-grid {
-  max-width: 100%;
+  background: var(--color-page);
 }
 
 /* =========================================================
-   RESPONSIVE
+   2. SIDEBAR
    ========================================================= */
 
-@media (max-width: 1024px) {
-  .pustakawan-home .admin-layout {
+.sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+  padding: 28px 12px 18px;
+  overflow-y: auto;
+  background: var(--color-navy);
+  color: #fff;
+}
+
+.sidebar .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  margin: 0 0 30px;
+  padding: 0 10px;
+  color: #fff;
+}
+
+.sidebar .brand__icon {
+  display: grid;
+  flex: 0 0 56px;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: #1e438f;
+  color: #fff;
+}
+
+.sidebar .brand__icon .icon {
+  width: 27px;
+  height: 27px;
+}
+
+.sidebar .brand__name {
+  overflow: hidden;
+  color: #fff;
+  font-size: clamp(15px, 1.25vw, 21px);
+  font-weight: 800;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar__nav {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+}
+
+.sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 48px;
+  padding: 11px 16px;
+  border-radius: 11px;
+  color: #dbe7ff;
+  font-size: clamp(14px, 1.1vw, 18px);
+  font-weight: 500;
+  line-height: 1.35;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.sidebar__link .icon {
+  width: 21px;
+  height: 21px;
+  color: currentColor;
+}
+
+.sidebar__link:hover,
+.sidebar__link:focus-visible {
+  background: rgb(255 255 255 / 10%);
+  color: #fff;
+}
+
+.sidebar__link--active {
+  background: #24478f;
+  color: #fff;
+  font-weight: 800;
+}
+
+.sidebar__link--logout {
+  margin-top: auto;
+  color: #dbe7ff;
+}
+
+/* =========================================================
+   3. JUDUL DAN HEADER HALAMAN
+   ========================================================= */
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 0 0 22px;
+}
+
+.page-title {
+  margin: 0 0 22px;
+  color: var(--color-title);
+  font-size: clamp(28px, 2.35vw, 42px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+}
+
+.page-header .page-title {
+  margin: 0;
+}
+
+/* =========================================================
+   4. PANEL DAN KONTEN
+   ========================================================= */
+
+.admin-content > .panel,
+.admin-content > section.panel {
+  margin: 0 0 22px;
+  padding: clamp(18px, 1.55vw, 28px) clamp(20px, 1.8vw, 34px);
+  border: 1px solid var(--color-border);
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 2%);
+}
+
+.panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.panel__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  color: var(--color-title);
+  font-size: clamp(18px, 1.35vw, 24px);
+  font-weight: 800;
+}
+
+.panel__title .icon {
+  color: var(--color-blue);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 18px;
+  color: var(--color-navy);
+  font-size: clamp(18px, 1.35vw, 24px);
+  font-weight: 800;
+}
+
+/* =========================================================
+   5. SEARCH BAR
+   ========================================================= */
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.search-bar__field {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.search-bar__field .input-field__icon {
+  left: 22px;
+  color: var(--color-placeholder);
+}
+
+.search-bar__field .input-field__icon .icon {
+  width: 22px;
+  height: 22px;
+}
+
+.search-bar__input {
+  display: block;
+  width: 100%;
+  min-height: 64px;
+  padding: 14px 22px 14px 60px;
+  border: 0;
+  border-radius: 17px;
+  outline: none;
+  background: var(--color-soft);
+  color: var(--color-text);
+  font-family: var(--font-main);
+  font-size: clamp(15px, 1.15vw, 19px);
+}
+
+.search-bar__input::placeholder {
+  color: var(--color-muted);
+  opacity: 1;
+}
+
+.search-bar__input:focus {
+  box-shadow: 0 0 0 2px rgb(2 132 199 / 18%);
+}
+
+.search-bar__button {
+  flex: 0 0 auto;
+  min-width: 108px;
+  min-height: 64px;
+  padding: 0 24px;
+  border-radius: 16px;
+  font-size: clamp(15px, 1.1vw, 18px);
+}
+
+/* =========================================================
+   6. TABEL DATA BUKU, ANGGOTA, DAN TRANSAKSI
+   ========================================================= */
+
+.table-wrap {
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.table-wrap .panel__header {
+  margin-bottom: 20px;
+}
+
+.data-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: var(--color-text);
+  text-align: left;
+}
+
+.data-table thead th {
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-muted);
+  font-size: clamp(12px, 0.95vw, 16px);
+  font-weight: 700;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.data-table tbody td {
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border);
+  font-size: clamp(14px, 1.05vw, 18px);
+  vertical-align: middle;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.data-table tbody td strong {
+  font-weight: 700;
+}
+
+.data-table__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+/* Label kode dan kategori */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: var(--color-soft);
+  color: var(--color-navy);
+  font-size: clamp(12px, 0.95vw, 16px);
+  font-weight: 700;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+.pill--code {
+  min-width: 76px;
+}
+
+.pill--category {
+  background: var(--color-soft);
+  color: var(--color-navy);
+}
+
+.pill--danger {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+/* =========================================================
+   7. DATA ANGGOTA
+   ========================================================= */
+
+.member {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 180px;
+}
+
+.member__initial {
+  display: grid;
+  flex: 0 0 40px;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--color-soft);
+  color: var(--color-navy);
+  font-weight: 800;
+}
+
+.member > span:last-child {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.member__email {
+  color: var(--color-muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   8. FORM TAMBAH BUKU
+   ========================================================= */
+
+.book-form {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.75fr) minmax(0, 1.25fr);
+  align-items: start;
+  gap: 28px;
+}
+
+.book-form > div {
+  min-width: 0;
+}
+
+.book-form .form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.book-form .form__group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.book-form .form__label {
+  color: var(--color-label);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.book-form .form__input {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 16px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 10px;
+  background: var(--color-soft);
+  color: var(--color-text);
+  font-family: var(--font-main);
+  font-size: 14px;
+}
+
+.book-form textarea.form__input {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.upload-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 230px;
+  padding: 20px;
+  border: 2px dashed var(--color-border-strong);
+  border-radius: 16px;
+  background: var(--color-soft);
+  color: var(--color-navy);
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+}
+
+.upload-box__icon {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--color-blue);
+}
+
+.upload-box__icon .icon {
+  width: 26px;
+  height: 26px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+/* =========================================================
+   9. BERANDA PUSTAKAWAN
+   ========================================================= */
+
+.pustakawan-home {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--color-page);
+}
+
+.pustakawan-home .admin-content {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Panel profil admin */
+.pustakawan-home .admin-profile.panel {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: clamp(20px, 1.8vw, 32px);
+  border: 1px solid var(--color-border);
+  border-radius: 22px;
+  background: #fff;
+}
+
+.pustakawan-home .admin-profile .page-title {
+  margin: 0 0 20px;
+  color: var(--color-title);
+  font-size: clamp(28px, 2.35vw, 42px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+/* Foto atau ikon profil */
+.pustakawan-home .admin-profile .user-info {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-width: 0;
+}
+
+.pustakawan-home .admin-profile .user-info__avatar--large {
+  display: grid;
+  flex: 0 0 clamp(64px, 5.8vw, 104px);
+  place-items: center;
+  width: clamp(64px, 5.8vw, 104px);
+  height: clamp(64px, 5.8vw, 104px);
+  border-radius: 50%;
+  background: var(--color-soft);
+  color: var(--color-navy);
+}
+
+.pustakawan-home .admin-profile .user-info__avatar--large .icon {
+  width: clamp(30px, 2.5vw, 44px);
+  height: clamp(30px, 2.5vw, 44px);
+}
+
+/* Informasi Nama Admin dan NIP */
+.pustakawan-home .profile__list {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  margin: 0;
+}
+
+.pustakawan-home .profile__list > div {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  align-items: center;
+  gap: 18px;
+  min-width: 0;
+}
+
+.pustakawan-home .profile__list dt,
+.pustakawan-home .profile__list dd {
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(14px, 1.15vw, 19px);
+  line-height: 1.5;
+}
+
+.pustakawan-home .profile__list dt {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Titik dua rata pada satu garis vertikal */
+.pustakawan-home .profile__list dt::after {
+  content: ":";
+  font-weight: 700;
+}
+
+.pustakawan-home .profile__list dd {
+  min-width: 0;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   10. BAGIAN STOK BUKU
+   ========================================================= */
+
+.pustakawan-home .stock-section {
+  width: 100%;
+  min-width: 0;
+}
+
+.pustakawan-home .stock-section .section-title {
+  margin: 0 0 18px;
+  color: var(--color-navy);
+  font-size: clamp(18px, 1.35vw, 24px);
+  font-weight: 800;
+}
+
+/* Dua kartu buku */
+.pustakawan-home .book-grid--admin {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  width: 100%;
+  min-width: 0;
+}
+
+.pustakawan-home .book-grid--admin .book-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  padding: clamp(16px, 1.3vw, 24px);
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 3%);
+}
+
+/* Sampul buku */
+.pustakawan-home .book-grid--admin .cover--banner {
+  width: 100%;
+  height: clamp(170px, 15vw, 230px);
+  margin: 0;
+  overflow: hidden;
+  border-radius: 13px;
+  background: var(--color-soft);
+  box-shadow: 0 4px 12px rgb(15 23 42 / 12%);
+}
+
+.pustakawan-home .book-grid--admin .cover__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Sampul buku tanpa gambar */
+.pustakawan-home .book-grid--admin .cover--placeholder {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 16px;
+  background: #34318a;
+  color: #fff;
+}
+
+.pustakawan-home .book-grid--admin .cover--placeholder figcaption {
+  color: #fff;
+  font-size: clamp(14px, 1.1vw, 19px);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.pustakawan-home .book-grid--admin .cover--placeholder small {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.72em;
+  font-weight: 500;
+}
+
+/* Judul dan badge buku */
+.pustakawan-home .book-grid--admin .book-card__title {
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(17px, 1.35vw, 24px);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.pustakawan-home .book-grid--admin .badge {
+  align-self: flex-start;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--color-soft);
+  color: var(--color-navy);
+  font-size: clamp(12px, 0.95vw, 16px);
+  font-weight: 700;
+}
+
+/* Tombol detail */
+.pustakawan-home .book-grid--admin .btn {
+  min-height: 44px;
+  margin-top: auto;
+  border-radius: 12px;
+  font-size: clamp(14px, 1.05vw, 18px);
+}
+
+/* =========================================================
+   11. RESPONSIVE TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .admin-layout {
     grid-template-columns: 220px minmax(0, 1fr);
   }
 
-  .pustakawan-home .admin-content {
-    padding: 24px;
+  .admin-content {
+    padding: 22px;
+  }
+
+  .pustakawan-home .book-grid--admin {
+    gap: 16px;
   }
 }
 
-@media (max-width: 768px) {
-  .pustakawan-home .admin-layout {
+/* =========================================================
+   12. RESPONSIVE MOBILE
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .admin-layout {
     grid-template-columns: 1fr;
   }
 
-  .pustakawan-home .admin-sidebar {
+  .sidebar {
     position: relative;
-    min-height: auto;
+    width: 100%;
     height: auto;
+    min-height: auto;
+    padding: 14px;
+    overflow: visible;
+  }
+
+  .sidebar .brand {
+    margin-bottom: 14px;
+  }
+
+  .sidebar__nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  .sidebar__link {
+    min-height: 42px;
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+
+  .sidebar__link--logout {
+    margin-top: 0;
+  }
+
+  .admin-content {
+    min-height: auto;
+    padding: 18px;
+  }
+
+  .page-title {
+    font-size: 28px;
+  }
+
+  .page-header {
+    align-items: flex-start;
+  }
+
+  .admin-content > .panel,
+  .admin-content > section.panel {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .search-bar {
+    align-items: stretch;
+  }
+
+  .search-bar__input,
+  .search-bar__button {
+    min-height: 48px;
+  }
+
+  .search-bar__button {
+    min-width: 76px;
+    padding-inline: 14px;
+  }
+
+  .book-form {
+    grid-template-columns: 1fr;
+  }
+
+  .upload-box {
+    min-height: 160px;
   }
 
   .pustakawan-home .admin-content {
-    padding: 18px;
+    gap: 16px;
+  }
+
+  .pustakawan-home .admin-profile .user-info {
+    align-items: flex-start;
+  }
+
+  .pustakawan-home .profile__list > div {
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .pustakawan-home .book-grid--admin {
+    grid-template-columns: 1fr;
   }
 }
 
+/* =========================================================
+   13. RESPONSIVE MOBILE KECIL
+   ========================================================= */
+
 @media (max-width: 480px) {
-  .pustakawan-home .admin-content {
+  .sidebar .brand__icon {
+    flex-basis: 44px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .sidebar__nav {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .admin-content {
     padding: 14px;
+  }
+
+  .page-header {
+    flex-direction: column;
+  }
+
+  .page-header > .btn {
+    width: 100%;
+  }
+
+  .pustakawan-home .admin-profile .user-info {
+    flex-direction: column;
+  }
+
+  .pustakawan-home .profile__list {
+    width: 100%;
+  }
+
+  .pustakawan-home .profile__list > div {
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .search-bar {
+    flex-direction: column;
+  }
+
+  .search-bar__button {
+    width: 100%;
+  }
+
+  .panel__header {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
