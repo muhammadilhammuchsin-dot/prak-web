@@ -322,3 +322,599 @@ button:disabled {
   opacity: 0.65;
   cursor: not-allowed;
 }
+
+
+/* =====================================================
+   10. DESAIN LOGIN FIGMA
+   Digunakan bersama oleh Anggota, Pustakawan, dan Kepus.
+   ===================================================== */
+
+/* Background halaman login */
+.auth-login .auth-page {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 10px;
+  background: linear-gradient(145deg, #e1f5ff 0%, #bce8ff 48%, #8bd4fa 100%);
+}
+
+/* Card utama login */
+.auth-login .auth-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  max-width: 400px;
+  min-height: 520px;
+  padding: 26px 21px 19px;
+  border: 0;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 7px 20px rgb(11 42 111 / 10%);
+}
+
+/* Header logo dan identitas */
+.auth-login .auth-card__header {
+  text-align: center;
+}
+
+.auth-login .auth-card__logo {
+  display: block;
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 3px;
+  object-fit: contain;
+}
+
+.auth-login .auth-card__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.045em;
+  color: #111827;
+}
+
+.auth-login .auth-card__subtitle {
+  margin-top: 1px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.035em;
+  color: #0284c7;
+}
+
+/* Pilihan role */
+.auth-login .role-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #e0e7f0;
+  border-radius: 12px;
+  background: #f1f5f9;
+}
+
+.auth-login .role-tabs__link {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  min-height: 30px;
+  padding: 4px 3px;
+  border: 1px solid #d7e0eb;
+  border-radius: 9px;
+  background: #f8fafc;
+  font-size: 0.59rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: #334155;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Role yang sedang dipilih */
+.auth-login .role-tabs__link--active {
+  border-color: #d5e7f7;
+  background: #ffffff;
+  color: #0b2a6f;
+  box-shadow: 0 2px 7px rgb(2 132 199 / 20%);
+}
+
+.auth-login .role-tabs__link .icon {
+  width: 11px;
+  height: 11px;
+}
+
+/* Petunjuk login */
+.auth-login .auth-card__hint {
+  margin: 0;
+  font-size: 0.63rem;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+  color: #475569;
+}
+
+/* Form login */
+.auth-login .form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.auth-login .form__group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Label input */
+.auth-login .form__label {
+  font-size: 0.57rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.025em;
+  color: #334155;
+}
+
+/* Input dan placeholder */
+.auth-login .form__input {
+  width: 100%;
+  height: 31px;
+  padding: 6px 9px;
+  border: 1px solid #cbd8e8;
+  border-radius: 8px;
+  background: #ffffff;
+  font-family: var(--font-input);
+  font-size: 0.62rem;
+  line-height: 1.3;
+  color: #334155;
+}
+
+.auth-login .form__input::placeholder {
+  color: #94a3b8;
+}
+
+.auth-login .form__input--icon {
+  padding-left: 28px;
+}
+
+.auth-login .form__input--with-toggle {
+  padding-right: 30px;
+}
+
+/* Ikon input */
+.auth-login .input-field__icon {
+  left: 9px;
+  color: #94a3b8;
+}
+
+.auth-login .input-field__icon .icon {
+  width: 12px;
+  height: 12px;
+}
+
+/* Tombol tampilkan password */
+.auth-login .input-field__toggle {
+  right: 7px;
+  width: 22px;
+  height: 22px;
+}
+
+.auth-login .input-field__toggle .icon {
+  width: 13px;
+  height: 13px;
+}
+
+/* Lupa password */
+.auth-login .auth-card__link {
+  display: block;
+  align-self: flex-end;
+  margin-top: 1px;
+  font-size: 0.56rem;
+  font-weight: 700;
+  color: #0284c7;
+}
+
+/* Tombol login */
+.auth-login .btn--primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: #0788c8;
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.auth-login .btn--primary .icon {
+  width: 13px;
+  height: 13px;
+}
+
+/* Footer pendaftaran */
+.auth-login .auth-card__footer {
+  padding-top: 9px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 0.57rem;
+  line-height: 1.5;
+  text-align: center;
+  color: #64748b;
+}
+
+.auth-login .auth-card__footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-weight: 700;
+  color: #0284c7;
+}
+
+/* Pesan validasi */
+.auth-login .form__error {
+  margin-top: 2px;
+  font-size: 0.56rem;
+}
+
+.auth-login .auth-feedback {
+  padding: 7px 9px;
+  border-radius: 7px;
+  font-size: 0.6rem;
+}
+
+/* Halaman awal tanpa form login */
+.auth-login .auth-card--selector {
+  justify-content: center;
+  gap: 22px;
+  min-height: 340px;
+}
+
+.auth-login .auth-card--selector .auth-card__hint {
+  margin-top: 2px;
+}
+
+/* Responsif */
+@media (max-width: 380px) {
+  .auth-login .auth-card {
+    padding: 23px 17px 17px;
+  }
+
+  .auth-login .role-tabs__link {
+    gap: 3px;
+    font-size: 0.54rem;
+  }
+}
+
+@media (max-height: 560px) {
+  .auth-login .auth-page {
+    align-items: start;
+  }
+
+  .auth-login .auth-card {
+    min-height: 0;
+    margin: 10px 0;
+    gap: 12px;
+  }
+}
+
+
+/* =====================================================
+   OVERRIDE LOGIN SESUAI FIGMA
+   Berlaku untuk anggota, pustakawan, kepus
+   ===================================================== */
+
+body.auth-login{
+  margin:0;
+  min-height:100vh;
+  min-height:100svh;
+  background:linear-gradient(135deg,#d9f1ff 0%,#bde6ff 55%,#8fd5ff 100%);
+  font-family:"Plus Jakarta Sans","Inter",sans-serif;
+}
+
+.auth-login .auth-page{
+  min-height:100vh;
+  min-height:100svh;
+  display:grid;
+  place-items:center;
+  padding:12px;
+}
+
+.auth-login .auth-card{
+  width:100%;
+  max-width:446px;
+  padding:28px 24px 20px;
+  border-radius:22px;
+  background:#fff;
+  box-shadow:0 10px 24px rgba(11,42,111,.10);
+  border:1px solid rgba(203,213,225,.7);
+}
+
+.auth-login .auth-card__header{
+  text-align:center;
+  margin-bottom:18px;
+}
+
+.auth-login .auth-card__logo{
+  display:block;
+  width:92px;
+  height:92px;
+  object-fit:contain;
+  margin:0 auto 10px;
+}
+
+.auth-login .auth-card__title{
+  margin:0;
+  font-size:30px;
+  font-weight:800;
+  line-height:1.1;
+  letter-spacing:-.04em;
+  color:#0f172a;
+}
+
+.auth-login .auth-card__subtitle{
+  margin:4px 0 0;
+  font-size:12px;
+  font-weight:800;
+  color:#0284c7;
+  letter-spacing:.04em;
+}
+
+.auth-login .role-tabs{
+  display:flex;
+  gap:8px;
+  padding:8px;
+  margin-bottom:18px;
+  border:1px solid #dbe4ef;
+  border-radius:16px;
+  background:#f4f7fb;
+}
+
+.auth-login .role-tabs__link{
+  flex:1;
+  min-height:42px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:8px 10px;
+  border:1px solid #cfd9e6;
+  border-radius:12px;
+  background:#fff;
+  color:#475569;
+  font-size:13px;
+  font-weight:700;
+  text-decoration:none;
+  transition:.2s ease;
+}
+
+.auth-login .role-tabs__link:hover{
+  color:#0f172a;
+}
+
+.auth-login .role-tabs__link--active{
+  background:#1590d0;
+  border-color:#1590d0;
+  color:#fff;
+  box-shadow:0 6px 14px rgba(21,144,208,.25);
+}
+
+.auth-login .role-tabs__link .icon{
+  width:15px;
+  height:15px;
+}
+
+.auth-login .auth-card__hint{
+  margin:0 0 22px;
+  text-align:center;
+  font-size:14px;
+  font-weight:500;
+  color:#475569;
+}
+
+.auth-login .form{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.auth-login .form__group{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.auth-login .form__label{
+  font-size:12px;
+  font-weight:800;
+  color:#475569;
+  letter-spacing:.03em;
+}
+
+.auth-login .input-field{
+  position:relative;
+}
+
+.auth-login .input-field__icon{
+  position:absolute;
+  top:50%;
+  left:14px;
+  transform:translateY(-50%);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  color:#94a3b8;
+}
+
+.auth-login .input-field__icon .icon{
+  width:18px;
+  height:18px;
+}
+
+.auth-login .form__input{
+  width:100%;
+  height:42px;
+  border:1px solid #cbd5e1;
+  border-radius:12px;
+  background:#fff;
+  padding:10px 14px;
+  font-size:13px;
+  color:#334155;
+  outline:none;
+}
+
+.auth-login .form__input::placeholder{
+  color:#94a3b8;
+}
+
+.auth-login .form__input:focus{
+  border-color:#7dd3fc;
+  box-shadow:0 0 0 3px rgba(56,189,248,.15);
+}
+
+.auth-login .form__input--icon{
+  padding-left:46px;
+}
+
+.auth-login .form__input--with-toggle{
+  padding-right:42px;
+}
+
+.auth-login .input-field__toggle{
+  position:absolute;
+  top:50%;
+  right:10px;
+  transform:translateY(-50%);
+  width:28px;
+  height:28px;
+  border:0;
+  background:transparent;
+  color:#94a3b8;
+  cursor:pointer;
+}
+
+.auth-login .input-field__toggle .icon{
+  width:18px;
+  height:18px;
+}
+
+.auth-login .auth-card__link{
+  align-self:flex-end;
+  font-size:12px;
+  font-weight:700;
+  color:#0284c7;
+  text-decoration:none;
+}
+
+.auth-login .btn--primary{
+  width:100%;
+  min-height:44px;
+  border:0;
+  border-radius:12px;
+  background:#1188c9;
+  color:#fff;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  font-size:15px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.auth-login .btn--primary .icon{
+  width:16px;
+  height:16px;
+}
+
+.auth-login .auth-card__footer{
+  margin-top:22px;
+  padding-top:16px;
+  border-top:1px solid #e2e8f0;
+  text-align:center;
+  font-size:13px;
+  color:#475569;
+}
+
+.auth-login .auth-card__footer a{
+  color:#0284c7;
+  font-weight:800;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+}
+
+.auth-login .auth-card__footer .icon{
+  width:14px;
+  height:14px;
+}
+
+.auth-login .form__error{
+  margin:0;
+  font-size:11px;
+  color:#dc2626;
+}
+
+.auth-login .auth-feedback{
+  margin:0;
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:12px;
+}
+
+.auth-login .auth-feedback--error{
+  background:#fee2e2;
+  color:#b91c1c;
+}
+
+.auth-login .auth-feedback--info{
+  background:#e0f2fe;
+  color:#075985;
+}
+
+/* Halaman awal langsung pakai card login yang sama */
+.auth-login .auth-card--selector .auth-card__hint{
+  margin-bottom:0;
+}
+
+/* Responsive */
+@media (max-width:480px){
+  .auth-login .auth-card{
+    max-width:100%;
+    padding:24px 18px 18px;
+    border-radius:20px;
+  }
+
+  .auth-login .auth-card__logo{
+    width:86px;
+    height:86px;
+  }
+
+  .auth-login .auth-card__title{
+    font-size:26px;
+  }
+
+  .auth-login .role-tabs{
+    gap:6px;
+    padding:6px;
+  }
+
+  .auth-login .role-tabs__link{
+    min-height:40px;
+    font-size:12px;
+    padding:8px 6px;
+  }
+}
