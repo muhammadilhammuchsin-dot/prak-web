@@ -552,9 +552,11 @@
     const nama =
       form.elements.namedItem('nama').value.trim();
 
-    const identity = normalizeIdentity(
-      form.elements.namedItem('npm').value
-    );
+    const identityInput = String(
+      form.elements.namedItem('npm').value || ''
+    ).trim();
+
+    const identity = normalizeIdentity(identityInput);
 
     // Email tidak digunakan pada form saat ini.
     const emailField =
@@ -618,6 +620,7 @@
       role,
       nama,
       identity,
+      identityDisplay: identityInput,
       email,
       salt: toBase64(salt),
       passwordHash,
@@ -735,6 +738,7 @@
     const session = {
       role,
       identity: account.identity,
+      identityDisplay: account.identityDisplay || account.identity,
       nama: account.nama,
       email: account.email || '',
       loginAt: new Date().toISOString()

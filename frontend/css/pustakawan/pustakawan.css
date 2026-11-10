@@ -902,3 +902,47 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+/* =====================================================
+   PERBAIKAN PROFIL ADMIN BERANDA PUSTAKAWAN
+   Menyamakan posisi titik dua Nama Admin dan NIP.
+   ===================================================== */
+
+.profile__list > div {
+  display: grid;
+  grid-template-columns: 138px minmax(0, 1fr);
+  align-items: baseline;
+  column-gap: 12px;
+}
+
+.profile__list dt {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  width: 100%;
+  color: #172033;
+  font-weight: 700;
+}
+
+.profile__list dt::after {
+  content: ":";
+  margin-left: 0;
+  flex: 0 0 auto;
+}
+
+/* Penyesuaian layar kecil */
+@media (max-width: 600px) {
+  .profile__list > div {
+    grid-template-columns: 1fr;
+    gap: 1px;
+  }
+
+  .profile__list dt {
+    display: block;
+  }
+
+  .profile__list dt::after {
+    content: "";
+  }
+}

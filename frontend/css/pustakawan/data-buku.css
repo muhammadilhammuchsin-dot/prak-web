@@ -1,0 +1,636 @@
+
+/* =====================================================
+   PUSTAKAWAN - HALAMAN DATA BUKU
+   Tampilan mengikuti frame Data Buku pada Figma.
+   ===================================================== */
+
+.db-page {
+  min-width: 320px;
+  min-height: 100vh;
+  background: #f8f7fd;
+  color: #172033;
+}
+
+.db-layout {
+  --admin-sidebar-width: clamp(154px, 17.78vw, 256px);
+}
+
+.db-content.admin-content {
+  min-height: 100vh;
+  margin-left: var(--admin-sidebar-width);
+  padding: 0;
+  background: #f9f8fe;
+}
+
+.db-topbar {
+  height: 64px;
+  background: #fff;
+  border-bottom: 1px solid #f0f1f7;
+}
+
+.db-main {
+  width: 100%;
+  padding: 0 32px 40px;
+}
+
+.db-page-header {
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.db-page-header h1 {
+  margin: 0;
+  color: #171e31;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(24px, 2.1vw, 30px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.db-add-button {
+  min-width: 193px;
+  min-height: 54px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 20px;
+  border-radius: 9px;
+  background: #082b70;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 160ms ease, transform 160ms ease;
+}
+
+.db-add-button:hover {
+  background: #123d91;
+  transform: translateY(-1px);
+}
+
+.db-add-button .icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Pencarian */
+.db-search-panel {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid #f0f1f8;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.db-search-field {
+  min-width: 0;
+  min-height: 42px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: #f1f2ff;
+  color: #747d91;
+}
+
+.db-search-field:focus-within {
+  border-color: #8aa8f5;
+  background: #fff;
+}
+
+.db-search-field .icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.db-search-field input {
+  width: 100%;
+  min-width: 0;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #172033;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.db-search-field input::placeholder {
+  color: #6b7489;
+  opacity: 1;
+}
+
+.db-search-button {
+  min-width: 72px;
+  min-height: 42px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 9px;
+  background: #0754d8;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 160ms ease;
+}
+
+.db-search-button:hover {
+  background: #0646b5;
+}
+
+/* Panel inventaris dan tabel */
+.db-table-card {
+  min-height: 392px;
+  overflow: hidden;
+  border: 1px solid #f0f1fb;
+  border-radius: 14px;
+  background: #f1f2ff;
+}
+
+.db-table-card__header {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 24px;
+  background: #f1f2ff;
+}
+
+.db-table-card__header h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  color: #172033;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.db-table-card__header h2 .icon {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+  fill: none;
+  stroke: #082b70;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.db-book-count {
+  flex: 0 0 auto;
+  color: #525b6e;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.db-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.db-table {
+  width: 100%;
+  min-width: 790px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  text-align: left;
+}
+
+.db-col-code { width: 18%; }
+.db-col-title { width: 28%; }
+.db-col-category { width: 21%; }
+.db-col-stock { width: 12%; }
+.db-col-actions { width: 21%; }
+
+.db-table thead {
+  background: #f1f2ff;
+}
+
+.db-table th {
+  height: 44px;
+  padding: 8px 16px;
+  color: #4b5060;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  white-space: nowrap;
+}
+
+.db-table th:first-child,
+.db-table td:first-child {
+  padding-left: 9.2%;
+}
+
+.db-table td {
+  height: 71px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e8eafa;
+  background: #fff;
+  color: #172033;
+  font-size: 13px;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.db-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.db-book-code {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  min-height: 24px;
+  padding: 3px 10px;
+  border-radius: 7px;
+  background: #dfe5ff;
+  color: #082b70;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.db-book-title {
+  display: block;
+  overflow: hidden;
+  color: #172033;
+  font-size: 13px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.db-category {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 100%;
+  min-height: 24px;
+  padding: 3px 11px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e3e8ff;
+  color: #20283b;
+  font-size: 11px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.db-category__dot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: #0754d8;
+}
+
+.db-category--social .db-category__dot {
+  background: #858895;
+}
+
+.db-stock {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding: 3px 11px;
+  border-radius: 999px;
+  background: #e9edff;
+  color: #20283b;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.db-stock--empty {
+  background: #ffe0de;
+  color: #b42318;
+}
+
+.db-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.db-action-button {
+  min-width: 56px;
+  min-height: 33px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 150ms ease, transform 150ms ease;
+}
+
+.db-action-button:hover {
+  filter: brightness(0.97);
+  transform: translateY(-1px);
+}
+
+.db-action-button .icon {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.db-action-button--edit {
+  background: #e9edff;
+  color: #0754d8;
+}
+
+.db-action-button--delete {
+  background: #fff0ef;
+  color: #d20b0b;
+}
+
+.db-loading,
+.db-empty {
+  height: 100px !important;
+  padding: 24px !important;
+  color: #64748b !important;
+  text-align: center;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+.db-feedback {
+  margin: 12px 2px 0;
+  color: #176b3a;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.db-feedback--error {
+  color: #b42318;
+}
+
+/* Dialog edit */
+.db-dialog {
+  width: min(520px, calc(100vw - 32px));
+  max-width: 520px;
+  max-height: min(90vh, 720px);
+  padding: 0;
+  overflow: auto;
+  border: 0;
+  border-radius: 16px;
+  background: #fff;
+  color: #172033;
+  box-shadow: 0 20px 60px rgb(15 23 42 / 25%);
+}
+
+.db-dialog::backdrop {
+  background: rgb(15 23 42 / 48%);
+  backdrop-filter: blur(2px);
+}
+
+.db-dialog__form {
+  padding: 26px;
+}
+
+.db-dialog__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.db-dialog__eyebrow {
+  margin-bottom: 5px;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.db-dialog__header h2 {
+  color: #172033;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.db-dialog__close {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: #eef2ff;
+  color: #082b70;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.db-dialog__fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.db-dialog__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.db-dialog__field label {
+  color: #344054;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.db-dialog__field input,
+.db-dialog__field select {
+  width: 100%;
+  min-height: 42px;
+  padding: 0 11px;
+  border: 1px solid #dbe2f0;
+  border-radius: 8px;
+  outline: 0;
+  background: #f8f9ff;
+  color: #172033;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+}
+
+.db-dialog__field input:focus,
+.db-dialog__field select:focus {
+  border-color: #0754d8;
+  background: #fff;
+}
+
+.db-dialog__feedback {
+  margin-top: 12px;
+  color: #b42318;
+  font-size: 12px;
+}
+
+.db-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  margin-top: 24px;
+}
+
+.db-dialog__cancel,
+.db-dialog__save {
+  min-height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.db-dialog__cancel {
+  background: #eef2ff;
+  color: #24324b;
+}
+
+.db-dialog__save {
+  background: #082b70;
+  color: #fff;
+}
+
+/* Responsif */
+@media (max-width: 900px) {
+  .db-main {
+    padding-right: 22px;
+    padding-left: 22px;
+  }
+
+  .db-table-card__header {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+}
+
+@media (max-width: 600px) {
+  .db-content.admin-content {
+    margin-left: 0;
+  }
+
+  .db-topbar {
+    height: 16px;
+  }
+
+  .db-main {
+    padding: 0 12px 28px;
+  }
+
+  .db-page-header {
+    min-height: 72px;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px 0;
+  }
+
+  .db-page-header h1 {
+    font-size: 25px;
+  }
+
+  .db-add-button {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .db-search-panel {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 9px;
+    margin-bottom: 16px;
+    padding: 12px;
+  }
+
+  .db-search-field {
+    min-height: 42px;
+  }
+
+  .db-search-button {
+    width: 100%;
+  }
+
+  .db-table-card {
+    min-height: 0;
+  }
+
+  .db-table-card__header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+    padding: 14px;
+  }
+
+  .db-table-card__header h2 {
+    font-size: 13px;
+  }
+
+  .db-book-count {
+    padding-left: 27px;
+  }
+
+  .db-dialog__form {
+    padding: 20px;
+  }
+
+  .db-dialog__fields {
+    grid-template-columns: 1fr;
+  }
+
+  .db-dialog__actions {
+    flex-direction: column-reverse;
+  }
+
+  .db-dialog__cancel,
+  .db-dialog__save {
+    width: 100%;
+  }
+}
