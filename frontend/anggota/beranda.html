@@ -80,23 +80,28 @@
 
   <!-- Konten utama beranda -->
   <main class="page">
-    <!-- Informasi anggota -->
+    <!-- Profil anggota: nama diambil dari sesi login -->
     <div class="user-bar">
       <span class="user-bar__avatar">
         <svg class="icon icon--lg" aria-hidden="true"><use href="#i-profile"/></svg>
       </span>
-      <strong>Arfianti</strong>
+      <strong data-member-name>Anggota</strong>
     </div>
 
-    <!-- Sambutan anggota -->
+    <!-- Sapaan anggota: nama mengikuti akun yang login -->
     <section class="hero" aria-labelledby="sapaan">
-      <h1 class="hero__title" id="sapaan">Hallo, Arfianti</h1>
+      <h1 class="hero__title" id="sapaan">
+        Hallo, <span data-member-name>Anggota</span>
+      </h1>
       <p class="hero__text">Selamat datang di E-Perpustakaan Universitas Khairun</p>
     </section>
 
-    <!-- Informasi minat baca -->
-    <section class="panel panel--outlined">
-      <h2 class="panel__title">Minat Baca Anda : <strong class="highlight">Informatika</strong></h2>
+    <!-- Minat baca anggota -->
+    <section class="panel panel--outlined" aria-live="polite">
+      <h2 class="panel__title">
+        Minat Baca Anda :
+        <strong class="highlight" data-reading-interest>Belum terdeteksi</strong>
+      </h2>
     </section>
 
     <!-- Kategori populer -->
@@ -111,7 +116,7 @@
       </div>
     </section>
 
-    <!-- Daftar buku terbaru -->
+    <!-- Buku terbaru -->
     <section class="home-books">
       <h2 class="section-title">
         <svg class="icon icon--sm" aria-hidden="true"><use href="#i-book"/></svg>
@@ -163,7 +168,9 @@
     </section>
   </main>
 
-  <!-- JavaScript fungsi umum: navigasi dan notifikasi -->
+  <!-- JavaScript fungsi umum -->
   <script src="../js/shared/app.js" defer></script>
+  <!-- Nama anggota dan perhitungan minat baca KNN -->
+  <script src="../js/anggota/knn-rekomendasi.js" defer></script>
 </body>
 </html>

@@ -1,239 +1,194 @@
-
-/* =========================================================
-   E-PERPUSTAKAAN
-   MODUL DETAIL BUKU ANGGOTA
-
-   Fitur:
-   1. Membaca ID buku dari URL.
-   2. Mengambil data dari empat halaman kategori.
-   3. Menampilkan detail sesuai buku yang dipilih.
-   4. Menampilkan buku serupa.
-   5. Mengirim identitas buku ke modul transaksi.
-
-   Sumber data: HTML kategori, bukan database.
-   ========================================================= */
-
+/* E-PERPUSTAKAAN: DETAIL BUKU ANGGOTA.
+   Mengambil buku dari katalog HTML dan IndexedDB pustakawan.
+   Buku admin memakai kolom id_buku, judul, penulis, kategori, stok, deskripsi, gambar.
+   Kategori dan ID dikirim ke transaksi agar aktivitas masuk ke profil KNN. */
 (() => {
   'use strict';
-
-  // Daftar halaman sumber katalog.
+  const DB_NAME = 'eperpus_pustakawan';
+  const DB_VERSION = 1;
+  const STORE_NAME = 'books';
   const CATEGORY_PAGES = [
-    {
-      key: 'informatika',
-      label: 'Informatika & Komputer',
-      file: 'cari-informatika.html'
-    },
-    {
-      key: 'sains',
-      label: 'Sains & Matematika',
-      file: 'cari-sains.html'
-    },
-    {
-      key: 'sosial',
-      label: 'Sosial & Bisnis',
-      file: 'cari-sosial.html'
-    },
-    {
-      key: 'sastra',
-      label: 'Sastra & Bahasa',
-      file: 'cari-sastra.html'
-    }
+    { key: 'informatika', label: 'Informatika & Komputer', file: 'cari-informatika.html' },
+    { key: 'sains', label: 'Sains & Matematika', file: 'cari-sains.html' },
+    { key: 'sosial', label: 'Sosial & Bisnis', file: 'cari-sosial.html' },
+    { key: 'sastra', label: 'Sastra & Bahasa', file: 'cari-sastra.html' }
   ];
-
-  // Data tambahan yang memang tersedia pada HTML detail lama.
-  const DETAIL_FALLBACKS = {
+  const FALLBACKS = {
     '0001': {
       stock: 4,
       description: 'Landasan teoretis dan penerapan struktur data: Linear Lists, Stack, Trees, B-Tree, Heap, hingga Graph, lengkap dengan kompleksitas Big-O.',
       borrowExtra: '(12 kali oleh Informatika)'
     }
   };
+  const $ = (selector, root = document) => root.querySelector(selector);
+  const objectUrls = [];
 
-  // Mengambil satu elemen HTML.
-  const $ = (selector, root = document) =>
-    root.querySelector(selector);
-
-  // Menormalkan teks.
+  // Menyamakan teks dan kategori.
   function normalizeText(value) {
-    return String(value || '')
-      .replace(/\s+/g, ' ')
-      .trim();
+    return String(value || '').normalize('NFKC').toLocaleLowerCase('id').replace(/\s+/g, ' ').trim();
+  }
+  function mapCategory(value) {
+    const text = normalizeText(value);
+    if (text.includes('informatika') || text.includes('komputer') || text.includes('sistem informasi')) return 'informatika';
+    if (text.includes('sains') || text.includes('matematika')) return 'sains';
+    if (text.includes('sosial') || text.includes('bisnis')) return 'sosial';
+    if (text.includes('sastra') || text.includes('bahasa')) return 'sastra';
+    return '';
+  }
+  function getCategoryLabel(key) {
+    return CATEGORY_PAGES.find(item => item.key === key)?.label || 'Kategori lainnya';
   }
 
-  // Mengambil ID dari kartu buku.
-  function getBookId(card) {
-    // Prioritaskan ID yang sudah tersimpan.
-    if (card.dataset.bookId) {
-      return card.dataset.bookId.trim();
+  // Membaca semua buku admin dari IndexedDB yang dipakai form tambah buku.
+  function getAdminBooks() {
+    return new Promise((resolve, reject) => {
+      if (!('indexedDB' in window)) return resolve([]);
+      const request = indexedDB.open(DB_NAME, DB_VERSION);
+      request.onupgradeneeded = () => {
+        const db = request.result;
+        if (!db.objectStoreNames.contains(STORE_NAME)) db.createObjectStore(STORE_NAME, { keyPath: 'id_buku' });
+      };
+      request.onerror = () => reject(request.error || new Error('IndexedDB gagal dibuka.'));
+      request.onsuccess = () => {
+        const db = request.result;
+        if (!db.objectStoreNames.contains(STORE_NAME)) {
+          db.close();
+          resolve([]);
+          return;
+        }
+        const tx = db.transaction(STORE_NAME, 'readonly');
+        const requestAll = tx.objectStore(STORE_NAME).getAll();
+        requestAll.onsuccess = () => resolve(Array.isArray(requestAll.result) ? requestAll.result : []);
+        requestAll.onerror = () => reject(requestAll.error || new Error('Data buku admin gagal dibaca.'));
+        tx.oncomplete = () => db.close();
+        tx.onerror = () => db.close();
+      };
+    });
+  }
+
+  // Mengubah record admin ke format detail buku.
+  function normalizeAdminBook(record) {
+    const id = String(record.id_buku || '').trim();
+    const title = String(record.judul || '').trim();
+    const key = mapCategory(record.kategori);
+    if (!id || !title || !key) return null;
+    let image = '';
+    if (record.gambar instanceof Blob && record.gambar.size) {
+      image = URL.createObjectURL(record.gambar);
+      objectUrls.push(image);
+    } else if (typeof record.gambar === 'string') {
+      image = record.gambar;
     }
-
-    // Mengambil ID dari label sampul.
-    const label = $('.cover__label', card)?.textContent || '';
-
-    const labelMatch = label.match(
-      /ID\s*:\s*(\d+)/i
-    );
-
-    if (labelMatch) return labelMatch[1];
-
-    // Mengambil ID dari nama file gambar.
-    const image = $('.cover__image', card);
-    const imagePath = image?.getAttribute('src') || '';
-
-    const imageMatch = imagePath.match(
-      /(?:^|\/)(\d+)\.(?:jpe?g|png|webp)(?:[?#].*)?$/i
-    );
-
-    return imageMatch ? imageMatch[1] : '';
-  }
-
-  // Mengambil angka statistik peminjaman.
-  function getBorrowCount(card) {
-    const badge = $('.badge', card)?.textContent || '';
-    const match = badge.match(/(\d+)\s*x/i);
-
-    return match ? Number(match[1]) : null;
-  }
-
-  // Mengambil angka stok apabila sumber menyediakannya.
-  function getStock(card) {
-    const element = $('[data-book-stock], .stock-badge', card);
-
-    if (!element) return null;
-
-    const match = element.textContent.match(/\d+/);
-
-    return match ? Number(match[0]) : null;
-  }
-
-  // Mengambil informasi satu buku dari kartu HTML.
-  function parseBookCard(card, category, pageUrl) {
-    const title = normalizeText(
-      $('.book-card__title', card)?.textContent
-    );
-
-    if (!title) return null;
-
-    const image = $('.cover__image', card);
-    const imagePath = image?.getAttribute('src') || '';
-
-    let imageUrl = '';
-
-    // Mengubah alamat gambar menjadi URL lengkap.
-    if (imagePath) {
-      imageUrl = new URL(imagePath, pageUrl).href;
-    }
-
-    // Mengambil deskripsi jika tersedia.
-    const description = normalizeText(
-      $('.book-card__text, .book-card__description, [data-book-description]', card)?.textContent
-    );
-
-    // Mengambil kategori dari label buku.
-    const tag = normalizeText(
-      $('.tag', card)?.textContent
-    );
-
+    const stock = Number(record.stok);
     return {
-      id: getBookId(card),
+      id,
       title,
-      author: normalizeText(
-        $('.book-card__author', card)?.textContent
-      ) || 'Data penulis belum tersedia',
-      category: tag || category.label,
-      categoryKey: category.key,
-      image: imageUrl,
-      imageAlt: image?.getAttribute('alt') || `Sampul ${title}`,
-      description,
-      stock: getStock(card),
-      borrowCount: getBorrowCount(card),
-      borrowExtra: normalizeText(
-        card.dataset.borrowExtra || ''
-      )
+      author: String(record.penulis || '').trim() || 'Data penulis belum tersedia',
+      category: String(record.kategori || getCategoryLabel(key)),
+      categoryKey: key,
+      image,
+      imageAlt: `Sampul ${title}`,
+      description: String(record.deskripsi || '').trim(),
+      stock: Number.isFinite(stock) ? stock : null,
+      borrowCount: null,
+      source: 'indexeddb'
     };
   }
 
-  // Mengambil seluruh buku dari empat halaman kategori.
-  async function loadCatalog() {
-    const results = await Promise.all(
-      CATEGORY_PAGES.map(async category => {
-        const pageUrl = new URL(
-          category.file,
-          window.location.href
-        );
-
-        try {
-          const response = await fetch(pageUrl.href, {
-            cache: 'no-store'
-          });
-
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-          }
-
-          const html = await response.text();
-
-          // Mengubah HTML menjadi dokumen yang dapat dibaca.
-          const parsed = new DOMParser().parseFromString(
-            html,
-            'text/html'
-          );
-
-          return {
-            category,
-            pageUrl,
-            cards: [
-              ...parsed.querySelectorAll(
-                '.book-grid .book-card'
-              )
-            ]
-          };
-        } catch (error) {
-          console.error(
-            `Gagal membaca ${category.file}:`,
-            error
-          );
-
-          return null;
-        }
-      })
-    );
-
-    // Menyimpan buku berdasarkan ID agar tidak duplikat.
-    const catalog = new Map();
-
-    results.filter(Boolean).forEach(
-      ({ category, pageUrl, cards }) => {
-        cards.forEach(card => {
-          const book = parseBookCard(
-            card,
-            category,
-            pageUrl
-          );
-
-          if (book?.id && !catalog.has(book.id)) {
-            catalog.set(book.id, book);
-          }
-        });
-      }
-    );
-
-    return [...catalog.values()];
+  // Mengambil ID buku dari kartu katalog statis.
+  function getStaticBookId(card) {
+    const label = card.querySelector('.cover__label')?.textContent || '';
+    const labelMatch = label.match(/ID\s*:\s*([\w-]+)/i);
+    if (labelMatch) return labelMatch[1];
+    const imagePath = card.querySelector('.cover__image')?.getAttribute('src') || '';
+    const imageMatch = imagePath.match(/(?:^|\/)([\w-]+)\.(?:jpe?g|png|webp)(?:[?#].*)?$/i);
+    return card.dataset.bookId || imageMatch?.[1] || '';
   }
 
-  // Mengisi seluruh informasi detail buku.
-  function renderBook(book) {
-    const fallback = DETAIL_FALLBACKS[book.id] || {};
+  // Mengambil metadata buku dari halaman kategori HTML.
+  function parseStaticCard(card, category, pageUrl) {
+    const title = card.querySelector('.book-card__title')?.textContent.replace(/\s+/g, ' ').trim() || '';
+    if (!title) return null;
+    const imageElement = card.querySelector('.cover__image');
+    const imagePath = imageElement?.getAttribute('src') || '';
+    let image = '';
+    try {
+      if (imagePath) image = new URL(imagePath, pageUrl).href;
+    } catch (_) {}
+    const badge = card.querySelector('.badge')?.textContent || '';
+    const borrowMatch = badge.match(/(\d+)\s*x/i);
+    return {
+      id: getStaticBookId(card),
+      title,
+      author: card.querySelector('.book-card__author')?.textContent.trim() || 'Data penulis belum tersedia',
+      category: card.querySelector('.tag')?.textContent.trim() || category.label,
+      categoryKey: category.key,
+      image,
+      imageAlt: imageElement?.alt || `Sampul ${title}`,
+      description: card.querySelector('.book-card__text, .book-card__description, [data-book-description]')?.textContent.trim() || '',
+      stock: null,
+      borrowCount: borrowMatch ? Number(borrowMatch[1]) : null,
+      source: 'html'
+    };
+  }
 
-    // Mengisi informasi identitas buku.
+  // Menggabungkan katalog statis dan buku yang dimasukkan admin.
+  async function loadCatalog() {
+    const pages = await Promise.allSettled(CATEGORY_PAGES.map(async category => {
+      const url = new URL(category.file, window.location.href);
+      const response = await fetch(url.href, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`${category.file}: HTTP ${response.status}`);
+      const html = await response.text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      return [...doc.querySelectorAll('.book-grid .book-card')]
+        .map(card => parseStaticCard(card, category, url))
+        .filter(Boolean);
+    }));
+    const books = new Map();
+    pages.forEach(result => {
+      if (result.status === 'fulfilled') {
+        result.value.forEach(book => {
+          if (book.id && !books.has(book.id)) books.set(book.id, book);
+        });
+      } else {
+        console.warn('Salah satu halaman katalog statis gagal dimuat:', result.reason);
+      }
+    });
+    const adminBooks = await getAdminBooks().catch(error => {
+      console.warn('Data buku admin tidak dapat dibaca:', error);
+      return [];
+    });
+    adminBooks.map(normalizeAdminBook).filter(Boolean).forEach(book => {
+      if (books.has(book.id)) {
+        console.warn(`ID ${book.id} sudah dipakai katalog statis; record admin dilewati untuk mencegah ID ganda.`);
+      } else {
+        books.set(book.id, book);
+      }
+    });
+    return [...books.values()];
+  }
+
+  // Mengambil jumlah peminjaman historis untuk statistik buku.
+  function getBorrowCount(bookId) {
+    try {
+      const records = JSON.parse(localStorage.getItem('eperpus_demo_transactions') || '[]');
+      if (!Array.isArray(records)) return null;
+      return records.filter(item =>
+        String(item.bookId || '') === String(bookId) &&
+        !['batal', 'dibatalkan', 'cancelled'].includes(normalizeText(item.status))
+      ).length;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  // Menampilkan informasi buku dan mengirim kategori ke modul transaksi.
+  function renderBook(book) {
     $('[data-book-title]').textContent = book.title;
     $('[data-book-id]').textContent = book.id;
     $('[data-book-author]').textContent = book.author;
     $('[data-book-category]').textContent = book.category;
-
-    // Mengatur sampul buku.
     const image = $('[data-book-image]');
-
     if (book.image) {
       image.src = book.image;
       image.alt = book.imageAlt;
@@ -241,228 +196,109 @@
     } else {
       image.hidden = true;
     }
-
-    // Data stok hanya ditampilkan jika tersedia.
-    const stock = book.stock ?? fallback.stock;
-    const stockElement = $('[data-book-stock]');
-
-    stockElement.textContent =
-      stock === null || stock === undefined
-        ? 'Belum tersedia'
-        : String(stock);
-
-    // Mengisi deskripsi buku.
-    // Tidak membuat deskripsi baru apabila sumber tidak menyediakannya.
-    $('[data-book-description]').textContent =
-      book.description ||
-      fallback.description ||
-      'Deskripsi buku belum tersedia.';
-
-    // Mengisi statistik peminjaman.
-    const borrowCount =
-      book.borrowCount ?? fallback.borrowCount;
-
-    $('[data-book-borrow-count]').textContent =
-      borrowCount === null || borrowCount === undefined
-        ? 'Data peminjaman belum tersedia'
-        : `Dipinjam ${borrowCount}x`;
-
-    // Mengisi informasi tambahan peminjaman.
-    $('[data-book-borrow-extra]').textContent =
-      book.borrowExtra || fallback.borrowExtra || '';
-
-    // Mengirim ID dan judul ke tombol transaksi.
-    const borrowButton = $('[data-action="borrow"]');
-
-    borrowButton.dataset.bookId = book.id;
-    borrowButton.dataset.bookTitle = book.title;
-    borrowButton.disabled = stock === 0;
-
-    // Memperbarui judul tab browser.
+    const fallback = FALLBACKS[book.id] || {};
+    const stock = book.stock ?? fallback.stock ?? null;
+    $('[data-book-stock]').textContent = stock === null ? 'Belum tersedia' : String(stock);
+    $('[data-book-description]').textContent = book.description || fallback.description || 'Deskripsi buku belum tersedia.';
+    const count = book.borrowCount ?? getBorrowCount(book.id);
+    $('[data-book-borrow-count]').textContent = count === null ? 'Data peminjaman belum tersedia' : `Dipinjam ${count}x`;
+    $('[data-book-borrow-extra]').textContent = fallback.borrowExtra || '';
+    const button = $('[data-action="borrow"]');
+    button.dataset.bookId = book.id;
+    button.dataset.bookTitle = book.title;
+    button.dataset.bookCategoryKey = book.categoryKey;
+    button.dataset.bookSource = book.source || 'html';
+    button.dataset.bookStock = stock === null ? '' : String(stock);
+    button.disabled = stock !== null && stock <= 0;
+    if (stock !== null && stock <= 0) button.textContent = 'Stok Buku Habis';
     document.title = `${book.title} - E-Perpustakaan`;
-
-    // Memberitahu transaksi bahwa detail buku sudah dimuat.
-    document.dispatchEvent(
-      new CustomEvent('eperpus:book-loaded', {
-        detail: book
-      })
-    );
+    document.dispatchEvent(new CustomEvent('eperpus:book-loaded', { detail: book }));
   }
 
-  // Membuat satu kartu rekomendasi buku.
+  // Membuat kartu buku serupa dengan aman menggunakan textContent.
   function createRelatedCard(book) {
-    const article = document.createElement('article');
-    article.className = 'book-card';
-
-    const top = document.createElement('div');
-    top.className = 'book-card__top';
-
-    // Membuat area sampul.
+    const card = document.createElement('article');
+    card.className = 'book-card';
     const figure = document.createElement('figure');
     figure.className = 'cover cover--small';
-
     if (book.image) {
-      const image = document.createElement('img');
-
-      image.className = 'cover__image';
-      image.src = book.image;
-      image.alt = book.imageAlt;
-      image.loading = 'lazy';
-
-      figure.appendChild(image);
+      const img = document.createElement('img');
+      img.className = 'cover__image';
+      img.src = book.image;
+      img.alt = book.imageAlt;
+      img.loading = 'lazy';
+      figure.appendChild(img);
     } else {
       figure.classList.add('cover--placeholder');
-
       const caption = document.createElement('figcaption');
       caption.textContent = book.title;
-
       figure.appendChild(caption);
     }
-
-    // Membuat informasi buku.
-    const body = document.createElement('div');
-    body.className = 'book-card__body';
-
     const title = document.createElement('h3');
     title.className = 'book-card__title book-card__title--small';
     title.textContent = book.title;
-
-    const badge = document.createElement('span');
-    badge.className = 'badge';
-
-    badge.textContent = book.borrowCount === null
-      ? 'Data peminjaman belum tersedia'
-      : `dipinjam ${book.borrowCount}x`;
-
-    body.append(title, badge);
-    top.append(figure, body);
-
-    // Membuat tombol Detail dengan ID yang benar.
+    const tag = document.createElement('span');
+    tag.className = 'tag';
+    tag.textContent = book.category;
     const link = document.createElement('a');
-
     link.className = 'btn btn--light btn--block btn--small';
-
-    const detailUrl =
-      `detail.html?id=${encodeURIComponent(book.id)}`;
-
-    link.href = detailUrl;
-    link.dataset.route = detailUrl;
+    link.href = `detail.html?id=${encodeURIComponent(book.id)}`;
+    link.dataset.route = link.href;
     link.textContent = 'Detail';
-
-    article.append(top, link);
-
-    return article;
+    card.append(figure, tag, title, link);
+    return card;
   }
 
-  // Menampilkan buku lain dari kategori yang sama.
+  // Menampilkan maksimal tiga buku yang memiliki kategori sama.
   function renderRelatedBooks(currentBook, catalog) {
     const container = $('[data-related-books]');
-
     container.replaceChildren();
-
-    // Mengambil maksimal tiga buku dari kategori yang sama.
-    const related = catalog
-      .filter(book =>
-        book.id !== currentBook.id &&
-        book.categoryKey === currentBook.categoryKey
-      )
-      .slice(0, 3);
-
-    // Menampilkan pesan jika tidak ada buku serupa.
-    if (related.length === 0) {
+    const related = catalog.filter(book =>
+      book.id !== currentBook.id &&
+      book.categoryKey === currentBook.categoryKey &&
+      (book.stock === null || book.stock > 0)
+    ).slice(0, 3);
+    if (!related.length) {
       const message = document.createElement('p');
-
-      message.textContent =
-        'Belum ada buku serupa dalam kategori ini.';
-
+      message.textContent = 'Belum ada buku serupa yang tersedia dalam kategori ini.';
       container.appendChild(message);
       return;
     }
-
-    // Menampilkan seluruh kartu rekomendasi.
-    related.forEach(book => {
-      container.appendChild(
-        createRelatedCard(book)
-      );
-    });
+    related.forEach(book => container.appendChild(createRelatedCard(book)));
   }
 
   // Menampilkan pesan apabila buku tidak ditemukan.
   function showError(message) {
     const messageElement = $('[data-detail-message]');
-
     messageElement.textContent = message;
     messageElement.hidden = false;
-
-    // Mengubah judul dan menonaktifkan tombol peminjaman.
-    $('[data-book-title]').textContent =
-      'Buku tidak ditemukan';
-
+    $('[data-book-title]').textContent = 'Buku tidak ditemukan';
     $('[data-action="borrow"]').disabled = true;
-
-    // Menghapus rekomendasi karena data buku tidak valid.
     $('[data-related-books]').replaceChildren();
   }
 
-  // Inisialisasi halaman detail buku.
+  // Inisialisasi halaman detail berdasarkan ID dari URL.
   async function initialize() {
-    const params = new URLSearchParams(
-      window.location.search
-    );
-
-    // Mengambil ID buku dari URL.
-    const bookId = (params.get('id') || '').trim();
-
-    // Tidak menggunakan ID default agar kesalahan navigasi
-    // tidak membuat semua buku menampilkan detail yang sama.
-    if (!bookId) {
-      showError(
-        'ID buku tidak ditemukan. Silakan kembali ke katalog dan pilih buku yang ingin dilihat.'
-      );
-      return;
-    }
-
+    const id = (new URLSearchParams(window.location.search).get('id') || '').trim();
+    if (!id) return showError('ID buku tidak ditemukan. Silakan kembali ke katalog.');
     try {
-      // Mengambil katalog dari empat halaman kategori.
       const catalog = await loadCatalog();
-
-      // Mencari buku berdasarkan ID yang dipilih.
-      const selectedBook = catalog.find(book =>
-        book.id === bookId
-      );
-
-      // Menampilkan pesan jika ID tidak ditemukan.
-      if (!selectedBook) {
-        showError(
-          `Buku dengan ID ${bookId} tidak ditemukan. Periksa data katalog.`
-        );
-        return;
-      }
-
-      // Menampilkan detail buku yang sesuai.
-      renderBook(selectedBook);
-
-      // Menampilkan rekomendasi buku serupa.
-      renderRelatedBooks(selectedBook, catalog);
+      const book = catalog.find(item => item.id === id);
+      if (!book) return showError(`Buku dengan ID ${id} tidak ditemukan. Periksa kembali ID buku.`);
+      renderBook(book);
+      renderRelatedBooks(book, catalog);
     } catch (error) {
-      console.error(
-        'Gagal memuat detail buku:',
-        error
-      );
-
-      showError(
-        'Data buku gagal dimuat. Pastikan proyek dijalankan melalui Live Server.'
-      );
+      console.error('Gagal memuat detail buku:', error);
+      showError('Data buku gagal dimuat. Jalankan aplikasi melalui Live Server.');
     }
   }
 
-  // Menjalankan setelah HTML selesai diparsing.
+  // Membersihkan URL sementara untuk gambar yang berasal dari Blob.
+  window.addEventListener('pagehide', () => {
+    objectUrls.forEach(url => URL.revokeObjectURL(url));
+  });
   if (document.readyState === 'loading') {
-    document.addEventListener(
-      'DOMContentLoaded',
-      initialize,
-      { once: true }
-    );
+    document.addEventListener('DOMContentLoaded', initialize, { once: true });
   } else {
     initialize();
   }
