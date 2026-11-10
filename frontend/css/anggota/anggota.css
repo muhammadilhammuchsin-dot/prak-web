@@ -478,3 +478,43 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+
+/* PERBAIKAN SAMPUL PADA HALAMAN DETAIL BUKU */
+.book-detail .cover--large {
+  width: 100%;
+  height: 21rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  background: var(--color-soft);
+}
+.book-detail .cover--large .cover__image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+}
+.book-detail .cover--large .cover__image[hidden],
+.book-cover-placeholder[hidden] {
+  display: none !important;
+}
+.book-cover-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+.book-detail__cover-column,
+.book-detail__content {
+  min-width: 0;
+}
