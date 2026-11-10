@@ -39,6 +39,7 @@
   };
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+
   // 2. FUNGSI DASAR
   function normalizeIdentity(value) {
     return String(value || '').trim().replace(/\s+/g, '').toUpperCase();
@@ -46,6 +47,7 @@
   function isValidRole(role) {
     return Object.prototype.hasOwnProperty.call(ROLE_CONFIG, role);
   }
+
   // 3. MEMBACA DAN MENYIMPAN AKUN
   function readAccounts(key) {
     try {
@@ -68,6 +70,7 @@
       throw new Error('Akun gagal disimpan. Periksa kapasitas penyimpanan browser.');
     }
   }
+
   // Migrasi akun Pustakawan dari penyimpanan lama.
   function getAccounts() {
     const accounts = readAccounts(ACCOUNT_KEY);
@@ -94,6 +97,7 @@
     if (changed) saveAccounts(accounts);
     return accounts;
   }
+
   // 4. HASH PASSWORD PBKDF2-SHA256
   function toBase64(bytes) {
     let binary = '';
@@ -124,6 +128,7 @@
     for (let i = 0; i < first.length; i++) difference |= first.charCodeAt(i) ^ second.charCodeAt(i);
     return difference === 0;
   }
+
   // 5. FEEDBACK DAN VALIDASI
   function showFeedback(form, message, type = 'info') {
     const feedback = $('[data-auth-feedback]', form);
@@ -160,6 +165,7 @@
       error.hidden = true;
     }
   }
+
   // Validasi setiap field.
   function validateField(form, field) {
     const formType = form.dataset.authForm;
@@ -208,6 +214,7 @@
     clearFieldError(form, field);
     return true;
   }
+
   // Validasi seluruh field.
   function validateForm(form) {
     const fields = $$('input[name], select[name]', form);
@@ -225,6 +232,7 @@
     }
     return valid;
   }
+
   // 6. VALIDASI ROLE HALAMAN PENDAFTARAN
   function validateRegistrationRole(form) {
     const role = form.dataset.userRole;
@@ -237,6 +245,7 @@
     }
     return true;
   }
+
   // 7. PEMERIKSAAN AKUN DUPLIKAT
   function checkDuplicate(accounts, identity, email) {
     const existingIdentity = accounts.find(account => normalizeIdentity(account.identity) === identity);
@@ -250,6 +259,7 @@
     }
     return '';
   }
+
   // 8. PROSES PENDAFTARAN
   async function handleRegistration(form) {
     const role = form.dataset.userRole;
@@ -294,6 +304,7 @@
       window.location.href = ROLE_CONFIG[role].loginUrl;
     }, 1000);
   }
+
   // 9. PROSES LOGIN
   async function handleLogin(form) {
     const role = form.dataset.userRole;
@@ -336,6 +347,7 @@
       window.location.href = ROLE_CONFIG[role].homeUrl;
     }, 700);
   }
+
   // 10. TAMPILKAN / SEMBUNYIKAN PASSWORD
   function togglePassword(button) {
     const field = document.getElementById(button.dataset.togglePassword);
@@ -345,183 +357,391 @@
     button.setAttribute('aria-pressed', String(visible));
     button.setAttribute('aria-label', visible ? 'Sembunyikan password' : 'Tampilkan password');
   }
-  // 11. LUPA PASSWORD PETUGAS
-  // HTML asli memakai DIV dan tombol type=button, bukan form submit.
+
+  // 11. LUPA PASSWORD PETUGAS — ALUR EMAIL/IDENTITAS > OTP > PASSWORD BARU
+  // Mode proyek saat ini masih frontend/localStorage. OTP dibuat sebagai simulasi
+  // dan ditampilkan di feedback untuk pengujian; belum ada pengiriman email.
   function initializeForgotPassword() {
-    const containers = $$('[data-auth-form="forgot-password"][data-user-role]');
-    containers.forEach(container => {
-      if (container.dataset.forgotInitialized === 'true') return;
-      container.dataset.forgotInitialized = 'true';
-      const role = container.dataset.userRole;
-      const roleConfig = ROLE_CONFIG[role];
-      const identityField = container.querySelector('[name="email"], [name="npm"], [name="identity"]');
-      const passwordField = container.querySelector('[name="password"]');
-      const confirmField = container.querySelector('[name="password-confirm"], [name="passwordConfirm"], [name="konfirmasi_password"]');
-      const otpField = container.querySelector('[name="otp"]');
-      const saveButton = container.querySelector('[data-auth-action="forgot-password"]');
-      if (!roleConfig || !identityField || !passwordField || !confirmField || !saveButton) {
-        console.error('Elemen Lupa Password petugas tidak lengkap:', role);
-        return;
-      }
-      // Pendaftaran petugas menyimpan NIP/kode, bukan email.
-      // Kolom identitas dapat menerima email jika memang tersimpan,
-      // atau NIP/kode akun jika email belum didaftarkan.
-      const identityLabel = container.querySelector('label[for="email"], label[for="npm"]');
-      if (identityLabel) identityLabel.textContent = 'Masukkan email atau NIP / Kode akun';
-      identityField.placeholder = 'Masukkan email atau NIP / Kode akun';
-      identityField.setAttribute('autocomplete', 'username');
-      let isSubmitting = false;
-      let feedback = container.querySelector('[data-auth-feedback]');
-      if (!feedback) {
-        feedback = document.createElement('p');
-        feedback.className = 'auth-feedback';
-        feedback.dataset.authFeedback = '';
-        feedback.setAttribute('role', 'status');
-        feedback.setAttribute('aria-live', 'polite');
-        feedback.hidden = true;
-        saveButton.insertAdjacentElement('afterend', feedback);
-      }
-      function setForgotError(field, message) {
-        const group = field.closest('.form__group') || field.parentElement;
-        let error = group.querySelector('.form__error');
-        if (!error) {
-          error = document.createElement('p');
-          error.className = 'form__error';
-          error.setAttribute('role', 'alert');
-          group.appendChild(error);
-        }
-        error.dataset.errorFor = field.name;
+    const form = document.querySelector('form[data-auth-form="forgot-password"][data-user-role]');
+    if (!form || form.dataset.forgotInitialized === 'true') return;
+    const role = form.dataset.userRole;
+    const roleConfig = ROLE_CONFIG[role];
+    if (!roleConfig) return;
+    form.dataset.forgotInitialized = 'true';
+
+    const identityField = form.querySelector('[name="email"]');
+    const passwordField = form.querySelector('[name="password"]');
+    const confirmField = form.querySelector('[name="password-confirm"]');
+    const sendButton = form.querySelector('[data-forgot-action="send-otp"]');
+    const verifyButton = form.querySelector('[data-forgot-action="verify-otp"]');
+    const resendButton = form.querySelector('[data-forgot-action="resend-otp"]');
+    const saveButton = form.querySelector('[data-forgot-action="save-password"]');
+    const otpDigits = $$('[data-otp-digit]', form);
+    const steps = $$('[data-forgot-step]', form);
+    const progress = $$('[data-forgot-progress]', form);
+    const title = $('[data-forgot-title]', form);
+    const caption = $('[data-forgot-caption]', form);
+    const backLogin = $('[data-forgot-back-login]');
+    const backStep = $('[data-forgot-back]');
+    const destination = $('[data-forgot-destination]', form);
+    const timerLabel = $('[data-otp-timer]', form);
+    const otpError = $('[data-forgot-error="otp"]', form);
+    const feedback = $('[data-auth-feedback]', form);
+
+    if (!identityField || !passwordField || !confirmField || !sendButton || !verifyButton || !saveButton || otpDigits.length !== 6) {
+      console.error('Elemen Lupa Password petugas tidak lengkap:', role);
+      return;
+    }
+
+    const titles = {1: 'Pulihkan Password', 2: 'Verifikasi OTP', 3: 'Password Baru'};
+    let currentStep = 1;
+    let currentOtp = '';
+    let otpExpiresAt = 0;
+    let otpTimer = null;
+    let matchedIdentity = '';
+    let matchedEmail = '';
+    let otpVerified = false;
+    let isSubmitting = false;
+
+    function showForgotFeedback(message, type = 'info') {
+      if (!feedback) return;
+      feedback.textContent = message;
+      feedback.className = `auth-feedback auth-feedback--${type}`;
+      feedback.hidden = false;
+    }
+
+    function clearForgotFeedback() {
+      if (!feedback) return;
+      feedback.textContent = '';
+      feedback.hidden = true;
+      feedback.className = 'auth-feedback';
+    }
+
+    function setForgotError(field, message) {
+      const error = form.querySelector(`[data-error-for="${field.name}"]`);
+      field.classList.toggle('form__input--error', Boolean(message));
+      if (message) field.setAttribute('aria-invalid', 'true');
+      else field.removeAttribute('aria-invalid');
+      if (error) {
         error.textContent = message;
         error.hidden = !message;
-        field.classList.toggle('form__input--error', Boolean(message));
-        if (message) field.setAttribute('aria-invalid', 'true');
-        else field.removeAttribute('aria-invalid');
       }
-      function showForgotFeedback(message, type = 'info') {
-        feedback.textContent = message;
-        feedback.className = `auth-feedback auth-feedback--${type}`;
-        feedback.hidden = false;
+    }
+
+    function setOtpError(message) {
+      if (otpError) {
+        otpError.textContent = message;
+        otpError.hidden = !message;
       }
-      function clearForgotFeedback() {
-        feedback.textContent = '';
-        feedback.hidden = true;
-      }
-      function validateForgotField(field) {
-        const value = field.value.trim();
-        let message = '';
-        if (!value) {
-          message = 'Bagian ini wajib diisi.';
-        } else if (field === identityField && value.includes('@') && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-          message = 'Format email tidak valid.';
-        } else if (field === identityField && !value.includes('@') && !/^[A-Z0-9][A-Z0-9._-]{2,39}$/.test(normalizeIdentity(value))) {
-          message = 'NIP atau kode identitas tidak valid.';
-        } else if (field === passwordField && field.value.length < 8) {
-          message = 'Password minimal 8 karakter.';
-        } else if (field === confirmField && field.value !== passwordField.value) {
-          message = 'Konfirmasi password tidak sama.';
-        }
-        setForgotError(field, message);
-        return !message;
-      }
-      async function resetStaffPassword() {
-        if (isSubmitting) return;
-        clearForgotFeedback();
-        const valid = [identityField, passwordField, confirmField].map(validateForgotField).every(Boolean);
-        if (!valid) {
-          showForgotFeedback('Periksa kembali data yang Anda masukkan.', 'error');
-          return;
-        }
-        isSubmitting = true;
-        const originalText = saveButton.textContent;
-        saveButton.disabled = true;
-        saveButton.textContent = 'Memproses...';
-        try {
-          const entered = identityField.value.trim();
-          const isEmail = entered.includes('@');
-          const accounts = getAccounts();
-          const index = accounts.findIndex(account => {
-            if (account.role !== role) return false;
-            if (isEmail) return String(account.email || '').trim().toLowerCase() === entered.toLowerCase();
-            return normalizeIdentity(account.identity) === normalizeIdentity(entered);
-          });
-          if (index < 0) {
-            showForgotFeedback(
-              isEmail
-                ? `Email tidak ditemukan pada akun ${roleConfig.label}. Jika email belum didaftarkan, gunakan NIP/kode akun.`
-                : `NIP/kode tidak ditemukan pada akun ${roleConfig.label}.`,
-              'error'
-            );
-            return;
-          }
-          // OTP belum diverifikasi karena layanan pengiriman OTP belum tersedia.
-          // Hash dan salt dibuat dengan metode yang sama seperti proses login.
-          const salt = generateSalt();
-          const passwordHash = await hashPassword(passwordField.value, salt);
-          accounts[index] = {
-            ...accounts[index],
-            salt: toBase64(salt),
-            passwordHash,
-            passwordUpdatedAt: new Date().toISOString()
-          };
-          saveAccounts(accounts);
-          identityField.value = '';
-          passwordField.value = '';
-          confirmField.value = '';
-          if (otpField) otpField.value = '';
-          [identityField, passwordField, confirmField].forEach(field => setForgotError(field, ''));
-          showForgotFeedback('Password berhasil diperbarui. Silakan login kembali.', 'success');
-          window.setTimeout(() => {
-            window.location.href = roleConfig.loginUrl;
-          }, 1200);
-        } catch (error) {
-          console.error('Lupa password petugas:', error);
-          showForgotFeedback(error.message || 'Password gagal diperbarui.', 'error');
-        } finally {
-          isSubmitting = false;
-          saveButton.disabled = false;
-          saveButton.textContent = originalText;
-        }
-      }
-      [identityField, passwordField, confirmField].forEach(field => {
-        ['input', 'change'].forEach(eventName => {
-          field.addEventListener(eventName, () => {
-            validateForgotField(field);
-            if (field === passwordField && confirmField.value) validateForgotField(confirmField);
-            clearForgotFeedback();
-          });
-        });
-        field.addEventListener('keydown', event => {
-          if (event.key === 'Enter') {
-            event.preventDefault();
-            resetStaffPassword();
-          }
-        });
-        setForgotError(field, '');
+      otpDigits.forEach(input => {
+        if (message) input.setAttribute('aria-invalid', 'true');
+        else input.removeAttribute('aria-invalid');
       });
-      saveButton.addEventListener('click', resetStaffPassword);
-      // Ikon mata pada HTML asli menggunakan span .input-field__toggle.
-      container.querySelectorAll('.input-field__toggle').forEach(toggle => {
-        const input = toggle.closest('.input-field')?.querySelector('input[type="password"], input[type="text"]');
-        if (!input) return;
-        toggle.setAttribute('role', 'button');
-        toggle.setAttribute('tabindex', '0');
-        toggle.setAttribute('aria-label', 'Tampilkan password');
-        const changeVisibility = () => {
-          const visible = input.type === 'password';
-          input.type = visible ? 'text' : 'password';
-          toggle.setAttribute('aria-pressed', String(visible));
-          toggle.setAttribute('aria-label', visible ? 'Sembunyikan password' : 'Tampilkan password');
+    }
+
+    function clearOtpInputs() {
+      otpDigits.forEach(input => {
+        input.value = '';
+        input.removeAttribute('aria-invalid');
+      });
+      setOtpError('');
+    }
+
+    function showStep(step) {
+      currentStep = step;
+      steps.forEach(section => {
+        const active = Number(section.dataset.forgotStep) === step;
+        section.hidden = !active;
+        section.classList.toggle('is-active', active);
+      });
+      progress.forEach(item => item.classList.toggle('is-active', Number(item.dataset.forgotProgress) <= step));
+      if (title) title.textContent = titles[step];
+      if (caption) caption.textContent = `Langkah ${step} dari 3`;
+      if (backLogin) backLogin.hidden = step !== 1;
+      if (backStep) {
+        backStep.hidden = step === 1;
+        backStep.dataset.targetStep = String(step - 1);
+      }
+      clearForgotFeedback();
+    }
+
+    function maskEmail(value) {
+      const parts = value.split('@');
+      if (parts.length !== 2) return value;
+      const visible = parts[0].length > 2 ? parts[0].slice(0, 2) : parts[0].slice(0, 1);
+      return `${visible}${'*'.repeat(Math.max(3, parts[0].length - visible.length))}@${parts[1]}`;
+    }
+
+    function findStaffAccount(value) {
+      const accounts = getAccounts();
+      const entered = String(value || '').trim();
+      const isEmail = entered.includes('@');
+      const account = accounts.find(item => {
+        if (item.role !== role) return false;
+        if (isEmail) return String(item.email || '').trim().toLowerCase() === entered.toLowerCase();
+        return normalizeIdentity(item.identity) === normalizeIdentity(entered);
+      });
+      return account || null;
+    }
+
+    function createOtp() {
+      if (!window.crypto?.getRandomValues) {
+        throw new Error('Browser tidak mendukung generator kode aman. Jalankan melalui Live Server atau HTTPS.');
+      }
+      const random = new Uint32Array(1);
+      window.crypto.getRandomValues(random);
+      currentOtp = String(100000 + (random[0] % 900000));
+      otpExpiresAt = Date.now() + 5 * 60 * 1000;
+      otpVerified = false;
+      clearOtpInputs();
+      startOtpTimer();
+    }
+
+    function startOtpTimer() {
+      if (otpTimer) window.clearInterval(otpTimer);
+      const update = () => {
+        const remaining = Math.max(0, otpExpiresAt - Date.now());
+        const minutes = String(Math.floor(remaining / 60000)).padStart(2, '0');
+        const seconds = String(Math.floor((remaining % 60000) / 1000)).padStart(2, '0');
+        if (timerLabel) timerLabel.textContent = remaining > 0 ? `Kode berlaku ${minutes}:${seconds}` : 'Kode OTP kedaluwarsa';
+        if (remaining <= 0 && otpTimer) {
+          window.clearInterval(otpTimer);
+          otpTimer = null;
+        }
+      };
+      update();
+      otpTimer = window.setInterval(update, 1000);
+    }
+
+    function sendOtp() {
+      clearForgotFeedback();
+      const entered = identityField.value.trim();
+      if (!entered) {
+        setForgotError(identityField, 'Email atau identitas akun wajib diisi.');
+        identityField.focus();
+        return;
+      }
+      if (entered.includes('@') && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(entered)) {
+        setForgotError(identityField, 'Format email tidak valid.');
+        identityField.focus();
+        return;
+      }
+      if (!entered.includes('@') && !/^[A-Z0-9][A-Z0-9._-]{2,39}$/.test(normalizeIdentity(entered))) {
+        setForgotError(identityField, 'NIP atau kode akun tidak valid.');
+        identityField.focus();
+        return;
+      }
+      setForgotError(identityField, '');
+      let account;
+      try {
+        account = findStaffAccount(entered);
+      } catch (error) {
+        showForgotFeedback(error.message || 'Data akun petugas tidak dapat dibaca.', 'error');
+        return;
+      }
+      if (!account) {
+        showForgotFeedback(
+          entered.includes('@')
+            ? `Email tidak ditemukan pada akun ${roleConfig.label}. Untuk akun lama tanpa email, gunakan NIP/kode akun.`
+            : `NIP/kode akun tidak ditemukan pada akun ${roleConfig.label}.`,
+          'error'
+        );
+        return;
+      }
+
+      matchedIdentity = normalizeIdentity(account.identity);
+      matchedEmail = String(account.email || '').trim().toLowerCase();
+      if (destination) {
+        destination.textContent = matchedEmail
+          ? maskEmail(matchedEmail)
+          : `Akun ${roleConfig.label}: ${account.identityDisplay || account.identity}`;
+      }
+      try {
+        createOtp();
+        showStep(2);
+        showForgotFeedback(`MODE SIMULASI — Kode OTP untuk pengujian: ${currentOtp}. Email belum benar-benar dikirim karena backend email belum tersedia.`, 'info');
+        otpDigits[0].focus();
+      } catch (error) {
+        showForgotFeedback(error.message, 'error');
+      }
+    }
+
+    function verifyOtp() {
+      clearForgotFeedback();
+      const enteredOtp = otpDigits.map(input => input.value.trim()).join('');
+      if (enteredOtp.length !== 6 || !/^\d{6}$/.test(enteredOtp)) {
+        setOtpError('Masukkan seluruh 6 digit kode OTP.');
+        otpDigits.find(input => !input.value)?.focus();
+        return;
+      }
+      if (!currentOtp || Date.now() > otpExpiresAt) {
+        setOtpError('Kode OTP sudah kedaluwarsa. Silakan kirim ulang kode.');
+        return;
+      }
+      if (enteredOtp !== currentOtp) {
+        setOtpError('Kode OTP yang Anda masukkan tidak sesuai.');
+        return;
+      }
+      setOtpError('');
+      otpVerified = true;
+      if (otpTimer) window.clearInterval(otpTimer);
+      otpTimer = null;
+      showStep(3);
+      showForgotFeedback('Identitas akun berhasil diverifikasi. Silakan buat password baru.', 'info');
+      passwordField.focus();
+    }
+
+    async function saveNewPassword() {
+      if (isSubmitting) return;
+      clearForgotFeedback();
+      const password = passwordField.value;
+      const confirmation = confirmField.value;
+      let valid = true;
+
+      if (password.length < 8) {
+        setForgotError(passwordField, 'Password minimal 8 karakter.');
+        valid = false;
+      } else {
+        setForgotError(passwordField, '');
+      }
+      if (!confirmation) {
+        setForgotError(confirmField, 'Konfirmasi password wajib diisi.');
+        valid = false;
+      } else if (confirmation !== password) {
+        setForgotError(confirmField, 'Konfirmasi password tidak sama.');
+        valid = false;
+      } else {
+        setForgotError(confirmField, '');
+      }
+      if (!valid) {
+        showForgotFeedback('Periksa kembali password baru Anda.', 'error');
+        return;
+      }
+      if (!otpVerified || !matchedIdentity) {
+        showForgotFeedback('Verifikasi OTP belum berhasil. Ulangi proses pemulihan password.', 'error');
+        showStep(1);
+        return;
+      }
+
+      isSubmitting = true;
+      saveButton.disabled = true;
+      const originalText = saveButton.textContent;
+      saveButton.textContent = 'Menyimpan...';
+      try {
+        const accounts = getAccounts();
+        const index = accounts.findIndex(item => item.role === role && normalizeIdentity(item.identity) === matchedIdentity);
+        if (index < 0) throw new Error('Akun tidak ditemukan. Silakan mulai ulang proses pemulihan.');
+        const salt = generateSalt();
+        const passwordHash = await hashPassword(password, salt);
+        accounts[index] = {
+          ...accounts[index],
+          salt: toBase64(salt),
+          passwordHash,
+          passwordUpdatedAt: new Date().toISOString()
         };
-        toggle.addEventListener('click', changeVisibility);
-        toggle.addEventListener('keydown', event => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            changeVisibility();
-          }
+        saveAccounts(accounts);
+        showForgotFeedback('Password berhasil diperbarui. Anda akan diarahkan ke halaman login.', 'success');
+        matchedIdentity = '';
+        matchedEmail = '';
+        currentOtp = '';
+        otpVerified = false;
+        window.setTimeout(() => {
+          window.location.href = roleConfig.loginUrl;
+        }, 1300);
+      } catch (error) {
+        console.error('Lupa Password petugas:', error);
+        showForgotFeedback(error.message || 'Password gagal diperbarui.', 'error');
+      } finally {
+        isSubmitting = false;
+        saveButton.disabled = false;
+        saveButton.textContent = originalText;
+      }
+    }
+
+    sendButton.addEventListener('click', sendOtp);
+    verifyButton.addEventListener('click', verifyOtp);
+    resendButton?.addEventListener('click', () => {
+      if (!matchedIdentity) {
+        showStep(1);
+        return;
+      }
+      try {
+        createOtp();
+        showForgotFeedback(`MODE SIMULASI — Kode OTP baru: ${currentOtp}. Email belum benar-benar dikirim.`, 'info');
+      } catch (error) {
+        showForgotFeedback(error.message, 'error');
+      }
+    });
+    saveButton.addEventListener('click', saveNewPassword);
+
+    backStep?.addEventListener('click', () => {
+      const target = Number(backStep.dataset.targetStep || currentStep - 1);
+      if (target === 1) {
+        matchedIdentity = '';
+        matchedEmail = '';
+        currentOtp = '';
+        otpVerified = false;
+        if (otpTimer) window.clearInterval(otpTimer);
+        otpTimer = null;
+      }
+      showStep(target);
+    });
+
+    identityField.addEventListener('input', () => {
+      setForgotError(identityField, '');
+      clearForgotFeedback();
+      if (matchedIdentity) {
+        matchedIdentity = '';
+        matchedEmail = '';
+        currentOtp = '';
+        otpVerified = false;
+      }
+    });
+
+    passwordField.addEventListener('input', () => {
+      if (passwordField.value.length >= 8) setForgotError(passwordField, '');
+      if (confirmField.value && confirmField.value !== passwordField.value) {
+        setForgotError(confirmField, 'Konfirmasi password tidak sama.');
+      } else if (confirmField.value) {
+        setForgotError(confirmField, '');
+      }
+    });
+    confirmField.addEventListener('input', () => {
+      setForgotError(confirmField, confirmField.value === passwordField.value ? '' : 'Konfirmasi password tidak sama.');
+    });
+
+    otpDigits.forEach((input, index) => {
+      input.addEventListener('input', () => {
+        input.value = input.value.replace(/\D/g, '').slice(0, 1);
+        setOtpError('');
+        if (input.value && otpDigits[index + 1]) otpDigits[index + 1].focus();
+      });
+      input.addEventListener('keydown', event => {
+        if (event.key === 'Backspace' && !input.value && otpDigits[index - 1]) otpDigits[index - 1].focus();
+      });
+      input.addEventListener('paste', event => {
+        const pasted = (event.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0, 6);
+        if (!pasted) return;
+        event.preventDefault();
+        pasted.split('').forEach((digit, digitIndex) => {
+          if (otpDigits[digitIndex]) otpDigits[digitIndex].value = digit;
         });
+        otpDigits[Math.min(pasted.length, 5)].focus();
+        setOtpError('');
       });
     });
+
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      if (currentStep === 1) sendOtp();
+      else if (currentStep === 2) verifyOtp();
+      else saveNewPassword();
+    }, true);
+
+    showStep(1);
   }
+
   // 12. EVENT SUBMIT FORM
   async function handleFormSubmit(event) {
     event.preventDefault();
@@ -547,6 +767,7 @@
       }
     }
   }
+
   // 13. EVENT INPUT DAN VALIDASI ULANG
   function handleFieldChange(event) {
     const field = event.target;
@@ -560,6 +781,7 @@
     }
     clearFeedback(form);
   }
+
   // 14. INISIALISASI
   function initialize() {
     const forms = $$(FORM_SELECTOR);
@@ -572,7 +794,7 @@
       const button = event.target instanceof Element ? event.target.closest('[data-toggle-password]') : null;
       if (button) togglePassword(button);
     });
-    // Inisialisasi halaman lupa password yang memakai DIV.
+    // Inisialisasi halaman lupa password.
     initializeForgotPassword();
   }
   if (document.readyState === 'loading') {

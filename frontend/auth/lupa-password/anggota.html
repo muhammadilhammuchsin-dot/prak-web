@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#d9f1ff">
   <title>Pulihkan Password - E-Perpustakaan</title>
-  <!-- GOOGLE FONTS ASLI -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- CSS SHARED -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../css/shared/variables.css">
   <link rel="stylesheet" href="../../css/shared/base.css">
   <link rel="stylesheet" href="../../css/shared/utilities.css">
@@ -17,57 +17,174 @@
   <link rel="stylesheet" href="../../css/shared/layout.css">
   <link rel="stylesheet" href="../../css/shared/responsive.css">
 </head>
-<body>
+<body class="auth-forgot">
+  <!-- Sprite ikon khusus halaman Lupa Password. -->
   <svg class="icon-sprite" aria-hidden="true">
     <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></symbol>
-    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></symbol>
-    <symbol id="i-idcard" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M13 10h5M13 14h5"/></symbol>
-    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
-    <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="m3.5 6 8.5 6.5L20.5 6"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="12" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="16" r="1"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M1.5 12s3.8-7 10.5-7 10.5 7 10.5 7-3.8 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/><path d="m9 12 2 2 4-4"/></symbol>
   </svg>
   <main class="auth-page">
-    <section class="auth-card auth-card--wide" aria-labelledby="judul">
-      <header class="auth-card__header auth-card__header--row">
-        <a class="back-link back-link--dark" href="../login/anggota.html" data-route="../login/anggota.html" role="link" aria-label="Kembali ke halaman login">
+    <section class="auth-card auth-card--wide forgot-card" aria-labelledby="forgot-title">
+      <header class="auth-card__header auth-card__header--row forgot-header">
+        <a class="back-link back-link--dark forgot-back-login"
+           href="../login/anggota.html"
+           data-forgot-back-login
+           aria-label="Kembali ke halaman login">
           <svg class="icon icon--lg" aria-hidden="true"><use href="#i-arrow-left"/></svg>
         </a>
-        <h1 class="auth-card__title auth-card__title--form" id="judul">Pulihkan Password</h1>
+        <button class="back-link back-link--dark forgot-back-step"
+                type="button"
+                data-forgot-back
+                hidden
+                aria-label="Kembali ke langkah sebelumnya">
+          <svg class="icon icon--lg" aria-hidden="true"><use href="#i-arrow-left"/></svg>
+        </button>
+        <div class="forgot-header__text">
+          <h1 class="auth-card__title auth-card__title--form" id="forgot-title" data-forgot-title>Pulihkan Password</h1>
+          <p class="forgot-step-caption" data-forgot-caption>Langkah 1 dari 3</p>
+        </div>
       </header>
-      <form class="form" data-auth-form="forgot-password" data-user-role="anggota" novalidate>
-        <div class="form__group">
-          <label class="form__label" for="email">Masukkan email aktif</label>
-          <div class="input-field">
-            <span class="input-field__icon"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg></span>
-            <input class="form__input form__input--icon" id="email" name="email" type="email" placeholder="Contoh: Demak@gmail.com" autocomplete="email" required>
+      <div class="forgot-progress" aria-label="Progres pemulihan password">
+        <span class="forgot-progress__item is-active" data-forgot-progress="1"></span>
+        <span class="forgot-progress__item" data-forgot-progress="2"></span>
+        <span class="forgot-progress__item" data-forgot-progress="3"></span>
+      </div>
+      <form class="form forgot-form"
+            data-auth-form="forgot-password"
+            data-user-role="anggota"
+            novalidate>
+        <!-- LANGKAH 1: EMAIL DAN KIRIM OTP -->
+        <section class="forgot-step is-active" data-forgot-step="1">
+          <div class="forgot-step__content">
+            <div class="forgot-intro">
+              <h2>Masukkan email aktif</h2>
+              <p>Kami akan mengirim kode verifikasi ke email yang terdaftar pada akun E-Perpustakaan Anda.</p>
+            </div>
+            <div class="form__group">
+              <label class="form__label" for="email">Masukkan email aktif</label>
+              <div class="input-field">
+                <span class="input-field__icon" aria-hidden="true">
+                  <svg class="icon"><use href="#i-mail"/></svg>
+                </span>
+                <input class="form__input form__input--icon"
+                       id="email" name="email" type="email"
+                       inputmode="email"
+                       placeholder="Contoh: nama@email.com"
+                       autocomplete="email" maxlength="150"
+                       required aria-describedby="email-error">
+              </div>
+              <p class="form__error" id="email-error" data-error-for="email" role="alert" hidden></p>
+            </div>
+            <div class="forgot-info">
+              <span class="forgot-info__icon" aria-hidden="true">i</span>
+              <p>Pastikan email masih aktif dan dapat Anda akses.</p>
+            </div>
           </div>
-          <p class="form__error" data-error-for="email" role="alert" hidden></p>
-        </div>
-        <div class="form__group">
-          <label class="form__label" for="otp">Masukkan Kode OTP</label>
-          <div class="input-field">
-            <span class="input-field__icon"><svg class="icon" aria-hidden="true"><use href="#i-idcard"/></svg></span>
-            <input class="form__input form__input--icon" id="otp" name="otp" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="Contoh: 0735">
+          <div class="forgot-actions">
+            <button class="btn btn--primary btn--block btn--tall"
+                    type="button" data-forgot-action="send-otp">
+              Kirim Kode OTP
+            </button>
+            <p class="forgot-footnote">Kode verifikasi hanya berlaku selama 5 menit.</p>
           </div>
-        </div>
-        <div class="form__group">
-          <label class="form__label" for="password">Masukkan Password baru</label>
-          <div class="input-field">
-            <span class="input-field__icon"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg></span>
-            <input class="form__input form__input--icon form__input--with-toggle" id="password" name="password" type="password" minlength="8" autocomplete="new-password" placeholder="Minimal 8 karakter unik" required>
-            <button class="input-field__toggle" type="button" data-toggle-password="password" aria-label="Tampilkan password" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg></button>
+        </section>
+        <!-- LANGKAH 2: VERIFIKASI OTP -->
+        <section class="forgot-step" data-forgot-step="2" hidden>
+          <div class="forgot-step__content">
+            <div class="forgot-intro">
+              <h2>Periksa email Anda</h2>
+              <p>Masukkan 6 digit kode verifikasi yang telah dikirim ke:</p>
+              <strong class="forgot-destination" data-forgot-destination></strong>
+            </div>
+            <div class="form__group">
+              <label class="form__label" for="otp-digit-1">Masukkan Kode OTP</label>
+              <div class="forgot-otp" role="group" aria-label="Enam digit kode OTP">
+                <input id="otp-digit-1" class="forgot-otp__digit" type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" data-otp-digit aria-label="Digit OTP 1">
+                <input class="forgot-otp__digit" type="text" inputmode="numeric" maxlength="1" data-otp-digit aria-label="Digit OTP 2">
+                <input class="forgot-otp__digit" type="text" inputmode="numeric" maxlength="1" data-otp-digit aria-label="Digit OTP 3">
+                <input class="forgot-otp__digit" type="text" inputmode="numeric" maxlength="1" data-otp-digit aria-label="Digit OTP 4">
+                <input class="forgot-otp__digit" type="text" inputmode="numeric" maxlength="1" data-otp-digit aria-label="Digit OTP 5">
+                <input class="forgot-otp__digit" type="text" inputmode="numeric" maxlength="1" data-otp-digit aria-label="Digit OTP 6">
+              </div>
+              <p class="form__error" data-forgot-error="otp" role="alert" hidden></p>
+            </div>
+            <p class="forgot-help">Periksa kotak masuk atau folder spam pada email Anda.</p>
+            <div class="forgot-otp-meta">
+              <span data-otp-timer>Kode berlaku 05:00</span>
+              <button class="forgot-text-button" type="button" data-forgot-action="resend-otp">Kirim ulang kode</button>
+            </div>
           </div>
-          <p class="form__error" data-error-for="password" role="alert" hidden></p>
-        </div>
-        <div class="form__group">
-          <label class="form__label" for="password-confirm">Konfirmasi password anda</label>
-          <div class="input-field">
-            <span class="input-field__icon"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg></span>
-            <input class="form__input form__input--icon form__input--with-toggle" id="password-confirm" name="password-confirm" type="password" minlength="8" autocomplete="new-password" placeholder="Ulangi password anda" required>
-            <button class="input-field__toggle" type="button" data-toggle-password="password-confirm" aria-label="Tampilkan konfirmasi password" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg></button>
+          <div class="forgot-actions">
+            <button class="btn btn--primary btn--block btn--tall"
+                    type="button" data-forgot-action="verify-otp">
+              Verifikasi Kode
+            </button>
+            <p class="forgot-footnote">Jangan bagikan kode OTP kepada siapa pun.</p>
           </div>
-          <p class="form__error" data-error-for="password-confirm" role="alert" hidden></p>
-        </div>
-        <button class="btn btn--primary btn--block btn--tall form__submit" type="submit" data-auth-action="forgot-password">Simpan password</button>
+        </section>
+        <!-- LANGKAH 3: PASSWORD BARU -->
+        <section class="forgot-step" data-forgot-step="3" hidden>
+          <div class="forgot-step__content">
+            <div class="forgot-intro">
+              <h2>Buat password baru</h2>
+              <p>Buat password baru yang kuat untuk melindungi akun E-Perpustakaan Anda.</p>
+            </div>
+            <div class="form__group">
+              <label class="form__label" for="password">Password baru</label>
+              <div class="input-field">
+                <span class="input-field__icon" aria-hidden="true">
+                  <svg class="icon"><use href="#i-lock"/></svg>
+                </span>
+                <input class="form__input form__input--icon form__input--with-toggle"
+                       id="password" name="password" type="password"
+                       minlength="8" maxlength="100"
+                       autocomplete="new-password"
+                       placeholder="Minimal 8 karakter"
+                       required aria-describedby="password-error">
+                <button class="input-field__toggle" type="button"
+                        data-toggle-password="password"
+                        aria-label="Tampilkan password" aria-pressed="false">
+                  <svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg>
+                </button>
+              </div>
+              <p class="form__error" id="password-error" data-error-for="password" role="alert" hidden></p>
+            </div>
+            <div class="form__group">
+              <label class="form__label" for="password-confirm">Konfirmasi password Anda</label>
+              <div class="input-field">
+                <span class="input-field__icon" aria-hidden="true">
+                  <svg class="icon"><use href="#i-lock"/></svg>
+                </span>
+                <input class="form__input form__input--icon form__input--with-toggle"
+                       id="password-confirm" name="password-confirm" type="password"
+                       minlength="8" maxlength="100"
+                       autocomplete="new-password"
+                       placeholder="Ulangi password baru"
+                       required aria-describedby="password-confirm-error">
+                <button class="input-field__toggle" type="button"
+                        data-toggle-password="password-confirm"
+                        aria-label="Tampilkan konfirmasi password" aria-pressed="false">
+                  <svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg>
+                </button>
+              </div>
+              <p class="form__error" id="password-confirm-error" data-error-for="password-confirm" role="alert" hidden></p>
+            </div>
+            <div class="forgot-password-rules">
+              <p>• Minimal 8 karakter.</p>
+              <p>• Gunakan kombinasi huruf dan angka.</p>
+            </div>
+          </div>
+          <div class="forgot-actions">
+            <button class="btn btn--primary btn--block btn--tall"
+                    type="button" data-forgot-action="save-password">
+              Simpan Password
+            </button>
+            <p class="forgot-footnote">Pastikan password baru mudah Anda ingat dan sulit ditebak.</p>
+          </div>
+        </section>
         <p class="auth-feedback" data-auth-feedback role="status" aria-live="polite" hidden></p>
       </form>
     </section>
