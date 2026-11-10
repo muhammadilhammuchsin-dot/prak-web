@@ -80,7 +80,7 @@
 
   <!-- Konten utama beranda -->
   <main class="page">
-    <!-- Profil anggota: nama diambil dari sesi login -->
+    <!-- Profil anggota: nama mengikuti sesi login -->
     <div class="user-bar">
       <span class="user-bar__avatar">
         <svg class="icon icon--lg" aria-hidden="true"><use href="#i-profile"/></svg>
@@ -88,7 +88,7 @@
       <strong data-member-name>Anggota</strong>
     </div>
 
-    <!-- Sapaan anggota: nama mengikuti akun yang login -->
+    <!-- Sapaan anggota -->
     <section class="hero" aria-labelledby="sapaan">
       <h1 class="hero__title" id="sapaan">
         Hallo, <span data-member-name>Anggota</span>
@@ -96,7 +96,7 @@
       <p class="hero__text">Selamat datang di E-Perpustakaan Universitas Khairun</p>
     </section>
 
-    <!-- Minat baca anggota -->
+    <!-- Minat baca personal -->
     <section class="panel panel--outlined" aria-live="polite">
       <h2 class="panel__title">
         Minat Baca Anda :
@@ -104,15 +104,15 @@
       </h2>
     </section>
 
-    <!-- Kategori populer -->
+    <!-- Kategori terpopuler berdasarkan jumlah pencarian -->
     <section class="panel">
       <h2 class="panel__title panel__title--divided">
         <svg class="icon icon--sm" aria-hidden="true"><use href="#i-trend"/></svg>
         Kategori terpopuler
       </h2>
-      <div class="topic-card">
-        <span>Informatika &amp; TI</span>
-        <a class="topic-card__link" href="cari-informatika.html" data-route="cari-informatika.html">Detail</a>
+      <div class="topic-card" aria-live="polite">
+        <span data-popular-category>Belum ada data pencarian</span>
+        <a class="topic-card__link" href="cari.html" data-route="cari.html" data-popular-category-link hidden>Detail</a>
       </div>
     </section>
 
@@ -170,7 +170,9 @@
 
   <!-- JavaScript fungsi umum -->
   <script src="../js/shared/app.js" defer></script>
-  <!-- Nama anggota dan perhitungan minat baca KNN -->
+  <!-- Menghitung kategori paling banyak dicari -->
+  <script src="../js/anggota/kategori-terpopuler.js" defer></script>
+  <!-- Menghitung minat baca personal dengan KNN -->
   <script src="../js/anggota/knn-rekomendasi.js" defer></script>
 </body>
 </html>
