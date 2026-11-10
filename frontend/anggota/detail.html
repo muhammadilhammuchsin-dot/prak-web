@@ -5,22 +5,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Detail Buku - E-Perpustakaan</title>
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- CSS bersama -->
   <link rel="stylesheet" href="../css/shared/variables.css">
   <link rel="stylesheet" href="../css/shared/base.css">
   <link rel="stylesheet" href="../css/shared/utilities.css">
   <link rel="stylesheet" href="../css/shared/components.css">
   <link rel="stylesheet" href="../css/shared/layout.css">
-  <!-- CSS anggota -->
   <link rel="stylesheet" href="../css/anggota/anggota.css">
   <link rel="stylesheet" href="../css/shared/responsive.css">
 </head>
 <body>
-  <!-- Kumpulan ikon -->
   <svg class="icon-sprite" aria-hidden="true">
     <symbol id="i-book" viewBox="0 0 24 24">
       <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
@@ -40,7 +36,6 @@
     </symbol>
   </svg>
 
-  <!-- Navbar -->
   <header class="site-header">
     <div class="site-header__inner">
       <a class="brand" href="beranda.html" data-route="beranda.html">
@@ -67,13 +62,15 @@
     </div>
   </header>
 
-  <!-- Konten detail buku -->
   <main class="page">
     <article class="panel book-detail" data-book-detail>
-      <!-- Sampul dan tombol peminjaman -->
-      <div>
-        <figure class="cover cover--large">
-          <img class="cover__image" data-book-image src="../assets/covers/0001.jpg" alt="Sampul buku" loading="lazy">
+      <div class="book-detail__cover-column">
+        <figure class="cover cover--large book-detail__cover">
+          <!-- Gambar ditentukan oleh ID buku melalui detail.js -->
+          <img class="cover__image" data-book-image alt="Sampul buku" loading="eager" hidden>
+          <div class="book-cover-placeholder" data-book-cover-placeholder aria-live="polite">
+            Memuat sampul buku...
+          </div>
         </figure>
         <button class="btn btn--navy btn--block book-detail__borrow" type="button" data-action="borrow" disabled>
           <svg class="icon icon--sm" aria-hidden="true"><use href="#i-bookmark"/></svg>
@@ -81,22 +78,12 @@
         </button>
       </div>
 
-      <!-- Informasi buku diisi oleh detail.js -->
-      <div>
+      <div class="book-detail__content">
         <h1 class="book-detail__title" data-book-title>Memuat data buku...</h1>
         <dl class="book-detail__meta">
-          <div>
-            <dt>ID</dt>
-            <dd data-book-id>—</dd>
-          </div>
-          <div>
-            <dt>Penulis</dt>
-            <dd data-book-author>—</dd>
-          </div>
-          <div>
-            <dt>Kategori</dt>
-            <dd data-book-category>—</dd>
-          </div>
+          <div><dt>ID</dt><dd data-book-id>—</dd></div>
+          <div><dt>Penulis</dt><dd data-book-author>—</dd></div>
+          <div><dt>Kategori</dt><dd data-book-category>—</dd></div>
         </dl>
         <p>Stok tersedia : <span class="stock-badge" data-book-stock>—</span></p>
         <h2 class="book-detail__label">Deskripsi buku :</h2>
@@ -109,10 +96,8 @@
       </div>
     </article>
 
-    <!-- Pesan apabila buku tidak ditemukan -->
     <p data-detail-message role="status" aria-live="polite" hidden></p>
 
-    <!-- Rekomendasi buku dengan kategori serupa -->
     <section>
       <h2 class="section-title">Buku Serupa</h2>
       <div class="book-grid" data-related-books>
@@ -121,13 +106,8 @@
     </section>
   </main>
 
-  <!-- JavaScript pemuat detail berdasarkan ID buku -->
   <script src="../js/anggota/detail.js" defer></script>
-
-  <!-- JavaScript transaksi peminjaman -->
   <script src="../js/anggota/transaksi.js" defer></script>
-
-  <!-- JavaScript navigasi dan fungsi umum -->
   <script src="../js/shared/app.js" defer></script>
 </body>
 </html>
