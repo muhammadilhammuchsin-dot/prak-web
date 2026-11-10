@@ -1,13 +1,15 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Transaksi - E-Perpustakaan</title>
+  <meta name="theme-color" content="#00236f">
+  <title>Transaksi Peminjaman - E-Perpustakaan</title>
 
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- CSS bersama -->
   <link rel="stylesheet" href="../css/shared/variables.css">
@@ -18,12 +20,11 @@
 
   <!-- CSS pustakawan -->
   <link rel="stylesheet" href="../css/pustakawan/pustakawan.css">
-
-  <!-- Responsive -->
   <link rel="stylesheet" href="../css/shared/responsive.css">
+  <link rel="stylesheet" href="../css/pustakawan/transaksi.css">
 </head>
 
-<body>
+<body class="transaction-page">
 
   <!-- ICON SPRITE -->
   <svg class="icon-sprite" aria-hidden="true">
@@ -66,195 +67,200 @@
 
   </svg>
 
-  <!-- LAYOUT UTAMA -->
   <div class="admin-layout">
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
 
       <div class="brand brand--light">
+
         <span class="brand__icon">
           <svg class="icon" aria-hidden="true">
             <use href="#i-book"/>
           </svg>
         </span>
 
-        <span class="brand__name">E-Perpustakaan</span>
+        <span class="brand__name">
+          E-Perpustakaan
+        </span>
+
       </div>
 
       <nav class="sidebar__nav" aria-label="Menu pustakawan">
 
-        <a class="sidebar__link"
-           data-route="beranda.html"
-           role="link"
-           tabindex="0">
+        <a
+          href="beranda.html"
+          class="sidebar__link"
+          data-route="beranda.html">
+
           <svg class="icon icon--sm" aria-hidden="true">
             <use href="#i-grid"/>
           </svg>
-          Beranda
+
+          <span>Beranda</span>
         </a>
 
-        <a class="sidebar__link"
-           data-route="data-buku.html"
-           role="link"
-           tabindex="0">
+        <a
+          href="data-buku.html"
+          class="sidebar__link"
+          data-route="data-buku.html">
+
           <svg class="icon icon--sm" aria-hidden="true">
             <use href="#i-book"/>
           </svg>
-          Data Buku
+
+          <span>Data Buku</span>
         </a>
 
-        <a class="sidebar__link"
-           data-route="data-anggota.html"
-           role="link"
-           tabindex="0">
+        <a
+          href="data-anggota.html"
+          class="sidebar__link"
+          data-route="data-anggota.html">
+
           <svg class="icon icon--sm" aria-hidden="true">
             <use href="#i-users"/>
           </svg>
-          Data Anggota
+
+          <span>Data Anggota</span>
         </a>
 
-        <a class="sidebar__link sidebar__link--active"
-           data-route="transaksi.html"
-           aria-current="page"
-           role="link"
-           tabindex="0">
+        <a
+          href="transaksi.html"
+          class="sidebar__link sidebar__link--active"
+          data-route="transaksi.html"
+          aria-current="page">
+
           <svg class="icon icon--sm" aria-hidden="true">
             <use href="#i-swap"/>
           </svg>
-          Transaksi
+
+          <span>Transaksi</span>
         </a>
 
-        <a class="sidebar__link sidebar__link--logout"
-           data-route="../auth/login/pustakawan.html"
-           role="link"
-           tabindex="0">
+        <a
+          href="../auth/login/pustakawan.html"
+          class="sidebar__link sidebar__link--logout"
+          data-route="../auth/login/pustakawan.html">
+
           <svg class="icon icon--sm" aria-hidden="true">
             <use href="#i-logout"/>
           </svg>
-          Keluar
+
+          <span>Keluar</span>
         </a>
 
       </nav>
     </aside>
 
     <!-- KONTEN UTAMA -->
-    <main class="admin-content">
+    <main class="admin-content transaction-content">
 
-      <h1 class="page-title">Transaksi Peminjaman</h1>
+      <header class="transaction-heading">
+        <h1 class="page-title">
+          Transaksi Peminjaman
+        </h1>
+      </header>
 
       <!-- PENCARIAN -->
-      <section class="panel" aria-label="Pencarian">
+      <section
+        class="panel transaction-search"
+        aria-label="Pencarian transaksi">
 
-        <div class="search-bar"
-             role="search"
-             data-search-form="transactions">
+        <form
+          class="transaction-search__form"
+          id="transactionSearchForm"
+          data-search-form="transactions"
+          role="search">
 
-          <div class="input-field search-bar__field">
+          <label
+            class="transaction-search__field"
+            for="keyword">
 
-            <span class="input-field__icon">
-              <svg class="icon icon--sm" aria-hidden="true">
-                <use href="#i-search"/>
-              </svg>
-            </span>
-
-            <label class="visually-hidden" for="keyword">
-              ID buku
-            </label>
+            <svg class="icon" aria-hidden="true">
+              <use href="#i-search"/>
+            </svg>
 
             <input
-              class="search-bar__input"
               id="keyword"
               name="keyword"
               type="search"
               placeholder="id buku"
-            >
+              autocomplete="off"
+              aria-label="Cari ID transaksi, anggota, atau buku">
 
-          </div>
+          </label>
 
           <button
-            class="btn btn--navy search-bar__button"
-            type="button"
+            class="transaction-search__button"
+            type="submit"
             data-action="search-transactions">
+
             CARI
+
           </button>
 
-        </div>
+        </form>
       </section>
 
       <!-- TABEL TRANSAKSI -->
-      <section class="panel table-wrap">
+      <section
+        class="panel transaction-table-panel"
+        aria-labelledby="transactionTableTitle">
 
-        <h2 class="panel__title panel__title--divided">
-          Daftar Transaksi Sirkulasi
-        </h2>
+        <header class="transaction-table-panel__header">
 
-        <table class="data-table">
+          <span
+            class="transaction-table-panel__indicator"
+            aria-hidden="true">
+          </span>
 
-          <caption class="visually-hidden">
-            Daftar transaksi sirkulasi
-          </caption>
+          <h2 id="transactionTableTitle">
+            Daftar Transaksi Sirkulasi
+          </h2>
 
-          <thead>
-            <tr>
-              <th scope="col">ID</th>
-              <th scope="col">ANGGOTA</th>
-              <th scope="col">PRODI</th>
-              <th scope="col">BUKU</th>
-              <th scope="col">TANGGAL</th>
-              <th scope="col">STATUS</th>
-            </tr>
-          </thead>
+        </header>
 
-          <tbody>
+        <div class="transaction-table-scroll">
 
-            <tr>
-              <td><span class="pill pill--code">101</span></td>
-              <td><strong>Anti</strong></td>
-              <td><span class="pill">Informatika</span></td>
-              <td>C++</td>
-              <td>10/11/2026</td>
-              <td><span class="pill">dipinjam</span></td>
-            </tr>
+          <table class="transaction-table">
 
-            <tr>
-              <td><span class="pill pill--code">102</span></td>
-              <td><strong>Demak</strong></td>
-              <td><span class="pill">Mesin</span></td>
-              <td>python</td>
-              <td>11/12/2026</td>
-              <td><span class="pill">dikembalikan</span></td>
-            </tr>
+            <caption class="visually-hidden">
+              Daftar transaksi peminjaman dan pengembalian buku
+            </caption>
 
-            <tr>
-              <td><span class="pill pill--code">103</span></td>
-              <td><strong>Muti</strong></td>
-              <td><span class="pill">Ekonomi</span></td>
-              <td>garuda</td>
-              <td>12/12/2026</td>
-              <td><span class="pill">dipinjam</span></td>
-            </tr>
+            <colgroup>
+              <col class="transaction-col-id">
+              <col class="transaction-col-member">
+              <col class="transaction-col-program">
+              <col class="transaction-col-book">
+              <col class="transaction-col-date">
+              <col class="transaction-col-status">
+            </colgroup>
 
-            <tr>
-              <td><span class="pill pill--code">104</span></td>
-              <td><strong>Aan</strong></td>
-              <td><span class="pill">Guru (FKIP)</span></td>
-              <td>C++</td>
-              <td>13/12/2026</td>
-              <td><span class="pill">dipinjam</span></td>
-            </tr>
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">ANGGOTA</th>
+                <th scope="col">PRODI</th>
+                <th scope="col">BUKU</th>
+                <th scope="col">TANGGAL</th>
+                <th scope="col">STATUS</th>
+              </tr>
+            </thead>
 
-            <tr>
-              <td><span class="pill pill--code">105</span></td>
-              <td><strong>Ilham</strong></td>
-              <td><span class="pill">Mesin</span></td>
-              <td>C++</td>
-              <td>15/12/2026</td>
-              <td><span class="pill">dipinjam</span></td>
-            </tr>
+            <tbody id="transactionTableBody">
 
-          </tbody>
-        </table>
+              <tr>
+                <td colspan="6" class="transaction-empty">
+                  Memuat data transaksi...
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
       </section>
 
     </main>

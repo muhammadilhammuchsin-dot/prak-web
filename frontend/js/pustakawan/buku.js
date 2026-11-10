@@ -1,19 +1,29 @@
+
 /* =====================================================
    PUSTAKAWAN - TAMBAH BUKU DAN STOK BERANDA
 
-   Penyimpanan saat ini menggunakan IndexedDB browser.
-   Data tetap tersedia setelah halaman dimuat ulang
-   pada browser yang sama.
+   Penyimpanan menggunakan IndexedDB browser.
 
-   Integrasi MySQL belum aktif karena endpoint backend
-   dan skema SQL pada arsip proyek masih kosong.
+   Database : eperpus_pustakawan
+   Versi    : 1
+   Store    : books
+   Key      : id_buku
+
+   Fungsi:
+   1. Menambahkan buku.
+   2. Menyimpan gambar sampul.
+   3. Memvalidasi data buku.
+   4. Menampilkan stok buku di Beranda.
+   5. Menampilkan detail buku.
+
+   Integrasi MySQL belum aktif.
    ===================================================== */
 
 (() => {
   'use strict';
 
   // ===================================================
-  // KONFIGURASI DATABASE BROWSER
+  // 1. KONFIGURASI DATABASE
   // ===================================================
 
   const DB_NAME = 'eperpus_pustakawan';
@@ -27,18 +37,21 @@
   const objectUrls = new Set();
 
   // ===================================================
-  // MEMBUKA DATABASE
+  // 2. MEMBUKA DATABASE
   // ===================================================
 
   function openDatabase() {
+
     return new Promise((resolve, reject) => {
 
       if (!('indexedDB' in window)) {
+
         reject(
           new Error(
             'Browser ini tidak mendukung penyimpanan IndexedDB.'
           )
         );
+
         return;
       }
 
@@ -58,10 +71,13 @@
           });
 
         }
+
       };
 
       request.onsuccess = () => {
+
         resolve(request.result);
+
       };
 
       request.onerror = () => {
@@ -74,10 +90,11 @@
       };
 
     });
+
   }
 
   // ===================================================
-  // OPERASI DATABASE
+  // 3. OPERASI DATABASE
   // ===================================================
 
   function runStore(mode, operation) {
@@ -98,7 +115,9 @@
         );
 
         request.onsuccess = () => {
+
           result = request.result;
+
         };
 
         request.onerror = () => {
@@ -169,7 +188,7 @@
   }
 
   // ===================================================
-  // NOTIFIKASI FORM
+  // 4. NOTIFIKASI FORM
   // ===================================================
 
   function showFeedback(
@@ -191,7 +210,7 @@
   }
 
   // ===================================================
-  // PENGELOLAAN OBJECT URL GAMBAR
+  // 5. PENGELOLAAN OBJECT URL GAMBAR
   // ===================================================
 
   function createObjectUrl(blob) {
@@ -215,7 +234,7 @@
   }
 
   // ===================================================
-  // MENGHAPUS PREVIEW GAMBAR
+  // 6. MENGHAPUS PREVIEW GAMBAR
   // ===================================================
 
   function clearImagePreview() {
@@ -245,7 +264,7 @@
   }
 
   // ===================================================
-  // PREVIEW GAMBAR SAMPUL
+  // 7. PREVIEW GAMBAR SAMPUL
   // ===================================================
 
   function initializeImagePreview() {
@@ -327,7 +346,7 @@
   }
 
   // ===================================================
-  // VALIDASI FORM TAMBAH BUKU
+  // 8. VALIDASI FORM TAMBAH BUKU
   // ===================================================
 
   function validateBookForm(form) {
@@ -435,7 +454,7 @@
   }
 
   // ===================================================
-  // MENYIMPAN BUKU
+  // 9. MENYIMPAN BUKU
   // ===================================================
 
   async function saveBook(event) {
@@ -482,9 +501,13 @@
 
     try {
 
-      button.disabled = true;
+      if (button) {
 
-      button.textContent = 'Menyimpan...';
+        button.disabled = true;
+
+        button.textContent = 'Menyimpan...';
+
+      }
 
       showFeedback('');
 
@@ -548,7 +571,7 @@
   }
 
   // ===================================================
-  // MENGISI INFORMASI DETAIL BUKU
+  // 10. MENGISI INFORMASI DETAIL BUKU
   // ===================================================
 
   function setDetailValue(id, value) {
@@ -564,7 +587,7 @@
   }
 
   // ===================================================
-  // MEMBUKA DETAIL BUKU
+  // 11. MEMBUKA DETAIL BUKU
   // ===================================================
 
   function openBookDetail(button) {
@@ -607,7 +630,7 @@
   }
 
   // ===================================================
-  // MEMBUAT KARTU BUKU DI BERANDA
+  // 12. MEMBUAT KARTU BUKU DI BERANDA
   // ===================================================
 
   function createHomeBookCard(book) {
@@ -703,7 +726,7 @@
   }
 
   // ===================================================
-  // MENAMPILKAN BUKU TERSIMPAN DI BERANDA
+  // 13. MENAMPILKAN BUKU TERSIMPAN DI BERANDA
   // ===================================================
 
   async function renderHomeBooks() {
@@ -711,31 +734,78 @@
     const container =
       $('[data-home-book-list]');
 
+    // Jika halaman bukan Beranda Pustakawan,
+    // fungsi tidak perlu dijalankan.
     if (!container) return;
+
+    // Membersihkan kartu statis atau kartu lama.
+    container.replaceChildren();
+
+    // Indikator loading.
+    const loading = document.createElement('p');
+
+    loading.className = 'pb-stock-empty';
+
+    loading.textContent =
+      'Memuat data stok buku...';
+
+    container.appendChild(loading);
 
     try {
 
+      // Mengambil seluruh buku dari IndexedDB.
       const books = await getAllBooks();
 
       // Hanya menampilkan buku dengan stok positif.
-      books
+      const availableBooks = books
+
         .filter(book => Number(book.stok) > 0)
 
         // Buku terbaru ditampilkan lebih dahulu.
         .sort((a, b) =>
-          String(b.created_at).localeCompare(
-            String(a.created_at)
+
+          String(b.created_at || '').localeCompare(
+            String(a.created_at || '')
           )
-        )
 
-        // Membuat kartu untuk setiap buku.
-        .forEach(book => {
+        );
 
-          container.appendChild(
-            createHomeBookCard(book)
-          );
+      // Menghapus indikator loading.
+      container.replaceChildren();
 
-        });
+      // Jika tidak ada buku yang dapat ditampilkan.
+      if (availableBooks.length === 0) {
+
+        const emptyMessage =
+          document.createElement('p');
+
+        emptyMessage.className = 'pb-stock-empty';
+
+        emptyMessage.textContent =
+          books.length === 0
+            ? 'Belum ada buku yang ditambahkan.'
+            : 'Belum ada buku dengan stok tersedia.';
+
+        container.appendChild(emptyMessage);
+
+        return;
+
+      }
+
+      // Menyiapkan seluruh kartu buku.
+      const fragment =
+        document.createDocumentFragment();
+
+      availableBooks.forEach(book => {
+
+        fragment.appendChild(
+          createHomeBookCard(book)
+        );
+
+      });
+
+      // Menampilkan seluruh kartu sekaligus.
+      container.appendChild(fragment);
 
     } catch (error) {
 
@@ -743,6 +813,8 @@
         'Gagal memuat buku tersimpan:',
         error
       );
+
+      container.replaceChildren();
 
       const feedback =
         document.createElement('p');
@@ -759,13 +831,14 @@
   }
 
   // ===================================================
-  // INISIALISASI
+  // 14. INISIALISASI
   // ===================================================
 
   document.addEventListener(
     'DOMContentLoaded',
     () => {
 
+      // Form hanya tersedia pada halaman Tambah Buku.
       const form = $('#bookForm');
 
       if (form) {
@@ -779,13 +852,15 @@
 
       }
 
+      // Beranda hanya akan memuat data apabila
+      // elemen data-home-book-list tersedia.
       renderHomeBooks();
 
     }
   );
 
   // ===================================================
-  // EVENT DETAIL BUKU
+  // 15. EVENT DETAIL BUKU
   // ===================================================
 
   document.addEventListener(
@@ -796,6 +871,7 @@
 
       if (!(target instanceof Element)) return;
 
+      // Membuka detail buku.
       const detailButton =
         target.closest('[data-book-detail]');
 
@@ -807,6 +883,7 @@
 
       }
 
+      // Menutup detail buku.
       if (
         target.closest('[data-close-book-detail]')
       ) {
@@ -819,7 +896,7 @@
   );
 
   // ===================================================
-  // MEMBERSIHKAN OBJECT URL
+  // 16. MEMBERSIHKAN OBJECT URL
   // ===================================================
 
   window.addEventListener(

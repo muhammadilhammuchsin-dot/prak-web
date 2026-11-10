@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -23,10 +24,12 @@
   <!-- CSS responsive -->
   <link rel="stylesheet" href="../css/shared/responsive.css">
 </head>
+
 <body class="pustakawan-home">
 
   <!-- Kumpulan ikon SVG -->
   <svg class="icon-sprite" aria-hidden="true">
+
     <symbol id="i-book" viewBox="0 0 24 24">
       <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
       <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
@@ -68,6 +71,7 @@
       <circle cx="9" cy="7" r="4"/>
       <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
     </symbol>
+
   </svg>
 
   <!-- LAYOUT UTAMA -->
@@ -78,65 +82,90 @@
 
       <!-- Logo -->
       <div class="brand brand--light">
+
         <span class="brand__icon">
           <svg class="icon" aria-hidden="true">
             <use href="#i-book"/>
           </svg>
         </span>
-        <span class="brand__name">E-Perpustakaan</span>
+
+        <span class="brand__name">
+          E-Perpustakaan
+        </span>
+
       </div>
 
       <!-- Navigasi -->
       <nav class="sidebar__nav" aria-label="Menu pustakawan">
 
-        <a class="sidebar__link sidebar__link--active"
-           data-route="beranda.html"
-           aria-current="page"
-           role="link"
-           tabindex="0">
+        <!-- Beranda -->
+        <a
+          class="sidebar__link sidebar__link--active"
+          data-route="beranda.html"
+          aria-current="page"
+          role="link"
+          tabindex="0">
+
           <svg class="icon icon--sm" aria-hidden="true">
             <use href="#i-grid"/>
           </svg>
+
           <span>Beranda</span>
         </a>
 
-        <a class="sidebar__link"
-           data-route="data-buku.html"
-           role="link"
-           tabindex="0">
+        <!-- Data Buku -->
+        <a
+          class="sidebar__link"
+          data-route="data-buku.html"
+          role="link"
+          tabindex="0">
+
           <svg class="icon icon--sm" aria-hidden="true">
             <use href="#i-book"/>
           </svg>
+
           <span>Data Buku</span>
         </a>
 
-        <a class="sidebar__link"
-           data-route="data-anggota.html"
-           role="link"
-           tabindex="0">
+        <!-- Data Anggota -->
+        <a
+          class="sidebar__link"
+          data-route="data-anggota.html"
+          role="link"
+          tabindex="0">
+
           <svg class="icon icon--sm" aria-hidden="true">
             <use href="#i-users"/>
           </svg>
+
           <span>Data Anggota</span>
         </a>
 
-        <a class="sidebar__link"
-           data-route="transaksi.html"
-           role="link"
-           tabindex="0">
+        <!-- Transaksi -->
+        <a
+          class="sidebar__link"
+          data-route="transaksi.html"
+          role="link"
+          tabindex="0">
+
           <svg class="icon icon--sm" aria-hidden="true">
             <use href="#i-swap"/>
           </svg>
+
           <span>Transaksi</span>
         </a>
 
-        <a class="sidebar__link sidebar__link--logout"
-           data-route="../auth/login/pustakawan.html"
-           role="link"
-           tabindex="0">
+        <!-- Keluar -->
+        <a
+          class="sidebar__link sidebar__link--logout"
+          data-route="../auth/login/pustakawan.html"
+          role="link"
+          tabindex="0">
+
           <svg class="icon icon--sm" aria-hidden="true">
             <use href="#i-logout"/>
           </svg>
+
           <span>Keluar</span>
         </a>
 
@@ -147,7 +176,9 @@
     <main class="admin-content">
 
       <!-- INFORMASI ADMIN -->
-      <section class="admin-profile panel" aria-labelledby="page-title">
+      <section
+        class="admin-profile panel"
+        aria-labelledby="page-title">
 
         <h1 class="page-title" id="page-title">
           Admin Perpustakaan
@@ -155,124 +186,93 @@
 
         <div class="user-info">
 
-          <span class="user-info__avatar user-info__avatar--large"
-                aria-hidden="true">
+          <!-- Ikon profil -->
+          <span
+            class="user-info__avatar user-info__avatar--large"
+            aria-hidden="true">
+
             <svg class="icon icon--lg">
               <use href="#i-profile"/>
             </svg>
+
           </span>
 
+          <!-- Informasi admin dinamis -->
           <dl class="profile__list">
 
             <div>
               <dt>Nama Admin</dt>
-              <dd id="adminName">Memuat nama admin...</dd>
+              <dd id="adminName">
+                Memuat nama admin...
+              </dd>
             </div>
 
             <div>
               <dt>NIP</dt>
-              <dd id="adminNip">Memuat NIP...</dd>
+              <dd id="adminNip">
+                Memuat NIP...
+              </dd>
             </div>
 
           </dl>
+
         </div>
       </section>
 
       <!-- STOK BUKU -->
-      <section class="stock-section" aria-labelledby="stock-title">
+      <section
+        class="stock-section"
+        aria-labelledby="stock-title">
 
         <h2 class="section-title" id="stock-title">
           Stok yang tersedia
         </h2>
 
-        <div class="book-grid book-grid--admin" data-home-book-list>
+        <!--
+          Data buku akan dimasukkan secara dinamis
+          oleh JavaScript dari IndexedDB.
+          Tidak ada lagi buku statis di HTML.
+        -->
 
-          <!-- BUKU PERTAMA -->
-          <article class="book-card">
+        <div
+          class="book-grid book-grid--admin"
+          data-home-book-list
+          aria-live="polite">
 
-            <figure class="cover cover--banner">
-              <img
-                class="cover__image"
-                src="../assets/covers/0002.jpg"
-                alt="Sampul buku Rekayasa Perangkat Lunak Terapan"
-                loading="eager">
-            </figure>
-
-            <h3 class="book-card__title">
-              Rekayasa Perangkat Lunak Terapan
-            </h3>
-
-            <span class="badge">dipinjam 20x</span>
-
-            <button class="btn btn--navy btn--block btn--small"
-                    type="button"
-                    data-book-detail
-                    data-book-title="Rekayasa Perangkat Lunak Terapan"
-                    data-book-author="Belum tersedia"
-                    data-book-category="Informatika & Komputer"
-                    data-book-stock="Data stok contoh"
-                    data-book-description="Informasi ini merupakan data contoh pada tampilan Beranda.">
-              <svg class="icon icon--sm" aria-hidden="true">
-                <use href="#i-eye"/>
-              </svg>
-              Detail
-            </button>
-
-          </article>
-
-          <!-- BUKU KEDUA -->
-          <article class="book-card">
-
-            <figure class="cover cover--banner cover--placeholder"
-                    role="img"
-                    aria-label="Ilustrasi sampul Sistem Basis Data Relasional">
-
-              <figcaption>
-                SISTEM BASIS DATA RELASIONAL
-                <small>Teori, Desain, dan Implementasi</small>
-              </figcaption>
-
-            </figure>
-
-            <h3 class="book-card__title">
-              Sistem Basis Data Relasional
-            </h3>
-
-            <span class="badge">dipinjam 30x</span>
-
-            <button class="btn btn--navy btn--block btn--small"
-                    type="button"
-                    data-book-detail
-                    data-book-title="Sistem Basis Data Relasional"
-                    data-book-author="Belum tersedia"
-                    data-book-category="Informatika & Komputer"
-                    data-book-stock="Data stok contoh"
-                    data-book-description="Informasi ini merupakan data contoh pada tampilan Beranda.">
-              <svg class="icon icon--sm" aria-hidden="true">
-                <use href="#i-eye"/>
-              </svg>
-              Detail
-            </button>
-
-          </article>
+          <p class="pb-stock-empty">
+            Memuat data stok buku...
+          </p>
 
         </div>
+
       </section>
 
-      <!-- Dialog detail buku -->
-      <dialog class="pb-book-dialog" id="bookDetailDialog" aria-labelledby="bookDetailTitle">
+      <!-- DIALOG DETAIL BUKU -->
+      <dialog
+        class="pb-book-dialog"
+        id="bookDetailDialog"
+        aria-labelledby="bookDetailTitle">
+
         <div class="pb-book-dialog__panel">
 
-          <button class="pb-book-dialog__close"
-                  type="button"
-                  data-close-book-detail
-                  aria-label="Tutup detail">
+          <!-- Tombol tutup -->
+          <button
+            class="pb-book-dialog__close"
+            type="button"
+            data-close-book-detail
+            aria-label="Tutup detail">
+
             ×
+
           </button>
 
-          <h2 id="bookDetailTitle">Detail Buku</h2>
+          <h2 id="bookDetailTitle">
+            Detail Buku
+          </h2>
 
+          <!-- Informasi detail -->
           <dl class="pb-book-dialog__details">
+
             <div>
               <dt>Penulis</dt>
               <dd id="bookDetailAuthor">-</dd>
@@ -292,6 +292,7 @@
               <dt>Deskripsi</dt>
               <dd id="bookDetailDescription">-</dd>
             </div>
+
           </dl>
 
         </div>
@@ -300,13 +301,23 @@
     </main>
   </div>
 
-  <!-- Data buku untuk memperbarui stok yang tersedia di Beranda -->
-  <script src="../js/pustakawan/buku.js" defer></script>
+  <!-- JavaScript pengelolaan buku dan IndexedDB -->
+  <script
+    src="../js/pustakawan/buku.js"
+    defer>
+  </script>
 
-  <script src="../js/pustakawan/beranda-profile.js" defer></script>
+  <!-- JavaScript profil admin -->
+  <script
+    src="../js/pustakawan/beranda-profile.js"
+    defer>
+  </script>
 
-  <!-- Navigasi dan notifikasi bersama -->
-  <script src="../js/shared/app.js" defer></script>
+  <!-- JavaScript navigasi dan utilitas bersama -->
+  <script
+    src="../js/shared/app.js"
+    defer>
+  </script>
 
 </body>
 </html>

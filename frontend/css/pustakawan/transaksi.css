@@ -1,0 +1,449 @@
+
+/* =====================================================
+   PUSTAKAWAN - HALAMAN TRANSAKSI
+   ===================================================== */
+
+.transaction-page {
+  min-width: 320px;
+  min-height: 100vh;
+  background: #f7f7fc;
+  color: #131b2e;
+}
+
+.transaction-page .admin-layout {
+  --admin-sidebar-width: clamp(154px, 18vw, 250px);
+  min-height: 100vh;
+}
+
+.transaction-page .admin-layout > .sidebar {
+  width: var(--admin-sidebar-width);
+}
+
+.transaction-page .admin-content.transaction-content {
+  min-width: 0;
+  min-height: 100vh;
+  margin-left: var(--admin-sidebar-width);
+  padding: 48px clamp(18px, 2.2vw, 30px) 28px;
+  background: #f7f7fc;
+}
+
+/* =====================================================
+   JUDUL
+   ===================================================== */
+
+.transaction-heading {
+  margin: 0 0 24px;
+}
+
+.transaction-heading .page-title {
+  margin: 0;
+  color: #172033;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+/* =====================================================
+   PENCARIAN
+   ===================================================== */
+
+.transaction-search {
+  margin-bottom: 20px;
+  padding: 20px 24px;
+  border: 1px solid #e3e8f3;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.transaction-search__form {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  margin: 0;
+}
+
+.transaction-search__field {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  min-width: 0;
+  height: 60px;
+  padding: 0 16px 0 44px;
+  border-radius: 12px;
+  background: #eef1ff;
+}
+
+.transaction-search__field .icon {
+  position: absolute;
+  left: 17px;
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: #94a3b8;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.transaction-search__field input {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #172033;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+}
+
+.transaction-search__field input::placeholder {
+  color: #8992a5;
+}
+
+.transaction-search__field:focus-within {
+  outline: 1px solid #9bb5ec;
+  background: #f7f8ff;
+}
+
+.transaction-search__button {
+  display: inline-flex;
+  flex: 0 0 102px;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  border: none;
+  border-radius: 12px;
+  background: #082b70;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.transaction-search__button:hover {
+  background: #19458f;
+}
+
+/* =====================================================
+   PANEL TABEL
+   ===================================================== */
+
+.transaction-table-panel {
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #e3e8f3;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.transaction-table-panel__header {
+  display: flex;
+  align-items: center;
+  min-height: 60px;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e3e8f3;
+}
+
+.transaction-table-panel__header__indicator {
+  display: none;
+}
+
+.transaction-table-panel__header h2 {
+  margin: 0;
+  color: #172033;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* =====================================================
+   TABEL
+   ===================================================== */
+
+.transaction-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.transaction-table {
+  width: 100%;
+  min-width: 920px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  text-align: left;
+}
+
+.transaction-col-id {
+  width: 12%;
+}
+
+.transaction-col-member {
+  width: 16%;
+}
+
+.transaction-col-program {
+  width: 19%;
+}
+
+.transaction-col-book {
+  width: 17%;
+}
+
+.transaction-col-date {
+  width: 17%;
+}
+
+.transaction-col-status {
+  width: 19%;
+}
+
+.transaction-table th {
+  height: 60px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e0e6f0;
+  color: #64748b;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.transaction-table td {
+  height: 72px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e0e6f0;
+  color: #172033;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.transaction-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.transaction-table tbody tr:hover td {
+  background: #fcfcff;
+}
+
+/* =====================================================
+   ID TRANSAKSI
+   ===================================================== */
+
+.transaction-id {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  min-height: 36px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: #e8edff;
+  color: #082b70;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* =====================================================
+   ANGGOTA
+   ===================================================== */
+
+.transaction-member-name {
+  color: #172033;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* =====================================================
+   PROGRAM STUDI
+   ===================================================== */
+
+.transaction-program {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  min-height: 36px;
+  padding: 5px 13px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #082b70;
+  font-size: 13px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =====================================================
+   JUDUL BUKU
+   ===================================================== */
+
+.transaction-book-title {
+  display: block;
+  overflow: hidden;
+  color: #172033;
+  font-size: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =====================================================
+   TANGGAL
+   ===================================================== */
+
+.transaction-date {
+  color: #172033;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* =====================================================
+   STATUS INTERAKTIF
+   ===================================================== */
+
+.transaction-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 90px;
+  min-height: 36px;
+  padding: 5px 13px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+.transaction-status--borrowed {
+  background: #e8edff;
+  color: #082b70;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.transaction-status--borrowed:hover {
+  background: #d6e1ff;
+  transform: translateY(-1px);
+}
+
+.transaction-status--borrowed:focus-visible {
+  outline: 3px solid #8eb2ff;
+  outline-offset: 3px;
+}
+
+.transaction-status--returned {
+  background: #e1f5e9;
+  color: #18794e;
+  cursor: default;
+  opacity: 1;
+}
+
+.transaction-status__dot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.transaction-status:disabled {
+  opacity: 1;
+}
+
+/* =====================================================
+   KONDISI KOSONG
+   ===================================================== */
+
+.transaction-empty {
+  height: 110px !important;
+  padding: 24px !important;
+  color: #64748b !important;
+  text-align: center;
+}
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 900px) {
+  .transaction-page .admin-content.transaction-content {
+    padding: 28px 18px;
+  }
+
+  .transaction-search {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .transaction-page .admin-layout > .sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+  }
+
+  .transaction-page .admin-content.transaction-content {
+    margin-left: 0;
+    padding: 18px 12px 24px;
+  }
+
+  .transaction-heading {
+    margin-bottom: 16px;
+  }
+
+  .transaction-heading .page-title {
+    font-size: 25px;
+  }
+
+  .transaction-search {
+    margin-bottom: 16px;
+    padding: 12px;
+  }
+
+  .transaction-search__form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .transaction-search__field {
+    width: 100%;
+    height: 48px;
+  }
+
+  .transaction-search__button {
+    flex-basis: 44px;
+    width: 100%;
+    height: 44px;
+  }
+
+  .transaction-table-panel__header {
+    min-height: 52px;
+    padding: 14px;
+  }
+
+  .transaction-table-panel__header h2 {
+    font-size: 16px;
+  }
+
+  .transaction-table {
+    min-width: 920px;
+  }
+}
