@@ -513,7 +513,16 @@
       total: periodTransactions.length,
       counts,
       unclassified,
-      classified: periodTransactions.length - unclassified
+      classified: periodTransactions.length - unclassified,
+
+      // Daftar transaksi yang sesuai dengan periode PDF.
+      transactions: periodTransactions.map(record => ({
+        id: String(record.displayId || record.id || '-'),
+        member: String(record.anggota || '-'),
+        book: String(record.judul || '-'),
+        date: String(record.tanggal || record.date || ''),
+        status: String(record.status || 'dipinjam')
+      }))
     };
   }
 
@@ -764,6 +773,18 @@
     }
 
     showFeedback(message);
+
+    // Memakai hasil hitung yang sama untuk PDF dan dashboard.
+    document.dispatchEvent(new CustomEvent('eperpus:report-updated', {
+      detail: {
+        ...report,
+        period,
+        periodLabel: selectedLabel,
+        members: countMembers(),
+        books: countBooks(),
+        catalogComplete
+      }
+    }));
   }
 
   // =======================================================

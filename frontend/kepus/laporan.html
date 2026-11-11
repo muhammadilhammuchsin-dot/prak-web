@@ -24,6 +24,7 @@
   <!-- CSS responsive -->
   <link rel="stylesheet" href="../css/shared/responsive.css">
 </head>
+
 <body class="kepus-report" data-kepus-protected="true">
 
   <!-- Sprite ikon -->
@@ -58,6 +59,7 @@
     <!-- Filter periode laporan -->
     <section class="panel period-picker"
              aria-label="Filter periode laporan">
+
       <label class="period-picker__label" for="period">
         PERIODE
       </label>
@@ -70,10 +72,37 @@
         <option>November 2026</option>
         <option>Desember 2026</option>
       </select>
+
+      <!-- Tombol Download PDF -->
+      <button type="button"
+              id="downloadMonthlyReport"
+              class="period-picker__download"
+              disabled>
+
+        <svg aria-hidden="true"
+             viewBox="0 0 24 24"
+             width="15"
+             height="15"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+
+          <path d="M12 3v12m-5-5 5 5 5-5"/>
+          <path d="M4 17v3h16v-3"/>
+
+        </svg>
+
+        Download PDF
+
+      </button>
+
     </section>
 
     <!-- Ringkasan jumlah anggota dan buku -->
     <section class="stats" aria-label="Ringkasan perpustakaan">
+
       <article class="stat-card">
         <h2 class="stat-card__label">TOTAL ANGGOTA</h2>
         <p class="stat-card__value">Memuat...</p>
@@ -83,10 +112,12 @@
         <h2 class="stat-card__label">TOTAL BUKU</h2>
         <p class="stat-card__value">Memuat...</p>
       </article>
+
     </section>
 
     <!-- Diagram donat distribusi peminjaman -->
     <section class="panel report-panel report-panel--donut">
+
       <header class="report-panel__header">
         <h2 class="panel__title">
           Distribusi peminjaman berdasarkan kategori
@@ -99,52 +130,66 @@
         <div class="donut"
              role="img"
              aria-label="Diagram distribusi peminjaman berdasarkan kategori">
+
           <span class="donut__hole">100%</span>
+
         </div>
 
         <!-- Legenda kategori -->
         <ul class="legend" aria-label="Legenda kategori buku">
+
           <li class="legend__item">
             <span class="legend__dot legend__dot--1"
                   aria-hidden="true"></span>
+
             <span class="legend__label">
               Teknologi &amp; Informatika
             </span>
+
             <strong>60%</strong>
           </li>
 
           <li class="legend__item">
             <span class="legend__dot legend__dot--2"
                   aria-hidden="true"></span>
+
             <span class="legend__label">
               Sains &amp; Matematika
             </span>
+
             <strong>20%</strong>
           </li>
 
           <li class="legend__item">
             <span class="legend__dot legend__dot--3"
                   aria-hidden="true"></span>
+
             <span class="legend__label">
               Sosial &amp; Bisnis
             </span>
+
             <strong>12%</strong>
           </li>
 
           <li class="legend__item">
             <span class="legend__dot legend__dot--4"
                   aria-hidden="true"></span>
+
             <span class="legend__label">
               Sastra &amp; Bahasa
             </span>
+
             <strong>8%</strong>
           </li>
+
         </ul>
+
       </div>
     </section>
 
     <!-- Diagram batang jumlah peminjaman -->
     <section class="panel report-panel report-panel--bars">
+
       <header class="report-panel__header">
         <h2 class="panel__title">
           Diagram peminjaman buku
@@ -168,6 +213,7 @@
 
           <!-- Area grafik -->
           <ul class="bar-chart__plot">
+
             <li class="bar-chart__item">
               <span>91%</span>
               <span class="bar-chart__bar bar-chart__bar--1"></span>
@@ -187,10 +233,12 @@
               <span>31%</span>
               <span class="bar-chart__bar bar-chart__bar--4"></span>
             </li>
+
           </ul>
 
           <!-- Label kategori -->
           <ul class="bar-chart__labels">
+
             <li>
               Teknologi
               <span class="bar-chart__note">91% dipinjam</span>
@@ -210,7 +258,9 @@
               Sosial
               <span class="bar-chart__note">31% dipinjam</span>
             </li>
+
           </ul>
+
         </div>
       </div>
 
@@ -219,11 +269,16 @@
          data-report-feedback
          role="status"
          aria-live="polite"></p>
+
     </section>
+
   </main>
 
   <!-- Pengolahan data dan diagram laporan -->
   <script src="../js/kepus/laporan.js" defer></script>
+
+  <!-- Membuat dan mengunduh PDF -->
+  <script src="../js/kepus/laporan-pdf.js" defer></script>
 
   <!-- Proteksi halaman dan logout Kepus -->
   <script src="../js/auth/kepus-auth.js" defer></script>

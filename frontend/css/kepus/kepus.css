@@ -759,3 +759,50 @@
     min-height: auto;
   }
 }
+
+/* =========================================================
+   TOMBOL DOWNLOAD LAPORAN PDF
+   ========================================================= */
+
+.period-picker__download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-left: auto;
+  min-height: 31px;
+  padding: 6px 13px;
+  border: 0;
+  border-radius: 7px;
+  background: #0b2a6f;
+  color: #fff;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.period-picker__download:not(:disabled):hover {
+  background: #17489d;
+  transform: translateY(-1px);
+}
+
+.period-picker__download:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 3px;
+}
+
+.period-picker__download:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+@media (max-width: 420px) {
+  .period-picker__download {
+    padding: 6px 9px;
+    font-size: 9px;
+  }
+}
